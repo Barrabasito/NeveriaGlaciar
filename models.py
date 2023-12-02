@@ -172,7 +172,7 @@ class ImagenProducto(db.Model):
     rendered_data = db.Column(db.Text, nullable=False)
     codigo_producto = db.Column(db.String(10), db.ForeignKey("producto.codigo_producto"), nullable=False)
     
-class ImagenMateriPrima(db.Model):
+class ImagenMateriaPrima(db.Model):
     id_images = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(128), nullable=False)
     data = db.Column(db.LargeBinary, nullable=False)

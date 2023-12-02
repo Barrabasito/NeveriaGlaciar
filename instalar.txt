@@ -1,0 +1,9 @@
+pip install pyjwt
+pip install flask
+pip install flask-migrate
+pip install flask-sqlalchemy
+pip install flask-bcrypt
+pip install bcrypt
+pip install flask-cors
+pip install flask-wtf
+pip install psycopg2

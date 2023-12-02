@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Agregar Nuevo Encargo</h1>
+    <form id="encargo-form">
+        <label for="materia_prima">Materia Prima</label>
+        <select id="materia_prima" name="materia_prima">
+            {% for materia_prima in materias_primas %}
+                <option value="{{ materia_prima.codigo_materia }}" data-precio="{{ materia_prima.precio }}">{{ materia_prima.nombre_materia }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="cantidad_encargo">Cantidad de Encargo</label>
+        <input type="number" id="cantidad_encargo" name="cantidad_encargo" value="0" placeholder="Ingresa la cantidad de encargo">
+        <br>
+        <label for="cantidad_a_pagar">Cantidad a Pagar</label>
+        <input type="number" id="cantidad_a_pagar" name="cantidad_a_pagar" placeholder="Automático" readonly>
+        <br>
+        <label for="forma_pago">Forma de Pago</label>
+        <input type="text" id="forma_pago" name="forma_pago" placeholder="Ingresa la forma de pago">
+        <br>
+        <label for="fecha_encargo">Fecha de Encargo</label>
+        <input type="date" id="fecha_encargo" name="fecha_encargo" readonly>
+        <br>
+        <label for="proveedor_id">Proveedor</label>
+        <select id="proveedor_id" name="proveedor_id">
+            {% for proveedor in proveedores %}
+                <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombres }} {{ proveedor.apellidos }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" value="Agregar Encargo" id="encargo-btn">Agregar Encargo</button>
+    </form>
+    <script>
+        // Establecer la fecha actual en el campo de fecha
+        const fechaEncargo = document.getElementById('fecha_encargo');
+        const fechaActual = new Date().toISOString().split('T')[0];
+        fechaEncargo.value = fechaActual;
+
+        const encargoForm = document.getElementById('encargo-form');
+        const cantidadEncargoInput = document.getElementById('cantidad_encargo');
+        const cantidadAPagarInput = document.getElementById('cantidad_a_pagar');
+        const materiaPrimaSelect = document.getElementById('materia_prima');
+
+        // Agregar evento de cambio a la selección de materia prima
+        materiaPrimaSelect.addEventListener('change', function() {
+            calcularCantidadAPagar();
+        });
+
+        // Agregar evento de cambio a la cantidad de encargo
+        cantidadEncargoInput.addEventListener('change', function() {
+            calcularCantidadAPagar();
+        });
+
+        function calcularCantidadAPagar() {
+            const selectedOption = materiaPrimaSelect.options[materiaPrimaSelect.selectedIndex];
+            const precioMateriaPrima = parseFloat(selectedOption.getAttribute('data-precio')) || 0;
+            const cantidadEncargo = parseInt(cantidadEncargoInput.value) || 0;
+
+            // Calcular automáticamente la cantidad a pagar
+            const cantidadAPagar = precioMateriaPrima * cantidadEncargo;
+            cantidadAPagarInput.value = cantidadAPagar.toFixed(2); // Dos decimales
+        }
+
+        // Resto del código permanece igual...
+
+        encargoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const codigo_materia = materiaPrimaSelect.value;
+            const cantidad_encargo = parseInt(cantidadEncargoInput.value);
+            const cantidad_a_pagar = parseFloat(cantidadAPagarInput.value);
+            const forma_pago = document.getElementById('forma_pago').value;
+            const fecha_encargo = document.getElementById('fecha_encargo').value;
+            const proveedor_id = parseInt(document.getElementById('proveedor_id').value);
+            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+            fetch('/agregarEncargo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'codigo_materia': codigo_materia,
+                    'cantidad_encargo': cantidad_encargo,
+                    'cantidad_a_pagar': cantidad_a_pagar,
+                    'forma_pago': forma_pago,
+                    'fecha_encargo': fecha_encargo,
+                    'proveedor_id': proveedor_id,
+                    'sucursal_id': sucursal_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexEncargo'; // Redirecciona a la página de encargos después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

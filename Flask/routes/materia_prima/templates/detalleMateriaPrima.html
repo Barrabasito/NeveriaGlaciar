@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .details-table {
+            width: 100%;
+        }
+    </style>
+
+    <h1>Detalles de Materia Prima</h1>
+    <table class="details-table">
+        <tbody id="materia-prima-details-body">
+            <!-- Los detalles de la materia prima se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const materiaPrimaDetailsBody = document.getElementById('materia-prima-details-body');
+            const materiaPrimaData = {{ materia_prima | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+            
+            const labels = {
+                'codigo_materia': 'Código de Materia Prima',
+                'nombre_materia': 'Nombre',
+                'precio': 'Precio',
+                'cantidad': 'Cantidad',
+                'sucursal_id': 'Sucursal ID'
+            };
+
+            function appendDetailRow(key, value) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${labels[key]}:</td>
+                    <td>${value}</td>
+                `;
+                materiaPrimaDetailsBody.appendChild(newRow);
+            }
+
+            Object.keys(labels).forEach(key => {
+                appendDetailRow(key, materiaPrimaData[key]);
+            });
+        });
+    </script>
+    {% endblock %}

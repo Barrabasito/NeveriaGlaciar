@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Productos</h1>
+    <a href="/agregarProducto">Agregar Producto</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Código Producto</th>
+                <th>Sabor</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Categoría ID</th>
+                <th>Sucursal ID</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="productos-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verProducto(codigo_producto) {
+            window.location.href = `/detalleProducto/${codigo_producto}`;
+        }
+
+        function editarProducto(codigo_producto) {
+            window.location.href = `/editarProducto/${codigo_producto}`;
+        }
+
+        function eliminarProducto(codigo_producto) {
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                fetch(`/eliminarProducto/${codigo_producto}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexProducto'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const productosTableBody = document.getElementById('productos-table-body');
+
+            function appendRow(producto) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${producto.codigo_producto}</td>
+                    <td>${producto.sabor}</td>
+                    <td>${producto.precio}</td>
+                    <td>${producto.cantidad}</td>
+                    <td>${producto.categoria_id}</td>
+                    <td>${producto.sucursal_id}</td>
+                    <td class="actions">
+                        <button class="ver-btn">Ver</button>
+                        <button class="editar-btn">Editar</button>
+                        <button class="eliminar-btn">Eliminar</button>
+                    </td>
+                `;
+                productosTableBody.appendChild(newRow);
+
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verProducto(producto.codigo_producto));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarProducto(producto.codigo_producto));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarProducto(producto.codigo_producto));
+            }
+
+            fetch('/listaProductos')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de productos por código_producto
+                    const productosOrdenados = data.productos.sort((a, b) => a.codigo_producto.localeCompare(b.codigo_producto));
+                    productosOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

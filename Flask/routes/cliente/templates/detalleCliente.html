@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .details-table {
+            width: 100%;
+        }
+    </style>
+
+    <h1>Detalles de Cliente</h1>
+    <table class="details-table">
+        <tbody id="cliente-details-body">
+            <!-- Los detalles del cliente se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const clienteDetailsBody = document.getElementById('cliente-details-body');
+            const clienteData = {{ cliente | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+            
+            const order = ['nombre_empresa', 'direccion', 'codigo_producto', 'cantidad_pedida', 'costo_total', 'forma_pago', 'fecha_registro', 'sucursal_id'];
+
+            function appendDetailRow(key, value) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${key}:</td>
+                    <td>${value}</td>
+                `;
+                clienteDetailsBody.appendChild(newRow);
+            }
+
+            order.forEach(key => {
+                appendDetailRow(key, clienteData[key]);
+            });
+        });
+    </script>
+    {% endblock %}

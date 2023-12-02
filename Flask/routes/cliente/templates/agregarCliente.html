@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Agregar Nuevo Cliente</h1>
+    <form id="cliente-form">
+        <label for="nombre_empresa">Nombre de la Empresa</label>
+        <input type="text" id="nombre_empresa" name="nombre_empresa" placeholder="Ingresa el nombre de la empresa">
+        <br>
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ingresa la dirección">
+        <br>
+        <label for="codigo_producto">Código del Producto</label>
+        <input type="text" id="codigo_producto" name="codigo_producto" placeholder="Ingresa el código del producto">
+        <br>
+        <label for="cantidad_pedida">Cantidad Pedida</label>
+        <input type="number" id="cantidad_pedida" name="cantidad_pedida" placeholder="Ingresa la cantidad pedida">
+        <br>
+        <label for="costo_total">Costo Total</label>
+        <input type="number" id="costo_total" name="costo_total" placeholder="Ingresa el costo total" step="0.01">
+        <br>
+        <label for="forma_pago">Forma de Pago</label>
+        <input type="text" id="forma_pago" name="forma_pago" placeholder="Ingresa la forma de pago">
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" value="Agregar Cliente" id="cliente-btn">Agregar Cliente</button>
+    </form>
+    <script>
+        const clienteForm = document.getElementById('cliente-form');
+        clienteForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nombre_empresa = document.getElementById('nombre_empresa').value;
+            const direccion = document.getElementById('direccion').value;
+            const codigo_producto = document.getElementById('codigo_producto').value;
+            const cantidad_pedida = parseInt(document.getElementById('cantidad_pedida').value);
+            const costo_total = parseFloat(document.getElementById('costo_total').value);
+            const forma_pago = document.getElementById('forma_pago').value;
+            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+            fetch('/agregarCliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'nombre_empresa': nombre_empresa,
+                    'direccion': direccion,
+                    'codigo_producto': codigo_producto,
+                    'cantidad_pedida': cantidad_pedida,
+                    'costo_total': costo_total,
+                    'forma_pago': forma_pago,
+                    'sucursal_id': sucursal_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexCliente'; // Redirecciona a la página de clientes después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

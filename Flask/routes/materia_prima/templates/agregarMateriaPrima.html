@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Agregar Nueva Materia Prima</h1>
+    <form id="materia-prima-form">
+        <label for="codigo_materia">Código de la Materia Prima</label>
+        <input type="text" id="codigo_materia" name="codigo_materia" placeholder="Ingresa el código de la materia prima">
+        <br>
+        <label for="nombre_materia">Nombre de la Materia Prima</label>
+        <input type="text" id="nombre_materia" name="nombre_materia" placeholder="Ingresa el nombre de la materia prima">
+        <br>
+        <label for="precio">Precio</label>
+        <input type="number" id="precio" name="precio" placeholder="Ingresa el precio" step="0.01">
+        <br>
+        <label for="cantidad">Cantidad</label>
+        <input type="number" id="cantidad" name="cantidad" placeholder="Ingresa la cantidad">
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" value="Agregar Materia Prima" id="materia-prima-btn">Agregar Materia Prima</button>
+    </form>
+    <script>
+        const materiaPrimaForm = document.getElementById('materia-prima-form');
+        materiaPrimaForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const codigo_materia = document.getElementById('codigo_materia').value;
+            const nombre_materia = document.getElementById('nombre_materia').value;
+            const precio = parseFloat(document.getElementById('precio').value);
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+            fetch('/agregarMateriaPrima', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'codigo_materia': codigo_materia,
+                    'nombre_materia': nombre_materia,
+                    'precio': precio,
+                    'cantidad': cantidad,
+                    'sucursal_id': sucursal_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexMateriaPrima'; // Redirecciona a la página de materias primas después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

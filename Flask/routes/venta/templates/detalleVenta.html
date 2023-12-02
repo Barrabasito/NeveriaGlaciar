@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+    {% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .details-table {
+            width: 100%;
+        }
+    </style>
+
+    <h1>Detalles de Venta</h1>
+    <table class="details-table">
+        <tbody id="venta-details-body">
+            <!-- Los detalles de la venta se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ventaDetailsBody = document.getElementById('venta-details-body');
+            // console.log(venta);
+            const ventaData = {{ venta | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+
+            const order = ['id_venta', 'fecha_venta', 'monto', 'forma_pago', 'sucursal_id', 'clave_empleado', 'productos_vendidos'];
+
+            function appendDetailRow(key, value) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${key}:</td>
+                    <td>${Array.isArray(value) ? value.map(p => `${p.codigo_producto} (${p.cantidad})`).join(', ') : value}</td>
+                `;
+                ventaDetailsBody.appendChild(newRow);
+            }
+            order.forEach(key => {
+                appendDetailRow(key, ventaData[key]);
+            });
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Editar Categoría</h1>
+    <form id="editar-categoria-form">
+        <label for="nombre_categoria">Nombre de la Categoría:</label>
+        <input type="text" id="nombre_categoria" name="nombre_categoria" placeholder="Ingrese el nombre de la categoría" required>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editarCategoriaForm = document.getElementById('editar-categoria-form');
+
+            // Obtener los elementos del formulario
+            const nombreCategoriaInput = document.getElementById('nombre_categoria');
+
+            // Llenar el campo con el valor de la categoría
+            nombreCategoriaInput.value = "{{ categoria.nombre_categoria }}";
+
+            // Agregar evento de envío del formulario
+            editarCategoriaForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const nombre_categoria = nombreCategoriaInput.value;
+
+                fetch('/editarCategoria/{{ categoria.id_categoria }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'nombre_categoria': nombre_categoria
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/indexCategoria';
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Add New Venta</h1>
+    <form id="venta-form">
+        <label for="monto">Monto</label>
+        <input type="number" id="monto" name="monto" placeholder="Enter monto" step="0.01" required>
+        <br>
+        <label for="forma_pago">Forma de Pago</label>
+        <input type="text" id="forma_pago" name="forma_pago" placeholder="Enter forma de pago">
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="clave_empleado">Empleado</label>
+        <select id="clave_empleado" name="clave_empleado">
+            {% for empleado in empleados %}
+                <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <h2>Productos Vendidos</h2>
+        <div id="productos-vendidos-container">
+            <!-- Contenido dinámico será insertado aquí -->
+        </div>
+        <button type="button" id="add-producto-btn">Add Producto Vendido</button>
+        <br>
+
+        <button type="submit" value="Add Venta" id="venta-btn">Add Venta</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productosVendidosContainer = document.getElementById('productos-vendidos-container');
+            const addProductoButton = document.getElementById('add-producto-btn');
+
+            function createProductoInput() {
+                const newProductoVendidoInput = document.createElement('div');
+                newProductoVendidoInput.classList.add('producto-vendido-input');
+                newProductoVendidoInput.innerHTML = `
+                    <label for="producto_seleccionado">Producto</label>
+                    <select class="producto-seleccionado" name="producto_seleccionado" required>
+                        {% for producto in productos %}
+                            <option value="{{ producto.codigo_producto }}">{{ producto.sabor }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" class="cantidad" name="cantidad" placeholder="Enter cantidad" required>
+                    <br>
+                    <button type="button" class="remove-producto-btn">Remove</button>
+                `;
+                productosVendidosContainer.appendChild(newProductoVendidoInput);
+
+                const removeProductoButton = newProductoVendidoInput.querySelector('.remove-producto-btn');
+                removeProductoButton.addEventListener('click', function () {
+                    productosVendidosContainer.removeChild(newProductoVendidoInput);
+                });
+            }
+
+            addProductoButton.addEventListener('click', function () {
+                createProductoInput();
+            });
+
+            // Agregar un input de producto por defecto al cargar la página
+            createProductoInput();
+        });
+
+        const ventaForm = document.getElementById('venta-form');
+        ventaForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const monto = parseFloat(document.getElementById('monto').value);
+            const formaPago = document.getElementById('forma_pago').value;
+            const sucursalId = parseInt(document.getElementById('sucursal_id').value);
+            const claveEmpleado = document.getElementById('clave_empleado').value;
+
+            const productosVendidosInputs = document.querySelectorAll('.producto-vendido-input');
+            const productosVendidos = Array.from(productosVendidosInputs).map(input => {
+                return {
+                    'codigo_producto': input.querySelector('.producto-seleccionado').value,
+                    'cantidad': parseInt(input.querySelector('.cantidad').value)
+                };
+            });
+
+            fetch('/agregarVenta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'monto': monto,
+                    'forma_pago': formaPago,
+                    'sucursal_id': sucursalId,
+                    'clave_empleado': claveEmpleado,
+                    'productos_vendidos': productosVendidos
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexVenta'; // Redirecciona a la página de ventas después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Clientes</h1>
+    <a href="/agregarCliente">Agregar Cliente</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre Empresa</th>
+                <th>Dirección</th>
+                <th>Código Producto</th>
+                <th>Cantidad Pedida</th>
+                <th>Costo Total</th>
+                <th>Forma Pago</th>
+                <th>Sucursal ID</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="clientes-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verCliente(nombre_empresa) {
+            window.location.href = `/detalleCliente/${nombre_empresa}`;
+        }
+
+        function editarCliente(nombre_empresa) {
+            window.location.href = `/editarCliente/${nombre_empresa}`;
+        }
+
+        function eliminarCliente(nombre_empresa) {
+            if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
+                fetch(`/eliminarCliente/${nombre_empresa}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexCliente'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const clientesTableBody = document.getElementById('clientes-table-body');
+
+            function appendRow(cliente) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${cliente.nombre_empresa}</td>
+                    <td>${cliente.direccion}</td>
+                    <td>${cliente.codigo_producto}</td>
+                    <td>${cliente.cantidad_pedida}</td>
+                    <td>${cliente.costo_total}</td>
+                    <td>${cliente.forma_pago}</td>
+                    <td>${cliente.sucursal_id}</td>
+                    <td class="actions">
+                        <button class="ver-btn">Ver</button>
+                        <button class="editar-btn">Editar</button>
+                        <button class="eliminar-btn">Eliminar</button>
+                    </td>
+                `;
+                clientesTableBody.appendChild(newRow);
+
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verCliente(cliente.nombre_empresa));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarCliente(cliente.nombre_empresa));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarCliente(cliente.nombre_empresa));
+            }
+
+            fetch('/listaClientes')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de clientes por nombre_empresa
+                    const clientesOrdenados = data.clientes.sort((a, b) => a.nombre_empresa.localeCompare(b.nombre_empresa));
+                    clientesOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Editar Materia Prima</h1>
+    <form id="editar-materia-prima-form">
+        <label for="nombre_materia">Nombre de la Materia Prima:</label>
+        <input type="text" id="nombre_materia" name="nombre_materia" placeholder="Ingrese el nombre de la materia prima" required>
+        <br>
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio" placeholder="Ingrese el precio de la materia prima" required>
+        <br>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad de la materia prima" required>
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editarMateriaPrimaForm = document.getElementById('editar-materia-prima-form');
+
+            // Obtener los elementos del formulario
+            const nombreMateriaInput = document.getElementById('nombre_materia');
+            const precioInput = document.getElementById('precio');
+            const cantidadInput = document.getElementById('cantidad');
+            const sucursalSelect = document.getElementById('sucursal_id');
+
+            // Llenar los campos con los valores de la materia prima y opciones de sucursales
+            nombreMateriaInput.value = "{{ materia_prima.nombre_materia }}";
+            precioInput.value = "{{ materia_prima.precio }}";
+            cantidadInput.value = "{{ materia_prima.cantidad }}";
+
+            // Seleccionar la sucursal actual de la materia prima
+            sucursalSelect.value = "{{ materia_prima.sucursal_id }}";
+
+            // Agregar evento de envío del formulario
+            editarMateriaPrimaForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const nombre_materia = nombreMateriaInput.value;
+                const precio = parseFloat(precioInput.value);
+                const cantidad = parseInt(cantidadInput.value);
+                const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+                fetch('/editarMateriaPrima/{{ materia_prima.codigo_materia }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'nombre_materia': nombre_materia,
+                        'precio': precio,
+                        'cantidad': cantidad,
+                        'sucursal_id': sucursal_id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/indexMateriaPrima';
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    {% endblock %}

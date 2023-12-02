@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Proveedores</h1>
+    <a href="/agregarProveedor">Agregar Proveedor</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Proveedor</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="proveedores-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verProveedor(id_proveedor) {
+            window.location.href = `/detalleProveedor/${id_proveedor}`;
+        }
+
+        function editarProveedor(id_proveedor) {
+            window.location.href = `/editarProveedor/${id_proveedor}`;
+        }
+
+        function eliminarProveedor(id_proveedor) {
+            if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
+                fetch(`/eliminarProveedor/${id_proveedor}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexProveedor'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const proveedoresTableBody = document.getElementById('proveedores-table-body');
+
+            function appendRow(proveedor) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${proveedor.id_proveedor}</td>
+                    <td>${proveedor.nombres}</td>
+                    <td>${proveedor.apellidos}</td>
+                    <td>${proveedor.direccion}</td>
+                    <td>${proveedor.telefono}</td>
+                    <td class="actions">
+                        <button class="ver-btn" onclick="verProveedor(${proveedor.id_proveedor})">Ver</button>
+                        <button class="editar-btn" onclick="editarProveedor(${proveedor.id_proveedor})">Editar</button>
+                        <button class="eliminar-btn" onclick="eliminarProveedor(${proveedor.id_proveedor})">Eliminar</button>
+                    </td>
+                `;
+                proveedoresTableBody.appendChild(newRow);
+            }
+
+            fetch('/listaProveedores')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de proveedores por id_proveedor
+                    const proveedoresOrdenados = data.proveedores.sort((a, b) => a.id_proveedor - b.id_proveedor);
+                    proveedoresOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

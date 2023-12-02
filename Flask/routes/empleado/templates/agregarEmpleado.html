@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Agregar Nuevo Empleado</h1>
+    <form id="empleado-form">
+        <label for="clave">Clave:</label>
+        <input type="text" id="clave" name="clave" placeholder="Ingresa la clave del empleado" required>
+        <br>
+        <label for="RFC">RFC:</label>
+        <input type="text" id="RFC" name="RFC" placeholder="Ingresa el RFC del empleado" required>
+        <br>
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres" placeholder="Ingresa los nombres del empleado" required>
+        <br>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" placeholder="Ingresa los apellidos del empleado" required>
+        <br>
+        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+        <br>
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" placeholder="La edad se calculará automáticamente" readonly>
+        <br>
+        <label for="sueldo">Sueldo:</label>
+        <input type="number" id="sueldo" name="sueldo" placeholder="Ingresa el sueldo del empleado" step="0.01" required>
+        <br>
+        <label for="area_laboral">Área Laboral:</label>
+        <input type="text" id="area_laboral" name="area_laboral" placeholder="Ingresa el área laboral del empleado" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Ingresa el email del empleado" required>
+        <br>
+        <label for="usuario_id">Usuario</label>
+        <select id="usuario_id" name="usuario_id">
+            {% for usuario in usuarios_disponibles %}
+                <option value="{{ usuario.id_usuario }}">{{ usuario.nombre_usuario }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" value="Agregar Empleado" id="empleado-btn">Agregar Empleado</button>
+    </form>
+    <script>
+        const empleadoForm = document.getElementById('empleado-form');
+
+        // Función para calcular la edad a partir de la fecha de nacimiento
+        function calcularEdad(fechaNacimiento) {
+            const hoy = new Date();
+            const fechaNac = new Date(fechaNacimiento);
+            let edad = hoy.getFullYear() - fechaNac.getFullYear();
+            const mes = hoy.getMonth() - fechaNac.getMonth();
+
+            if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+                edad--;
+            }
+
+            return edad;
+        }
+
+        // Evento al cambiar la fecha de nacimiento
+        document.getElementById('fecha_nacimiento').addEventListener('change', function () {
+            const fechaNacimiento = this.value;
+            const edadInput = document.getElementById('edad');
+            const edadCalculada = calcularEdad(fechaNacimiento);
+
+            if (edadCalculada >= 18) {
+                edadInput.value = edadCalculada;
+            } else {
+                alert('La edad debe ser igual o mayor a 18 años.');
+                this.value = ''; // Limpiar el valor de la fecha de nacimiento
+                edadInput.value = ''; // Limpiar el valor de la edad
+            }
+        });
+
+        // Evento de envío del formulario
+        empleadoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const clave = document.getElementById('clave').value;
+            const RFC = document.getElementById('RFC').value;
+            const nombres = document.getElementById('nombres').value;
+            const apellidos = document.getElementById('apellidos').value;
+            const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
+            const edad = parseInt(document.getElementById('edad').value);
+            const sueldo = parseFloat(document.getElementById('sueldo').value);
+            const area_laboral = document.getElementById('area_laboral').value;
+            const email = document.getElementById('email').value;
+            const usuario_id = parseInt(document.getElementById('usuario_id').value);
+            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+            fetch('/agregarEmpleado', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'clave': clave,
+                    'RFC': RFC,
+                    'nombres': nombres,
+                    'apellidos': apellidos,
+                    'fecha_nacimiento': fecha_nacimiento,
+                    'edad': edad,
+                    'sueldo': sueldo,
+                    'area_laboral': area_laboral,
+                    'email': email,
+                    'usuario_id': usuario_id,
+                    'sucursal_id': sucursal_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexEmpleado'; // Redirecciona a la página de empleados después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

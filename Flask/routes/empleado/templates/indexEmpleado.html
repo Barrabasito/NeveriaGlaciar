@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Empleados</h1>
+    <a href="/agregarEmpleado">Agregar Empleado</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Clave</th>
+                <th>RFC</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Edad</th>
+                <th>Sueldo</th>
+                <th>Área Laboral</th>
+                <th>Email</th>
+                <th>Usuario ID</th>
+                <th>Sucursal ID</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="empleados-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verEmpleado(clave) {
+            window.location.href = `/detalleEmpleado/${clave}`;
+        }
+
+        function editarEmpleado(clave) {
+            window.location.href = `/editarEmpleado/${clave}`;
+        }
+
+        function eliminarEmpleado(clave) {
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                fetch(`/eliminarEmpleado/${clave}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexEmpleado'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const empleadosTableBody = document.getElementById('empleados-table-body');
+
+            function appendRow(empleado) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${empleado.clave}</td>
+                    <td>${empleado.RFC}</td>
+                    <td>${empleado.nombres}</td>
+                    <td>${empleado.apellidos}</td>
+                    <td>${empleado.fecha_nacimiento}</td>
+                    <td>${empleado.edad}</td>
+                    <td>${empleado.sueldo}</td>
+                    <td>${empleado.area_laboral}</td>
+                    <td>${empleado.email}</td>
+                    <td>${empleado.usuario_id}</td>
+                    <td>${empleado.sucursal_id}</td>
+                    <td class="actions">
+                        <button class="ver-btn">Ver</button>
+                        <button class="editar-btn">Editar</button>
+                        <button class="eliminar-btn">Eliminar</button>
+                    </td>
+                `;
+                empleadosTableBody.appendChild(newRow);
+
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verEmpleado(empleado.clave));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarEmpleado(empleado.clave));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarEmpleado(empleado.clave));
+            }
+
+            fetch('/listaEmpleados')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de empleados por clave
+                    const empleadosOrdenados = data.empleados.sort((a, b) => a.clave.localeCompare(b.clave));
+                    empleadosOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

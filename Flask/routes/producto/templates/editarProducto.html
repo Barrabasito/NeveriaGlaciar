@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Editar Producto</h1>
+    <form id="editar-producto-form">
+        <label for="sabor">Sabor:</label>
+        <input type="text" id="sabor" name="sabor" placeholder="Ingrese el sabor del producto" required>
+        <br>
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio" placeholder="Ingrese el precio del producto" required>
+        <br>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad del producto" required>
+        <br>
+        <label for="categoria_id">Categoría</label>
+        <select id="categoria_id" name="categoria_id">
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id_categoria }}">{{ categoria.nombre_categoria }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editarProductoForm = document.getElementById('editar-producto-form');
+
+            // Obtener los elementos del formulario
+            const saborInput = document.getElementById('sabor');
+            const precioInput = document.getElementById('precio');
+            const cantidadInput = document.getElementById('cantidad');
+            const categoriaSelect = document.getElementById('categoria_id');
+            const sucursalSelect = document.getElementById('sucursal_id');
+
+            // Llenar los campos con los valores del producto y opciones de categorías y sucursales
+            saborInput.value = "{{ producto.sabor }}";
+            precioInput.value = "{{ producto.precio }}";
+            cantidadInput.value = "{{ producto.cantidad }}";
+
+    
+            // Seleccionar la categoría y sucursal actual del producto
+            categoriaSelect.value = "{{ producto.categoria_id }}";
+            sucursalSelect.value = "{{ producto.sucursal_id }}";
+
+            // Agregar evento de envío del formulario
+            editarProductoForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const sabor = saborInput.value;
+                const precio = parseFloat(precioInput.value);
+                const cantidad = parseInt(cantidadInput.value);
+                const categoria_id = parseInt(document.getElementById('categoria_id').value);
+                const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+
+                fetch('/editarProducto/{{ producto.codigo_producto }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'sabor': sabor,
+                        'precio': precio,
+                        'cantidad': cantidad,
+                        'categoria_id': categoria_id,
+                        'sucursal_id': sucursal_id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/indexProducto';
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    {% endblock %}

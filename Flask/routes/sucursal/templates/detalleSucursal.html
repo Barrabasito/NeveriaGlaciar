@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .details-table {
+            width: 100%;
+        }
+    </style>
+
+    <h1>Detalles de Sucursal</h1>
+    <table class="details-table">
+        <tbody id="sucursal-details-body">
+            <!-- Los detalles de la sucursal se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sucursalDetailsBody = document.getElementById('sucursal-details-body');
+            //console.log(sucursal);
+            const sucursalData = {{ sucursal | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+            
+            const order = ['id_sucursal', 'nombre', 'direccion', 'telefonos'];
+
+            function appendDetailRow(key, value) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${key}:</td>
+                    <td>${Array.isArray(value) ? value.map(obj => obj.numero).join(', ') : value}</td>
+                `;
+                sucursalDetailsBody.appendChild(newRow);
+            }
+            order.forEach(key => {
+                appendDetailRow(key, sucursalData[key]);
+            });
+        });
+    </script>
+    {% endblock %}

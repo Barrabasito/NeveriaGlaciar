@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1>Editar Sucursal</h1>
+    <form id="editar-sucursal-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre de la sucursal" required>
+        <br>
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
+        <br>
+        <label for="telefonos">Teléfonos:</label>
+        <div id="telefonos-container">
+            <!-- Aquí se agregarán dinámicamente los campos de teléfonos existentes -->
+        </div>
+        <button type="button" id="add-telefono-btn">Agregar Teléfono</button>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const telefonosContainer = document.getElementById('telefonos-container');
+            const addTelefonoButton = document.getElementById('add-telefono-btn');
+    
+            // Función para agregar un campo de teléfono
+            function addTelefonoInput(value = '') {
+                const newTelefonoInput = document.createElement('div');
+                newTelefonoInput.classList.add('telefono-input');
+                newTelefonoInput.innerHTML = `
+                    <input type="text" class="telefono" name="telefonos" placeholder="Ingrese el teléfono" value="${value}">
+                    <button type="button" class="remove-telefono-btn">Eliminar</button>
+                `;
+                telefonosContainer.appendChild(newTelefonoInput);
+    
+                const removeTelefonoButton = newTelefonoInput.querySelector('.remove-telefono-btn');
+                removeTelefonoButton.addEventListener('click', function () {
+                    telefonosContainer.removeChild(newTelefonoInput);
+                });
+            }
+    
+            // Agregar campos de teléfono existentes al cargar la página
+            const telefonosExistente = {{ telefonos | tojson | safe }};
+            telefonosExistente.forEach(telefono => addTelefonoInput(telefono));
+    
+            // Agregar evento para agregar nuevos campos de teléfono
+            addTelefonoButton.addEventListener('click', function () {
+                addTelefonoInput();
+            });
+
+             // Llenar los campos nombre y dirección con los valores de la sucursal
+             const nombreInput = document.getElementById('nombre');
+             const direccionInput = document.getElementById('direccion');
+             nombreInput.value = "{{ sucursal.nombre }}";
+             direccionInput.value = "{{ sucursal.direccion }}";
+
+        });
+    
+        const editarSucursalForm = document.getElementById('editar-sucursal-form');
+
+         editarSucursalForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+    
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const telefonosInputs = document.querySelectorAll('.telefono-input input.telefono');
+    
+            const telefonos = Array.from(telefonosInputs).map(input => input.value);
+    
+            fetch('/editarSucursal/{{ sucursal.id_sucursal }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'nombre': nombre,
+                    'direccion': direccion,
+                    'telefonos': telefonos
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                //window.location.href = `/detalleSucursal/${sucursal.id_sucursal}`;
+                window.location.href = '/indexSucursal';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Materias Primas</h1>
+    <a href="/agregarMateriaPrima">Agregar Materia Prima</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Código Materia Prima</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Sucursal ID</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="materias-primas-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verMateriaPrima(codigo_materia) {
+            window.location.href = `/detalleMateriaPrima/${codigo_materia}`;
+        }
+
+        function editarMateriaPrima(codigo_materia) {
+            window.location.href = `/editarMateriaPrima/${codigo_materia}`;
+        }
+
+        function eliminarMateriaPrima(codigo_materia) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta materia prima?")) {
+                fetch(`/eliminarMateriaPrima/${codigo_materia}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexMateriaPrima'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const materiasPrimasTableBody = document.getElementById('materias-primas-table-body');
+
+            function appendRow(materiaPrima) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${materiaPrima.codigo_materia}</td>
+                    <td>${materiaPrima.nombre_materia}</td>
+                    <td>${materiaPrima.precio}</td>
+                    <td>${materiaPrima.cantidad}</td>
+                    <td>${materiaPrima.sucursal_id}</td>
+                    <td class="actions">
+                        <button class="ver-btn">Ver</button>
+                        <button class="editar-btn">Editar</button>
+                        <button class="eliminar-btn">Eliminar</button>
+                    </td>
+                `;
+                materiasPrimasTableBody.appendChild(newRow);
+
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verMateriaPrima(materiaPrima.codigo_materia));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarMateriaPrima(materiaPrima.codigo_materia));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarMateriaPrima(materiaPrima.codigo_materia));
+            }
+
+            fetch('/listaMateriasPrimas')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de materias primas por código_materia
+                    const materiasPrimasOrdenadas = data.materias_primas.sort((a, b) => a.codigo_materia.localeCompare(b.codigo_materia));
+                    materiasPrimasOrdenadas.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

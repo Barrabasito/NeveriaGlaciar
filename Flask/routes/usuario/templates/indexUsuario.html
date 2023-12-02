@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+    <style>
+        td, th {
+            padding: 8px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
+    <h1>Consulta de Usuarios</h1>
+    <a href="/agregarUsuario">Agregar Usuario</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID Usuario</th>
+                <th>Nombre de Usuario</th>
+                <th>Password</th>
+                <th>Fecha de Registro</th>
+                <th>Admin</th>
+                <th>Sucursal ID</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="usuarios-table-body">
+            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+        </tbody>
+    </table>
+    <script>
+        function verUsuario(id_usuario) {
+            window.location.href = `/detalleUsuario/${id_usuario}`;
+        }
+    
+        function editarUsuario(id_usuario) {
+            window.location.href = `/editarUsuario/${id_usuario}`;
+        }
+    
+        function eliminarUsuario(id_usuario) {
+            if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+                fetch(`/eliminarUsuario/${id_usuario}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
+                    console.log(data);
+                    window.location.href = '/indexUsuario'; 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            const usuariosTableBody = document.getElementById('usuarios-table-body');
+    
+            function appendRow(usuario) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${usuario.id_usuario}</td>
+                    <td>${usuario.nombre_usuario}</td>
+                    <td>${usuario.password}</td>
+                    <td>${new Date(usuario.fecha_registro).toLocaleDateString()}</td>
+                    <td>${usuario.admin ? 'Sí' : 'No'}</td>
+                    <td>${usuario.sucursal_id}</td>
+                    <td class="actions">
+                        <button class="ver-btn">Ver</button>
+                        <button class="editar-btn">Editar</button>
+                        <button class="eliminar-btn">Eliminar</button>
+                    </td>
+                `;
+                usuariosTableBody.appendChild(newRow);
+    
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verUsuario(usuario.id_usuario));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarUsuario(usuario.id_usuario));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarUsuario(usuario.id_usuario));
+            }
+    
+            fetch('/listaUsuarios')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de usuarios por id_usuario
+                    const usuariosOrdenados = data.usuarios.sort((a, b) => a.id_usuario - b.id_usuario);
+                    usuariosOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Add New Sucursal</h1>
+    <form id="sucursal-form">
+        <label for="nombre">Sucursal Name</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Enter sucursal name">
+        <br>
+        <label for="direccion">Address</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Enter address">
+        <br>
+        <label for="telefonos">Telefonos</label>
+        <div id="telefonos-container">
+            <div class="telefono-input">
+                <input type="text" class="telefono" name="telefonos" placeholder="Enter telefono">
+                <button type="button" class="remove-telefono-btn">Remove</button>
+            </div>
+        </div>
+        <button type="button" id="add-telefono-btn">Add Telefonos</button>
+        <br>
+        <button type="submit" value="Add Sucursal" id="sucursal-btn">Add Sucursal</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const telefonosContainer = document.getElementById('telefonos-container');
+            const addTelefonoButton = document.getElementById('add-telefono-btn');
+
+            addTelefonoButton.addEventListener('click', function () {
+                const newTelefonoInput = document.createElement('div');
+                newTelefonoInput.classList.add('telefono-input');
+                newTelefonoInput.innerHTML = `
+                    <input type="text" class="telefono" name="telefonos" placeholder="Enter telefono">
+                    <button type="button" class="remove-telefono-btn">Remove</button>
+                `;
+                telefonosContainer.appendChild(newTelefonoInput);
+
+                const removeTelefonoButton = newTelefonoInput.querySelector('.remove-telefono-btn');
+                removeTelefonoButton.addEventListener('click', function () {
+                    telefonosContainer.removeChild(newTelefonoInput);
+                });
+            });
+        });
+
+        const sucursalForm = document.getElementById('sucursal-form');
+        sucursalForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const telefonosInputs = document.querySelectorAll('.telefono-input input.telefono');
+
+            const telefonos = Array.from(telefonosInputs).map(input => input.value);
+
+            fetch('/agregarSucursal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'nombre': nombre,
+                    'direccion': direccion,
+                    'telefonos': telefonos
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = '/indexSucursal'; // Redirecciona a la página de sucursales después de agregar
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    {% endblock %}

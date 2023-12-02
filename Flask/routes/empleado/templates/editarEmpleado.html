@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>Editar Empleado</h1>
+    <form id="editar-empleado-form">
+        <label for="clave">Clave:</label>
+        <input type="text" id="clave" name="clave" placeholder="Ingresa la clave del empleado" required readonly>
+        <br>
+        <label for="RFC">RFC:</label>
+        <input type="text" id="RFC" name="RFC" placeholder="Ingresa el RFC del empleado" required>
+        <br>
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres" placeholder="Ingresa los nombres del empleado" required>
+        <br>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" placeholder="Ingresa los apellidos del empleado" required>
+        <br>
+        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+        <br>
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" placeholder="La edad se calculará automáticamente" readonly>
+        <br>
+        <label for="sueldo">Sueldo:</label>
+        <input type="number" id="sueldo" name="sueldo" placeholder="Ingresa el sueldo del empleado" step="0.01" required>
+        <br>
+        <label for="area_laboral">Área Laboral:</label>
+        <input type="text" id="area_laboral" name="area_laboral" placeholder="Ingresa el área laboral del empleado" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Ingresa el email del empleado" required>
+        <br>
+        <label for="usuario_id">Usuario</label>
+        <select id="usuario_id" name="usuario_id">
+            {% for usuario in usuarios_disponibles %}
+                <option value="{{ usuario.id_usuario }}">{{ usuario.nombre_usuario }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="sucursal_id">Sucursal</label>
+        <select id="sucursal_id" name="sucursal_id">
+            {% for sucursal in sucursales %}
+                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editarEmpleadoForm = document.getElementById('editar-empleado-form');
+
+            // Obtener los elementos del formulario
+            const claveInput = document.getElementById('clave');
+            const RFCInput = document.getElementById('RFC');
+            const nombresInput = document.getElementById('nombres');
+            const apellidosInput = document.getElementById('apellidos');
+            const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+            const edadInput = document.getElementById('edad');
+            const sueldoInput = document.getElementById('sueldo');
+            const areaLaboralInput = document.getElementById('area_laboral');
+            const emailInput = document.getElementById('email');
+            const usuarioSelect = document.getElementById('usuario_id');
+            const sucursalSelect = document.getElementById('sucursal_id');
+
+            // Llenar los campos con los valores del empleado y opciones de usuarios y sucursales
+            claveInput.value = "{{ empleado.clave }}";
+            RFCInput.value = "{{ empleado.RFC }}";
+            nombresInput.value = "{{ empleado.nombres }}";
+            apellidosInput.value = "{{ empleado.apellidos }}";
+            fechaNacimientoInput.value = "{{ empleado.fecha_nacimiento }}";
+            edadInput.value = "{{ empleado.edad }}";
+            sueldoInput.value = "{{ empleado.sueldo }}";
+            areaLaboralInput.value = "{{ empleado.area_laboral }}";
+            emailInput.value = "{{ empleado.email }}";
+            usuarioSelect.value = "{{ empleado.usuario_id }}";
+            sucursalSelect.value = "{{ empleado.sucursal_id }}";
+
+            // Evento al cambiar la fecha de nacimiento
+            fechaNacimientoInput.addEventListener('change', function () {
+                const fechaNacimiento = this.value;
+                const edadCalculada = calcularEdad(fechaNacimiento);
+
+                if (edadCalculada >= 18) {
+                    edadInput.value = edadCalculada;
+                } else {
+                    alert('La edad debe ser igual o mayor a 18 años.');
+                    this.value = ''; // Limpiar el valor de la fecha de nacimiento
+                    edadInput.value = ''; // Limpiar el valor de la edad
+                }
+            });
+
+            // Agregar evento de envío del formulario
+            editarEmpleadoForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const clave = claveInput.value;
+                const RFC = RFCInput.value;
+                const nombres = nombresInput.value;
+                const apellidos = apellidosInput.value;
+                const fecha_nacimiento = fechaNacimientoInput.value;
+                const edad = parseInt(edadInput.value);
+                const sueldo = parseFloat(sueldoInput.value);
+                const area_laboral = areaLaboralInput.value;
+                const email = emailInput.value;
+                const usuario_id = parseInt(usuarioSelect.value);
+                const sucursal_id = parseInt(sucursalSelect.value);
+
+                fetch('/editarEmpleado/{{ empleado.clave }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'clave': clave,
+                        'RFC': RFC,
+                        'nombres': nombres,
+                        'apellidos': apellidos,
+                        'fecha_nacimiento': fecha_nacimiento,
+                        'edad': edad,
+                        'sueldo': sueldo,
+                        'area_laboral': area_laboral,
+                        'email': email,
+                        'usuario_id': usuario_id,
+                        'sucursal_id': sucursal_id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/indexEmpleado';
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            // Función para calcular la edad a partir de la fecha de nacimiento
+            function calcularEdad(fechaNacimiento) {
+                const hoy = new Date();
+                const fechaNac = new Date(fechaNacimiento);
+                let edad = hoy.getFullYear() - fechaNac.getFullYear();
+                const mes = hoy.getMonth() - fechaNac.getMonth();
+
+                if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+                    edad--;
+                }
+
+                return edad;
+            }
+        });
+    </script>
+    {% endblock %}

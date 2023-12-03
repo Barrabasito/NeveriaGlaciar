@@ -51,6 +51,25 @@
                 .catch(error => console.error('Error:', error));
             }
         }
+        function cambiarImagen(codigo_materia) {
+            const inputFile = document.getElementById(`inputFile-${codigo_materia}`);
+            inputFile.click();
+            inputFile.addEventListener('change', function() {
+                const file = this.files[0];
+                const formData = new FormData();
+                formData.append('inputFile', file);
+                fetch(`/modificarImagenMateriaPrima/${codigo_materia}`, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // You may want to update the UI or provide feedback to the user
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             const materiasPrimasTableBody = document.getElementById('materias-primas-table-body');
@@ -67,8 +86,8 @@
                         <button class="ver-btn">Ver</button>
                         <button class="editar-btn">Editar</button>
                         <button class="eliminar-btn">Eliminar</button>
-                        <label for="inputFile-${producto.codigo_producto}" class="cambiarImagenLabel">Cambiar Imagen</label>
-                        <input type="file" id="inputFile-${producto.codigo_producto}" name="inputFile" style="display: none;">
+                        <label for="inputFile-${materiaPrima.codigo_materia}" class="cambiarImagenLabel">Cambiar Imagen</label>
+                        <input type="file" id="inputFile-${materiaPrima.codigo_materia}" name="inputFile" style="display: none;">
                     </td>
                 `;
                 materiasPrimasTableBody.appendChild(newRow);
@@ -77,6 +96,8 @@
                 newRow.querySelector('.ver-btn').addEventListener('click', () => verMateriaPrima(materiaPrima.codigo_materia));
                 newRow.querySelector('.editar-btn').addEventListener('click', () => editarMateriaPrima(materiaPrima.codigo_materia));
                 newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarMateriaPrima(materiaPrima.codigo_materia));
+                newRow.querySelector('.cambiarImagenLabel').addEventListener('click', () => cambiarImagen(materiaPrima.codigo_materia));
+
             }
 
             fetch('/listaMateriasPrimas')

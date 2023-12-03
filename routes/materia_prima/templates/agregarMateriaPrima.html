@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Agregar Nueva Materia Prima</h1>
-    <form id="materia-prima-form">
+    <form id="materia-prima-form" enctype="multipart/form-data">
         <label for="codigo_materia">Código de la Materia Prima</label>
         <input type="text" id="codigo_materia" name="codigo_materia" placeholder="Ingresa el código de la materia prima">
         <br>
@@ -22,37 +22,26 @@
             {% endfor %}
         </select>
         <br>
+        <label for="inputFile">Imagen</label>
+        <input type="file" name="inputFile">
+        <br>
         <button type="submit" value="Agregar Materia Prima" id="materia-prima-btn">Agregar Materia Prima</button>
     </form>
     <script>
         const materiaPrimaForm = document.getElementById('materia-prima-form');
         materiaPrimaForm.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            const codigo_materia = document.getElementById('codigo_materia').value;
-            const nombre_materia = document.getElementById('nombre_materia').value;
-            const precio = parseFloat(document.getElementById('precio').value);
-            const cantidad = parseInt(document.getElementById('cantidad').value);
-            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
-
+            const formData = new FormData(materiaPrimaForm);
             fetch('/agregarMateriaPrima', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'codigo_materia': codigo_materia,
-                    'nombre_materia': nombre_materia,
-                    'precio': precio,
-                    'cantidad': cantidad,
-                    'sucursal_id': sucursal_id
-                })
+                body: formData,
             })
             .then(response => response.json())
             .then(data => {
-                window.location.href = '/indexMateriaPrima'; // Redirecciona a la página de materias primas después de agregar
+                console.log(data);
+               //window.location.href = '/indexMateriaPrima'; // Redirecciona a la página de materias primas después de agregar
             })
             .catch(error => console.error('Error:', error));
         });
     </script>
-    {% endblock %}
+{% endblock %}

@@ -46,7 +46,7 @@ class Usuario(db.Model):
             payload = {
                 "exp": datetime.datetime.utcnow()
                 + datetime.timedelta(
-                    minutes=10
+                    minutes=20
                 ),  # Sirve para especificar la cantidad de tiempo que servira el token
                 "iat": datetime.datetime.utcnow(),
                 "sub": usuario_id,

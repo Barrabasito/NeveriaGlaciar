@@ -40,7 +40,16 @@
             .then(data=>{
                 localStorage.setItem('token',data.auth_token);
                 console.log(data);
-                window.location.href = '/agregarVenta';
+                const jsonToSend = JSON.stringify(data.usuario);
+
+                // Codifica la cadena JSON para incluirla en la URL
+                const encodedData = encodeURIComponent(jsonToSend);
+
+                // Construye la URL con el parámetro
+                const url = `/agregarVenta?data=${encodedData}`;
+
+                console.log(data);
+                window.location.href = url;
             })
         })
     </script>

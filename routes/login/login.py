@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect
 from sqlalchemy import exc
-from models import Usuario,Sucursal
+from models import Usuario,Sucursal,Empleado
 from app import db, bcrypt
 from auth import tokenCheck, verificar
 from config import BaseConfig
@@ -31,11 +31,22 @@ def login_post():
             validation = bcrypt.check_password_hash(searchUser.password, password)
             if validation:
                 auth_token = usuario.encode_auth_token(usuario_id=searchUser.id_usuario)
+                usuario_data = {
+                'id_usuario': searchUser.id_usuario,
+                'nombre_usuario': searchUser.nombre_usuario,
+                'password': searchUser.password,
+                'fecha_registro': searchUser.fecha_registro.strftime('%Y-%m-%d'),  # Formatear la fecha como string
+                'admin': searchUser.admin,
+                'sucursal_id': searchUser.sucursal_id
+                }
+                
                 response = {
                     "status": "success",
                     "message": "Login exitoso",
                     "auth_token": auth_token,
+                    "usuario":usuario_data,
                 }
+                print(response)
                 return jsonify(response)
         return jsonify({"message": "Datos incorrectos"})
     

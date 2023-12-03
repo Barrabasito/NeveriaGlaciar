@@ -1,88 +1,131 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Add New Venta</h1>
+<style>
+    .containerAgregar {
+        display: flex;
+        height: 80%;
+        padding-right: 100px;
+        padding-left: 100px;
+    }
+    
+    .half {
+        flex: 1;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+    }
+    
+    /* Estilos adicionales para hacerlo más atractivo visualmente */
+    .half:nth-child(odd) {
+        background-color: #f0f0f0;
+    }
 
-    <form id="venta-form">
+    .listaProductos{
+        background-color: #ccc;
+        overflow-y: auto; /* Agregado para permitir desplazamiento si hay muchos productos */
+        max-height: 100%; /* Ajustado para ocupar toda la altura */
+    }
 
-        <div class="mb-3">
-            <label for="monto" class="form-label">Monto</label>
-            <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" required>
+    h2 {
+        color: #333;
+    }
+</style>
+<div class="containerAgregar mt-5">
+
+    <div class="half">
+
+        <form id="venta-form" enctype="multipart/form-data"></form>
+
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="monto" class="form-label">Monto:</label>
+                <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" required>
+            </div>
+
+            <div class="col-sm-12 col-md-6">
+                <label for="forma_pago" class="form-label">Forma de Pago:</label>
+                <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Enter forma de pago">
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label for="forma_pago" class="form-label">Forma de Pago</label>
-            <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Enter forma de pago">
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="sucursal_id" class="form-label">Sucursal:</label>
+                <select id="sucursal_id" name="sucursal_id" class="form-select">
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-sm-12 col-md-6">
+                <label for="clave_empleado" class="form-label">Empleado:</label>
+                <select id="clave_empleado" name="clave_empleado" class="form-select">
+                    {% for empleado in empleados %}
+                        <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label for="sucursal_id" class="form-label">Sucursal</label>
-            <select id="sucursal_id" name="sucursal_id" class="form-select">
-                {% for sucursal in sucursales %}
-                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="clave_empleado" class="form-label">Empleado</label>
-            <select id="clave_empleado" name="clave_empleado" class="form-select">
-                {% for empleado in empleados %}
-                    <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <h2>Productos Vendidos</h2>
-        <div id="productos-vendidos-container">
-            <!-- Contenido dinámico será insertado aquí -->
-        </div>
-        
-        <button type="button" id="add-producto-btn" class="btn btn-primary">Add Producto Vendido</button>
-
-        <button type="submit" class="btn btn-success" id="venta-btn">Add Venta</button>
-
-    </form>
-</div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const productosVendidosContainer = document.getElementById('productos-vendidos-container');
-            const addProductoButton = document.getElementById('add-producto-btn');
-
-            function createProductoInput() {
-                const newProductoVendidoInput = document.createElement('div');
-                newProductoVendidoInput.classList.add('producto-vendido-input');
-                newProductoVendidoInput.innerHTML = `
-                    <label for="producto_seleccionado">Producto</label>
-                    <select class="producto-seleccionado" name="producto_seleccionado" required>
+        <div class="row"><h6 style="text-align: center;">Producto</h6></div>
+        <hr>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="producto_seleccionado" class="form-label">Producto</label>
+                    <select class="form-select producto-seleccionado" name="producto_seleccionado" required>
                         {% for producto in productos %}
                             <option value="{{ producto.codigo_producto }}">{{ producto.sabor }}</option>
                         {% endfor %}
                     </select>
-                    <br>
-                    <label for="cantidad">Cantidad</label>
-                    <input type="number" class="cantidad" name="cantidad" placeholder="Enter cantidad" required>
-                    <br>
-                    <button type="button" class="remove-producto-btn">Remove</button>
-                `;
-                productosVendidosContainer.appendChild(newProductoVendidoInput);
+            </div>
+            <div class="col-sm-12 col-md-6">
+                    <label for="cantidad" class="form-label">Cantidad</label>
+                    <input type="number" class="form-control cantidad" name="cantidad" placeholder="Enter cantidad"value=1 required>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col">
+                <button type="button" id="add-producto-btn" class="btn btn-primary">Añadir</button>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-success w-100" id="venta-btn">Pagar</button>
+            </div>
+        </div>
 
-                const removeProductoButton = newProductoVendidoInput.querySelector('.remove-producto-btn');
-                removeProductoButton.addEventListener('click', function () {
-                    productosVendidosContainer.removeChild(newProductoVendidoInput);
-                });
+    </form>
+    </div>
+
+    <div id="listaProductos" class="half listaProductos">
+
+    </div>
+</div>
+    <script>        
+            const listaProductosContainer = document.getElementById('listaProductos');
+            const addProductoButton = document.getElementById('add-producto-btn');
+    
+            function createProductoList(producto) {
+                const nuevoProducto = document.createElement('div');
+                nuevoProducto.classList.add('producto-vendido-input');  // Agregada la clase
+                nuevoProducto.innerHTML = `<p>${producto.codigo_producto} - ${producto.cantidad}</p>`;
+                listaProductosContainer.appendChild(nuevoProducto);
             }
-
+    
             addProductoButton.addEventListener('click', function () {
-                createProductoInput();
+                const productoSeleccionado = document.querySelector('.producto-seleccionado').value;
+                const cantidad = document.querySelector('.cantidad').value;
+    
+                const nuevoProducto = {
+                    'codigo_producto': productoSeleccionado,
+                    'cantidad': cantidad
+                };
+    
+                createProductoList(nuevoProducto);
             });
 
-            // Agregar un input de producto por defecto al cargar la página
-            createProductoInput();
-        });
-
-        const ventaForm = document.getElementById('venta-form');
+        
+            const ventaForm = document.getElementById('venta-form');
         ventaForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -128,4 +171,5 @@
             console.error('No se encontró ningún elemento con la clase "inicio"');
           }
     </script>
+   
     {% endblock %}

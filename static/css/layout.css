@@ -140,7 +140,23 @@ li.active~.indicator{
     --x:0;
     transform: translateX(var(--x));
 }
+/* Estilos para tablets y dispositivos medianos */
+/* @media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
 
+    .container {
+        width: 90%;
+    }
+}
+
+/* Estilos para dispositivos pequeños (móviles) */
+@media (max-width: 576px) {
+    body {
+        font-size: 12px;
+    }
+} */
 li:nth-child(2).active~.indicator{--x:70px}
 li:nth-child(3).active~.indicator{--x:140px}
 li:nth-child(4).active~.indicator{--x:210px}

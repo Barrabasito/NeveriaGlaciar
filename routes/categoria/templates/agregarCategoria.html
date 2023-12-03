@@ -1,13 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Agregar Nueva Categoría</h1>
-    <form id="categoria-form">
-        <label for="nombre_categoria">Nombre de la Categoría</label>
-        <input type="text" id="nombre_categoria" name="nombre_categoria" placeholder="Ingresa el nombre de la categoría">
-        <br>
-        <button type="submit" value="Agregar Categoría" id="categoria-btn">Agregar Categoría</button>
-    </form>
+<h1 class="text-center mb-4">Agregar Nueva Categoría</h1>
+
+<form id="categoria-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombre_categoria" class="form-label">Nombre de la Categoría:</label>
+            <input type="text" id="nombre_categoria" name="nombre_categoria" class="form-control" placeholder="Ingresa el nombre de la categoría">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success w-100" id="categoria-btn">Agregar Categoría</button>
+        </div>
+    </div>
+</form>
     <script>
         const categoriaForm = document.getElementById('categoria-form');
         categoriaForm.addEventListener('submit', function (event) {

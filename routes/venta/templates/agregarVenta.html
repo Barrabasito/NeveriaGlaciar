@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<<<<<<< HEAD
 <style>
     .containerAgregar {
         display: flex;
@@ -20,6 +21,10 @@
     .half:nth-child(odd) {
         background-color: #f0f0f0;
     }
+=======
+<div class="container mt-5">
+    <h1 class="text-center">Agregar Nueva Venta</h1>
+>>>>>>> c5257bb1a4c3991b91e0ea44865b31c17a09e9fe
 
     .listaProductos{
         background-color: #ccc;
@@ -27,6 +32,7 @@
         max-height: 100%; /* Ajustado para ocupar toda la altura */
     }
 
+<<<<<<< HEAD
     h2 {
         color: #333;
     }
@@ -74,6 +80,58 @@
             <div class="col-sm-12 col-md-6">
                 <label for="producto_seleccionado" class="form-label">Producto</label>
                     <select class="form-select producto-seleccionado" name="producto_seleccionado" required>
+=======
+        <div class="mb-3">
+            <label for="monto" class="form-label">Monto:</label>
+            <input type="number" id="monto" name="monto" class="form-control" placeholder="Ingresa el monto" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="forma_pago" class="form-label">Forma de Pago:</label>
+            <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Ingresa la forma de pago">
+        </div>
+
+        <div class="mb-3">
+            <label for="sucursal_id" class="form-label">Sucursal:</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="clave_empleado" class="form-label">Empleado:</label>
+            <select id="clave_empleado" name="clave_empleado" class="form-select">
+                {% for empleado in empleados %}
+                    <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <h2 class="mb-3">Productos Vendidos</h2>
+        <div id="productos-vendidos-container">
+            <!-- Contenido dinámico será insertado aquí -->
+        </div>
+        
+        <button type="button" id="add-producto-btn" class="btn btn-primary">Agregar Producto Vendido</button>
+
+        <button type="submit" class="btn btn-success" id="venta-btn">Agregar Venta</button>
+
+    </form>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productosVendidosContainer = document.getElementById('productos-vendidos-container');
+            const addProductoButton = document.getElementById('add-producto-btn');
+
+            function createProductoInput() {
+                const newProductoVendidoInput = document.createElement('div');
+                newProductoVendidoInput.classList.add('producto-vendido-input');
+                newProductoVendidoInput.innerHTML = `
+                    <label for="producto_seleccionado">Producto</label>
+                    <select class="producto-seleccionado" name="producto_seleccionado" required>
+>>>>>>> c5257bb1a4c3991b91e0ea44865b31c17a09e9fe
                         {% for producto in productos %}
                             <option value="{{ producto.codigo_producto }}">{{ producto.sabor }}</option>
                         {% endfor %}

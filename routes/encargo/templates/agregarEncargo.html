@@ -1,43 +1,70 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Agregar Nuevo Encargo</h1>
-    <form id="encargo-form">
-        <label for="materia_prima">Materia Prima</label>
-        <select id="materia_prima" name="materia_prima">
-            {% for materia_prima in materias_primas %}
-                <option value="{{ materia_prima.codigo_materia }}" data-precio="{{ materia_prima.precio }}">{{ materia_prima.nombre_materia }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="cantidad_encargo">Cantidad de Encargo</label>
-        <input type="number" id="cantidad_encargo" name="cantidad_encargo" value="0" placeholder="Ingresa la cantidad de encargo">
-        <br>
-        <label for="cantidad_a_pagar">Cantidad a Pagar</label>
-        <input type="number" id="cantidad_a_pagar" name="cantidad_a_pagar" placeholder="Automático" readonly>
-        <br>
-        <label for="forma_pago">Forma de Pago</label>
-        <input type="text" id="forma_pago" name="forma_pago" placeholder="Ingresa la forma de pago">
-        <br>
-        <label for="fecha_encargo">Fecha de Encargo</label>
-        <input type="date" id="fecha_encargo" name="fecha_encargo" readonly>
-        <br>
-        <label for="proveedor_id">Proveedor</label>
-        <select id="proveedor_id" name="proveedor_id">
-            {% for proveedor in proveedores %}
-                <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombres }} {{ proveedor.apellidos }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="sucursal_id">Sucursal</label>
-        <select id="sucursal_id" name="sucursal_id">
-            {% for sucursal in sucursales %}
-                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <button type="submit" value="Agregar Encargo" id="encargo-btn">Agregar Encargo</button>
-    </form>
+<h1 class="text-center mb-4">Agregar Nuevo Encargo</h1>
+
+<form id="encargo-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="materia_prima" class="form-label">Materia Prima:</label>
+            <select id="materia_prima" name="materia_prima" class="form-select">
+                {% for materia_prima in materias_primas %}
+                    <option value="{{ materia_prima.codigo_materia }}" data-precio="{{ materia_prima.precio }}">{{ materia_prima.nombre_materia }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="cantidad_encargo" class="form-label">Cantidad de Encargo:</label>
+            <input type="number" id="cantidad_encargo" name="cantidad_encargo" value="0" class="form-control" placeholder="Ingresa la cantidad de encargo">
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="cantidad_a_pagar" class="form-label">Cantidad a Pagar:</label>
+            <input type="number" id="cantidad_a_pagar" name="cantidad_a_pagar" class="form-control" placeholder="Automático" readonly>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="forma_pago" class="form-label">Forma de Pago:</label>
+            <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Ingresa la forma de pago">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="fecha_encargo" class="form-label">Fecha de Encargo:</label>
+            <input type="date" id="fecha_encargo" name="fecha_encargo" class="form-control" readonly>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="proveedor_id" class="form-label">Proveedor:</label>
+            <select id="proveedor_id" name="proveedor_id" class="form-select">
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombres }} {{ proveedor.apellidos }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="sucursal_id" class="form-label">Sucursal:</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success w-100" id="encargo-btn">Agregar Encargo</button>
+        </div>
+    </div>
+</form>
     <script>
         // Establecer la fecha actual en el campo de fecha
         const fechaEncargo = document.getElementById('fecha_encargo');

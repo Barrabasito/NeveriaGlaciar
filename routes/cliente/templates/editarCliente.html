@@ -1,35 +1,62 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Editar Cliente</h1>
-    <form id="editar-cliente-form">
-        <label for="nombre_empresa">Nombre de la Empresa:</label>
-        <input type="text" id="nombre_empresa" name="nombre_empresa" value="{{ cliente.nombre_empresa }}" readonly>
-        <br>
-        <label for="direccion">Dirección:</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ingrese la dirección del cliente" required>
-        <br>
-        <label for="codigo_producto">Código del Producto:</label>
-        <input type="text" id="codigo_producto" name="codigo_producto" placeholder="Ingrese el código del producto" required>
-        <br>
-        <label for="cantidad_pedida">Cantidad Pedida:</label>
-        <input type="number" id="cantidad_pedida" name="cantidad_pedida" placeholder="Ingrese la cantidad pedida" required>
-        <br>
-        <label for="costo_total">Costo Total:</label>
-        <input type="number" id="costo_total" name="costo_total" placeholder="Ingrese el costo total" step="0.01" required>
-        <br>
-        <label for="forma_pago">Forma de Pago:</label>
-        <input type="text" id="forma_pago" name="forma_pago" placeholder="Ingrese la forma de pago" required>
-        <br>
-        <label for="sucursal_id">Sucursal:</label>
-        <select id="sucursal_id" name="sucursal_id">
-            {% for sucursal in sucursales %}
-                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
+<h1 class="text-center mb-4">Editar Cliente</h1>
+
+<form id="editar-cliente-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombre_empresa" class="form-label">Nombre de la Empresa:</label>
+            <input type="text" id="nombre_empresa" name="nombre_empresa" value="{{ cliente.nombre_empresa }}" class="form-control" readonly>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="direccion" class="form-label">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese la dirección del cliente" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="codigo_producto" class="form-label">Código del Producto:</label>
+            <input type="text" id="codigo_producto" name="codigo_producto" class="form-control" placeholder="Ingrese el código del producto" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="cantidad_pedida" class="form-label">Cantidad Pedida:</label>
+            <input type="number" id="cantidad_pedida" name="cantidad_pedida" class="form-control" placeholder="Ingrese la cantidad pedida" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="costo_total" class="form-label">Costo Total:</label>
+            <input type="number" id="costo_total" name="costo_total" class="form-control" placeholder="Ingrese el costo total" step="0.01" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="forma_pago" class="form-label">Forma de Pago:</label>
+            <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Ingrese la forma de pago" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="sucursal_id" class="form-label">Sucursal:</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </div>
+</form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

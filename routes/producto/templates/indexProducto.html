@@ -54,7 +54,7 @@
     
         function cambiarImagen(codigo_producto) {
             const inputFile = document.getElementById(`inputFile-${codigo_producto}`);
-            inputFile.click();
+            //inputFile.click();
             inputFile.addEventListener('change', function() {
                 const file = this.files[0];
                 const formData = new FormData();
@@ -73,39 +73,28 @@
         }
     
         document.addEventListener('DOMContentLoaded', function () {
-            const productosTableBody = document.getElementById('productos-table-body');   
-            function appendRow(producto) {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${producto.codigo_producto}</td>
-                    <td>${producto.sabor}</td>
-                    <td>${producto.precio}</td>
-                    <td>${producto.cantidad}</td>
-                    <td>${producto.categoria_id}</td>
-                    <td>${producto.sucursal_id}</td>
-                    <td class="actions">
-                        <button class="ver-btn">Ver</button>
-                        <button class="editar-btn">Editar</button>
-                        <button class="eliminar-btn">Eliminar</button>
-                        <label for="inputFile-${producto.codigo_producto}" class="cambiarImagenLabel">Cambiar Imagen</label>
-                        <input type="file" id="inputFile-${producto.codigo_producto}" name="inputFile" style="display: none;">
-                    </td>
-                `;
-                productosTableBody.appendChild(newRow);
-    
-                newRow.querySelector('.ver-btn').addEventListener('click', () => verProducto(producto.codigo_producto));
-                newRow.querySelector('.editar-btn').addEventListener('click', () => editarProducto(producto.codigo_producto));
-                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarProducto(producto.codigo_producto));
-                newRow.querySelector('.cambiarImagenLabel').addEventListener('click', () => cambiarImagen(producto.codigo_producto));
-            }
-    
-            fetch('/listaProductos')
-                .then(response => response.json())
-                .then(data => {
-                    const productosOrdenados = data.productos.sort((a, b) => a.codigo_producto.localeCompare(b.codigo_producto));
-                    productosOrdenados.forEach(appendRow);
-                })
-                .catch(error => console.error('Error:', error));
+    const productosCardBody = document.getElementById('productos-card-body');   
+
+    function appendCard(producto) {
+        const newCard = document.createElement('div');
+        newCard.classList.add('card', 'm-2');
+        newCard.innerHTML = `
+            <img src="${producto.imagen}" class="card-img-top" alt="Imagen del producto" style="max-height: 200px;">
+            <div class="card-body">
+                <h5 class="card-title">${producto.categoria_nombre}</h5>
+            </div>
+        `;
+        productosCardBody.appendChild(newCard);
+    }
+
+    fetch('/listaProductosa')
+        .then(response => response.json())
+        .then(data => {
+            const productosOrdenados = data.productos.sort((a, b) => a.categoria_id.localeCompare(b.categoria_id));
+            productosOrdenados.forEach(appendCard);
+        })
+        .catch(error => console.error('Error:', error));
+});
         });
     </script>
     <script>
@@ -113,8 +102,8 @@
         if (elemento) {
             // Agrega la clase 'active' al elemento
             elemento.classList.add('active');
-          } else {
+        } else {
             console.error('No se encontró ningún elemento con la clase "productos"');
-          }
+        }
     </script>
     {% endblock %}

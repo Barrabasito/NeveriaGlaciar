@@ -1,26 +1,44 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Editar Materia Prima</h1>
-    <form id="editar-materia-prima-form">
-        <label for="nombre_materia">Nombre de la Materia Prima:</label>
-        <input type="text" id="nombre_materia" name="nombre_materia" placeholder="Ingrese el nombre de la materia prima" required>
-        <br>
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" placeholder="Ingrese el precio de la materia prima" required>
-        <br>
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad de la materia prima" required>
-        <br>
-        <label for="sucursal_id">Sucursal</label>
-        <select id="sucursal_id" name="sucursal_id">
-            {% for sucursal in sucursales %}
-                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
+<h1 class="text-center mb-4">Editar Materia Prima</h1>
+
+<form id="editar-materia-prima-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombre_materia" class="form-label">Nombre de la Materia Prima:</label>
+            <input type="text" id="nombre_materia" name="nombre_materia" class="form-control" placeholder="Ingrese el nombre de la materia prima" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" id="precio" name="precio" class="form-control" placeholder="Ingrese el precio de la materia prima" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="cantidad" class="form-label">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" class="form-control" placeholder="Ingrese la cantidad de la materia prima" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="sucursal_id" class="form-label">Sucursal:</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </div>
+</form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

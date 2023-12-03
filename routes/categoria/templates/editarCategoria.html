@@ -1,13 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Editar Categoría</h1>
-    <form id="editar-categoria-form">
-        <label for="nombre_categoria">Nombre de la Categoría:</label>
-        <input type="text" id="nombre_categoria" name="nombre_categoria" placeholder="Ingrese el nombre de la categoría" required>
-        <br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
+<h1 class="text-center mb-4">Editar Categoría</h1>
+
+<form id="editar-categoria-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombre_categoria" class="form-label">Nombre de la Categoría:</label>
+            <input type="text" id="nombre_categoria" name="nombre_categoria" class="form-control" placeholder="Ingrese el nombre de la categoría" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </div>
+</form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -1,54 +1,92 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Agregar Nuevo Empleado</h1>
-    <form id="empleado-form" enctype="multipart/form-data">
-        <label for="clave">Clave:</label>
-        <input type="text" id="clave" name="clave" placeholder="Ingresa la clave del empleado" required>
-        <br>
-        <label for="RFC">RFC:</label>
-        <input type="text" id="RFC" name="RFC" placeholder="Ingresa el RFC del empleado" maxlength="10" required>
-        <br>
-        <label for="nombres">Nombres:</label>
-        <input type="text" id="nombres" name="nombres" placeholder="Ingresa los nombres del empleado" required>
-        <br>
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" placeholder="Ingresa los apellidos del empleado" required>
-        <br>
-        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
-        <br>
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" placeholder="La edad se calculará automáticamente" readonly>
-        <br>
-        <label for="sueldo">Sueldo:</label>
-        <input type="number" id="sueldo" name="sueldo" placeholder="Ingresa el sueldo del empleado" step="0.01" required>
-        <br>
-        <label for="area_laboral">Área Laboral:</label>
-        <input type="text" id="area_laboral" name="area_laboral" placeholder="Ingresa el área laboral del empleado" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Ingresa el email del empleado" required>
-        <br>
-        <label for="usuario_id">Usuario</label>
-        <select id="usuario_id" name="usuario_id">
-            {% for usuario in usuarios_disponibles %}
-                <option value="{{ usuario.id_usuario }}">{{ usuario.nombre_usuario }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="sucursal_id">Sucursal</label>
-        <select id="sucursal_id" name="sucursal_id">
-            {% for sucursal in sucursales %}
-                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="inputFile">Imagen</label>
-        <input type="file" name="inputFile">
-        <br>
-        <button type="submit" value="Agregar Empleado" id="empleado-btn">Agregar Empleado</button>
-    </form>
+<h1 class="text-center mb-4">Agregar Nuevo Empleado</h1>
+
+<form id="empleado-form" enctype="multipart/form-data" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="clave" class="form-label">Clave:</label>
+            <input type="text" id="clave" name="clave" class="form-control" placeholder="Ingresa la clave del empleado" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="RFC" class="form-label">RFC:</label>
+            <input type="text" id="RFC" name="RFC" class="form-control" placeholder="Ingresa el RFC del empleado" maxlength="10" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="nombres" class="form-label">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Ingresa los nombres del empleado" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="apellidos" class="form-label">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Ingresa los apellidos del empleado" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="edad" class="form-label">Edad:</label>
+            <input type="number" id="edad" name="edad" class="form-control" placeholder="La edad se calculará automáticamente" readonly>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="sueldo" class="form-label">Sueldo:</label>
+            <input type="number" id="sueldo" name="sueldo" class="form-control" placeholder="Ingresa el sueldo del empleado" step="0.01" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="area_laboral" class="form-label">Área Laboral:</label>
+            <input type="text" id="area_laboral" name="area_laboral" class="form-control" placeholder="Ingresa el área laboral del empleado" required>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Ingresa el email del empleado" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12 col-md-6">
+            <label for="usuario_id" class="form-label">Usuario:</label>
+            <select id="usuario_id" name="usuario_id" class="form-select">
+                {% for usuario in usuarios_disponibles %}
+                    <option value="{{ usuario.id_usuario }}">{{ usuario.nombre_usuario }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label for="sucursal_id" class="form-label">Sucursal:</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="inputFile" class="form-label">Imagen:</label>
+            <input type="file" name="inputFile" class="form-control">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success w-100" id="empleado-btn">Agregar Empleado</button>
+        </div>
+    </div>
+</form>
     <script>
         const empleadoForm = document.getElementById('empleado-form');
 

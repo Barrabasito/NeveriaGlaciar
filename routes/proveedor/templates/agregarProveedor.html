@@ -2,22 +2,43 @@
 
 {% block content %}
 
-    <h1>Agregar Nuevo Proveedor</h1>
-    <form id="proveedor-form">
-        <label for="nombres">Nombres</label>
-        <input type="text" id="nombres" name="nombres" placeholder="Ingresa los nombres del proveedor">
-        <br>
-        <label for="apellidos">Apellidos</label>
-        <input type="text" id="apellidos" name="apellidos" placeholder="Ingresa los apellidos del proveedor">
-        <br>
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ingresa la dirección del proveedor">
-        <br>
-        <label for="telefono">Teléfono</label>
-        <input type="text" id="telefono" name="telefono" placeholder="Ingresa el teléfono del proveedor">
-        <br>
-        <button type="submit" value="Agregar Proveedor" id="proveedor-btn">Agregar Proveedor</button>
-    </form>
+<h1 class="text-center mb-4">Agregar Nuevo Proveedor</h1>
+
+<form id="proveedor-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombres" class="form-label">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" class="form-control" placeholder="Ingresa los nombres del proveedor">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="apellidos" class="form-label">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" class="form-control" placeholder="Ingresa los apellidos del proveedor">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="direccion" class="form-label">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingresa la dirección del proveedor">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="telefono" class="form-label">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Ingresa el teléfono del proveedor">
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success w-100" id="proveedor-btn">Agregar Proveedor</button>
+        </div>
+    </div>
+</form>
     <script>
         const proveedorForm = document.getElementById('proveedor-form');
         proveedorForm.addEventListener('submit', function (event) {

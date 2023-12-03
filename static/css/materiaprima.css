@@ -1,0 +1,11 @@
+#materia-prima-form {
+    max-width: 400px; /* Establece el ancho máximo del formulario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+    max-height: 500px; /* Altura máxima del formulario */
+    overflow-y: auto; /* Añade barra de desplazamiento si es necesario */
+}
+
+label {
+    display: block; /* Muestra cada etiqueta en una línea separada */
+    margin-top: 10px; /* Añade un pequeño espacio entre las etiquetas y los campos de entrada */
+}

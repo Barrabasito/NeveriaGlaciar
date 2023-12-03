@@ -2,22 +2,39 @@
 
 {% block content %}
 
-    <h1>Editar Sucursal</h1>
-    <form id="editar-sucursal-form">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre de la sucursal" required>
-        <br>
-        <label for="direccion">Dirección:</label>
-        <input type="text" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
-        <br>
-        <label for="telefonos">Teléfonos:</label>
-        <div id="telefonos-container">
-            <!-- Aquí se agregarán dinámicamente los campos de teléfonos existentes -->
+<h1 class="text-center mb-4">Editar Sucursal</h1>
+
+<form id="editar-sucursal-form" class="container">
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ingrese el nombre de la sucursal" required>
         </div>
-        <button type="button" id="add-telefono-btn">Agregar Teléfono</button>
-        <br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="direccion" class="form-label">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese la dirección" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <label for="telefonos" class="form-label">Teléfonos:</label>
+            <div id="telefonos-container">
+                <!-- Aquí se agregarán dinámicamente los campos de teléfonos existentes -->
+            </div>
+            <button type="button" class="btn btn-primary" id="add-telefono-btn">Agregar Teléfono</button>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success w-100">Guardar Cambios</button>
+        </div>
+    </div>
+</form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

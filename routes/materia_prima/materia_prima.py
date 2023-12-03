@@ -167,11 +167,6 @@ def editar_materia_prima(codigo_materia):
 def eliminar_materia_prima(codigo_materia):
     try:
         materia_prima = Materia_Prima.query.get_or_404(codigo_materia)
-
-        # Eliminar la materia prima
-        db.session.delete(materia_prima)
-        db.session.commit()
-
         # Eliminar la imagen asociada a la materia prima
         imagen_materia_prima = ImagenMateriaPrima.query.filter_by(
             codigo_materia=codigo_materia
@@ -179,7 +174,9 @@ def eliminar_materia_prima(codigo_materia):
         if imagen_materia_prima:
             db.session.delete(imagen_materia_prima)
             db.session.commit()
-
+        # Eliminar la materia prima
+        db.session.delete(materia_prima)
+        db.session.commit()
         responseObject = {
             "status": "success",
             "message": "Materia prima y su imagen asociada eliminadas correctamente",

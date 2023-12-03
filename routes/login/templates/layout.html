@@ -10,7 +10,7 @@
 <body onload="checkToken()">
     <!-- Barra de navegación -->
     
-        <div class="navigation">
+        <div class="navigation navbar navbar-expand-lg navbar-light bg-light">
             <ul>      
                 <li class="sucursales">
                     <a href="{{'/indexSucursal'}}">
@@ -121,14 +121,14 @@
         </div>
   
        
-            <main >
+            <main class="container mt-3">
                 {%block content%}
                 {%endblock%}
             </main>
        
 
     <!-- Footer -->
-    <footer class="bg-light text-center text-lg-start">
+    <footer class="bg-light text-center text-lg-start mt-5">
         <div class="container p-4">
             <div class="row">
                 <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
@@ -141,34 +141,32 @@
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                     <h5 class="text-uppercase">Contacto</h5>
-                   
                 </div>
             </div>
         </div>
     </footer>  
-          
 </body>
 <script>
-    function checkToken() {
-        var token = localStorage.getItem('token');
-        if (token) {
-            fetch(`/login?token=${token}`)
-            .then(response => response.json())
-            .then(data =>{
-                console.log(data.message);
-                if(data.message != 'valid_token'){
-                    localStorage.removeItem('token');
-                    window.location.href = '/login';
-                }
-            })
-            .catch(error =>{
-                window.location.href = '/login';
-            })
-        }
-        else{
-            window.location.href = '/login';
-        }
-    }
+    // function checkToken() {
+    //     var token = localStorage.getItem('token');
+    //     if (token) {
+    //         fetch(`/login?token=${token}`)
+    //         .then(response => response.json())
+    //         .then(data =>{
+    //             console.log(data.message);
+    //             if(data.message != 'valid_token'){
+    //                 localStorage.removeItem('token');
+    //                 window.location.href = '/login';
+    //             }
+    //         })
+    //         .catch(error =>{
+    //             window.location.href = '/login';
+    //         })
+    //     }
+    //     else{
+    //         window.location.href = '/login';
+    //     }
+    // }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

@@ -1,21 +1,54 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
+<style>
+    h1 {
+        margin-top: 20px;
+        color: #F99D9D; /* Color de contraste */
+    }
 
-    <h1>Consulta de Materias Primas</h1>
-    <a href="/agregarMateriaPrima">Agregar Materia Prima</a>
-    <table border="1">
-        <thead>
-            <tr>
+    .table-container {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid #F99D9D; /* Borde de contraste para la tabla */
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #F99D9D; /* Borde de contraste para las celdas */
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+        th, td {
+            font-size: 14px;
+        }
+    }
+    
+    .btn-primary {
+        background-color: #F99D9D; /* Color de contraste para el botón */
+        color: #fff; /* Texto en color blanco para mejor visibilidad */
+    }
+</style>
+
+<h1 class="text-center">Consulta de Materias Primas</h1>
+<a href="/agregarMateriaPrima" class="btn btn-primary">Agregar Materia Prima</a>
+
+<div class="table-container">
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr class="table-danger">
                 <th>Código Materia Prima</th>
                 <th>Nombre</th>
                 <th>Precio</th>
@@ -28,15 +61,15 @@
             <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
         </tbody>
     </table>
+</div>
+
     <script>
         function verMateriaPrima(codigo_materia) {
             window.location.href = `/detalleMateriaPrima/${codigo_materia}`;
         }
-
         function editarMateriaPrima(codigo_materia) {
             window.location.href = `/editarMateriaPrima/${codigo_materia}`;
         }
-
         function eliminarMateriaPrima(codigo_materia) {
             if (confirm("¿Estás seguro de que deseas eliminar esta materia prima?")) {
                 fetch(`/eliminarMateriaPrima/${codigo_materia}`, {
@@ -53,7 +86,7 @@
         }
         function cambiarImagen(codigo_materia) {
             const inputFile = document.getElementById(`inputFile-${codigo_materia}`);
-            inputFile.click();
+            //inputFile.click();
             inputFile.addEventListener('change', function() {
                 const file = this.files[0];
                 const formData = new FormData();
@@ -70,36 +103,31 @@
                 .catch(error => console.error('Error:', error));
             });
         }
-
         document.addEventListener('DOMContentLoaded', function () {
             const materiasPrimasTableBody = document.getElementById('materias-primas-table-body');
-
             function appendRow(materiaPrima) {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${materiaPrima.codigo_materia}</td>
-                    <td>${materiaPrima.nombre_materia}</td>
-                    <td>${materiaPrima.precio}</td>
-                    <td>${materiaPrima.cantidad}</td>
-                    <td>${materiaPrima.sucursal_id}</td>
-                    <td class="actions">
-                        <button class="ver-btn">Ver</button>
-                        <button class="editar-btn">Editar</button>
-                        <button class="eliminar-btn">Eliminar</button>
-                        <label for="inputFile-${materiaPrima.codigo_materia}" class="cambiarImagenLabel">Cambiar Imagen</label>
+                    <td class="table-light">${materiaPrima.codigo_materia}</td>
+                    <td class="table-light">${materiaPrima.nombre_materia}</td>
+                    <td class="table-light">${materiaPrima.precio}</td>
+                    <td class="table-light"> ${materiaPrima.cantidad}</td>
+                    <td class="table-light">${materiaPrima.sucursal_id.nombre}</td>
+                    <td class="actions table-light">
+                        <button class="ver-btn btn btn-outline-primary">Ver</button>
+                        <button class="editar-btn btn btn-outline-info">Editar</button>
+                        <button class="eliminar-btn btn btn-outline-danger">Eliminar</button>
+                        <button type="button" class="cambiarImagenLabel btn btn-outline-secondary" onclick="document.getElementById('inputFile-${materiaPrima.codigo_materia}').click();">Cambiar Imagen</button>
                         <input type="file" id="inputFile-${materiaPrima.codigo_materia}" name="inputFile" style="display: none;">
                     </td>
                 `;
                 materiasPrimasTableBody.appendChild(newRow);
-
                 // Asociar eventos después de agregar la fila al DOM
                 newRow.querySelector('.ver-btn').addEventListener('click', () => verMateriaPrima(materiaPrima.codigo_materia));
                 newRow.querySelector('.editar-btn').addEventListener('click', () => editarMateriaPrima(materiaPrima.codigo_materia));
                 newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarMateriaPrima(materiaPrima.codigo_materia));
                 newRow.querySelector('.cambiarImagenLabel').addEventListener('click', () => cambiarImagen(materiaPrima.codigo_materia));
-
             }
-
             fetch('/listaMateriasPrimas')
                 .then(response => response.json())
                 .then(data => {
@@ -115,8 +143,8 @@
         if (elemento) {
             // Agrega la clase 'active' al elemento
             elemento.classList.add('active');
-          } else {
+        } else {
             console.error('No se encontró ningún elemento con la clase "materias"');
-          }
+        }
     </script>
     {% endblock %}

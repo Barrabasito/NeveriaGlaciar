@@ -2,34 +2,67 @@
 
 {% block content %}
     <style>
-        td, th {
+        .details-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px;
+        }
+
+        .details-table {
+            width: 45%; /* Ajusta el ancho según tus preferencias */
+        }
+
+        .product-card {
+            width: 45%; /* Ajusta el ancho según tus preferencias */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .details-table td,
+        .details-table th {
             padding: 8px;
             text-align: left;
         }
 
-        th {
+        .details-table th {
             font-weight: bold;
         }
 
-        td {
+        .details-table td {
             border-bottom: 1px solid #ddd;
-        }
-
-        .details-table {
-            width: 100%;
         }
     </style>
 
     <h1>Detalles de Producto</h1>
-    <table class="details-table">
-        <tbody id="producto-details-body">
-            <!-- Los detalles del producto se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+    <div class="details-container">
+        <table class="details-table">
+            <tbody id="producto-details-body">
+                <!-- Los detalles del producto se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="product-card">
+            <img src="data:image/png;base64,{{ imagens }}">
+            <div>
+                <h2>{{ producto_data.categoria_id.nombre_categoria }}</h2>
+                <!-- Otros detalles del producto, si es necesario -->
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productoDetailsBody = document.getElementById('producto-details-body');
-            const productoData = {{ producto | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+            const productoData = {{ producto_data | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
             
             const order = ['codigo_producto', 'sabor', 'precio', 'cantidad', 'categoria_id', 'sucursal_id'];
 
@@ -46,4 +79,4 @@
             });
         });
     </script>
-    {% endblock %}
+{% endblock %}

@@ -5,6 +5,7 @@ from encriptador import bcrypt
 from flask_migrate import Migrate
 from config import BaseConfig
 
+from routes.login.login import applogin
 from routes.usuario.usuario import appusuario
 from routes.sucursal.sucursal import appsucursal
 from routes.producto.producto import appproducto
@@ -21,6 +22,7 @@ from routes.pdf.pdf import apppdf
 from routes.csv.indexCsv import appcsv
 
 app = Flask(__name__)
+app.register_blueprint(applogin)
 app.register_blueprint(appusuario)
 app.register_blueprint(appsucursal)
 app.register_blueprint(appproducto)

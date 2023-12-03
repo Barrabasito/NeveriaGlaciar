@@ -82,4 +82,13 @@
                 .catch(error => console.error('Error:', error));
         });
     </script>
+    <script>
+        var elemento = document.querySelector('.encargos');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+          } else {
+            console.error('No se encontró ningún elemento con la clase "encargos"');
+          }
+    </script>
     {% endblock %}

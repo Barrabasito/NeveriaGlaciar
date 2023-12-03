@@ -31,13 +31,11 @@ def getUsers(usuario):
 def Inicio():
     return render_template("inicio.html")
 
+
 @appusuario.route("/indexUsuario")
 def indexUsuario():
     return render_template("indexUsuario.html")
 
-
-@appusuario.route("/login", methods=["GET", "POST"])
-def login_post():
     if request.method == "GET":
         token = request.args.get("token")
         if token:
@@ -101,6 +99,7 @@ def agregar_usuario():
 
         return jsonify(responseObject)
 
+
 @appusuario.route("/listaUsuarios")
 def consulta_usuarios():
     usuarios = Usuario.query.all()
@@ -116,6 +115,7 @@ def consulta_usuarios():
     ]
     return jsonify({'usuarios': usuarios_data})
 
+
 @appusuario.route("/detalleUsuario/<int:id_usuario>")
 def ver_usuario(id_usuario):
     usuario = Usuario.query.get_or_404(id_usuario)
@@ -130,6 +130,7 @@ def ver_usuario(id_usuario):
     }
 
     return render_template("detalleUsuario.html", usuario=usuario_data)
+
 
 @appusuario.route("/editarUsuario/<int:id_usuario>", methods=["GET", "POST"])
 def editar_usuario(id_usuario):

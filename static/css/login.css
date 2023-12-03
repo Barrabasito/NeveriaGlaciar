@@ -1,0 +1,58 @@
+body {
+    background-image: url("../image/fondo1.jpg"); /* Reemplaza con la ruta real de tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#login-container {
+    background-color: rgba(252, 124, 184, 0.8); /* Fondo semi-transparente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+h1 {
+    color: #f368a6; /* Use color1 */
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a0423; /* Use color3 */
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #8d0b45; /* Use color4 */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #950347; /* Use color5 */
+    color: #f8f8f8; /* White */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #7a093c; 
+}
+
+#logo {
+    max-width: 200px; 
+    margin-bottom: 20px;
+}

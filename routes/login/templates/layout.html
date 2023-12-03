@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title%} Parcial 3 APP {%endblock%}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/layout.css">
+</head>
+<body onload="checkToken()">
+    <!-- Barra de navegación -->
+    
+        <div class="navigation">
+            <ul>      
+                <li class="sucursales">
+                    <a href="{{'/indexSucursal'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-store"></i>                    
+                        </span>
+                        <span class="text">Sucursales</span>
+                    </a>
+                </li>
+                <li class="productos">
+                    <a href="{{'/indexProducto'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-ice-cream"></i>                    
+                        </span>
+                        <span class="text">Productos</span>
+                    </a>
+                </li>
+                <li class="categorias">
+                    <a href="{{'/indexCategoria'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-list"></i>                    
+                        </span>
+                        <span class="text">Categorias</span>
+                    </a>
+                </li>
+                <li class="materias">
+                    <a href="{{'/indexMateriaPrima'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-boxes-stacked"></i>                    
+                        </span>
+                        <span class="text">Materias Primas</span>
+                    </a>
+                </li>
+                <li class="empleados">
+                    <a href="{{'/indexEmpleado'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-person"></i>                    
+                        </span>
+                        <span class="text">Empleados</span>
+                    </a>
+                </li>
+                <li class="clientes">
+                    <a href="{{'/indexCliente'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-place-of-worship"></i>                    
+                        </span>
+                        <span class="text">Clientes</span>
+                    </a>
+                </li>
+                <li class="inicio">
+                    <a href="{{'/agregarVenta'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-house"></i>                    
+                        </span>
+                        <span class="text">Inicio</span>
+                    </a>
+                </li>
+                <li class="proveedores">
+                    <a href="{{'/indexProveedor'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-truck-moving"></i>                    
+                        </span>
+                        <span class="text">Proveedores</span>
+                    </a>
+                </li>
+                <li class="encargos">
+                    <a href="{{'/indexEncargo'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-bag-shopping"></i>                    
+                        </span>
+                        <span class="text">Encargos</span>
+                    </a>
+                </li>
+                <li class="ventas">
+                    <a href="{{'/indexVenta'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-money-bill"></i>                    
+                        </span>
+                        <span class="text">Ventas</span>
+                    </a>
+                </li>
+                <li class="usuarios">
+                    <a href="{{'/indexUsuario'}}">
+                        <span class="icon">
+                            <i class="fa-solid fa-users"></i>                    
+                        </span>
+                        <span class="text">Usuarios</span>
+                    </a>
+                </li>
+                <li class="reportes">
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fa-solid fa-print"></i>                    
+                        </span>
+                        <span class="text">Reportes</span>
+                    </a>
+                </li>
+                <li class="cerrar">
+                    <a href="#">
+                        <span class="icon">
+                            <i class="fa-solid fa-gear"></i>                    
+                        </span>
+                        <span class="text">Cerrar Sesión</span>
+                    </a>
+                </li>
+                <div class="indicator"></div>
+            </ul>
+        </div>
+  
+       
+            <main >
+                {%block content%}
+                {%endblock%}
+            </main>
+       
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-lg-start">
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Nevería Deliciosa</h5>
+                    <p>¡La mejor experiencia en helados y postres!</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Redes Sociales</h5>
+                    
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Contacto</h5>
+                   
+                </div>
+            </div>
+        </div>
+    </footer>  
+          
+</body>
+<script>
+    function checkToken() {
+        var token = localStorage.getItem('token');
+        if (token) {
+            fetch(`/login?token=${token}`)
+            .then(response => response.json())
+            .then(data =>{
+                console.log(data.message);
+                if(data.message != 'valid_token'){
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error =>{
+                window.location.href = '/login';
+            })
+        }
+        else{
+            window.location.href = '/login';
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

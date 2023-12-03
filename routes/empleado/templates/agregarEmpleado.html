@@ -2,12 +2,12 @@
 
 {% block content %}
     <h1>Agregar Nuevo Empleado</h1>
-    <form id="empleado-form">
+    <form id="empleado-form" enctype="multipart/form-data">
         <label for="clave">Clave:</label>
         <input type="text" id="clave" name="clave" placeholder="Ingresa la clave del empleado" required>
         <br>
         <label for="RFC">RFC:</label>
-        <input type="text" id="RFC" name="RFC" placeholder="Ingresa el RFC del empleado" required>
+        <input type="text" id="RFC" name="RFC" placeholder="Ingresa el RFC del empleado" maxlength="10" required>
         <br>
         <label for="nombres">Nombres:</label>
         <input type="text" id="nombres" name="nombres" placeholder="Ingresa los nombres del empleado" required>
@@ -44,6 +44,9 @@
             {% endfor %}
         </select>
         <br>
+        <label for="inputFile">Imagen</label>
+        <input type="file" name="inputFile">
+        <br>
         <button type="submit" value="Agregar Empleado" id="empleado-btn">Agregar Empleado</button>
     </form>
     <script>
@@ -78,43 +81,18 @@
             }
         });
 
-        // Evento de envío del formulario
         empleadoForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            const clave = document.getElementById('clave').value;
-            const RFC = document.getElementById('RFC').value;
-            const nombres = document.getElementById('nombres').value;
-            const apellidos = document.getElementById('apellidos').value;
-            const fecha_nacimiento = document.getElementById('fecha_nacimiento').value;
-            const edad = parseInt(document.getElementById('edad').value);
-            const sueldo = parseFloat(document.getElementById('sueldo').value);
-            const area_laboral = document.getElementById('area_laboral').value;
-            const email = document.getElementById('email').value;
-            const usuario_id = parseInt(document.getElementById('usuario_id').value);
-            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
+            const formData = new FormData(empleadoForm);
 
             fetch('/agregarEmpleado', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'clave': clave,
-                    'RFC': RFC,
-                    'nombres': nombres,
-                    'apellidos': apellidos,
-                    'fecha_nacimiento': fecha_nacimiento,
-                    'edad': edad,
-                    'sueldo': sueldo,
-                    'area_laboral': area_laboral,
-                    'email': email,
-                    'usuario_id': usuario_id,
-                    'sucursal_id': sucursal_id
-                })
+                body: formData,
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 window.location.href = '/indexEmpleado'; // Redirecciona a la página de empleados después de agregar
             })
             .catch(error => console.error('Error:', error));

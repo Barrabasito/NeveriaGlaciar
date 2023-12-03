@@ -1,38 +1,50 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="container mt-5">
     <h1>Add New Venta</h1>
+
     <form id="venta-form">
-        <label for="monto">Monto</label>
-        <input type="number" id="monto" name="monto" placeholder="Enter monto" step="0.01" required>
-        <br>
-        <label for="forma_pago">Forma de Pago</label>
-        <input type="text" id="forma_pago" name="forma_pago" placeholder="Enter forma de pago">
-        <br>
-        <label for="sucursal_id">Sucursal</label>
-        <select id="sucursal_id" name="sucursal_id">
-            {% for sucursal in sucursales %}
-                <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="clave_empleado">Empleado</label>
-        <select id="clave_empleado" name="clave_empleado">
-            {% for empleado in empleados %}
-                <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
-            {% endfor %}
-        </select>
-        <br>
+
+        <div class="mb-3">
+            <label for="monto" class="form-label">Monto</label>
+            <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="forma_pago" class="form-label">Forma de Pago</label>
+            <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Enter forma de pago">
+        </div>
+
+        <div class="mb-3">
+            <label for="sucursal_id" class="form-label">Sucursal</label>
+            <select id="sucursal_id" name="sucursal_id" class="form-select">
+                {% for sucursal in sucursales %}
+                    <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="clave_empleado" class="form-label">Empleado</label>
+            <select id="clave_empleado" name="clave_empleado" class="form-select">
+                {% for empleado in empleados %}
+                    <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
         <h2>Productos Vendidos</h2>
         <div id="productos-vendidos-container">
             <!-- Contenido dinámico será insertado aquí -->
         </div>
-        <button type="button" id="add-producto-btn">Add Producto Vendido</button>
-        <br>
+        
+        <button type="button" id="add-producto-btn" class="btn btn-primary">Add Producto Vendido</button>
 
-        <button type="submit" value="Add Venta" id="venta-btn">Add Venta</button>
+        <button type="submit" class="btn btn-success" id="venta-btn">Add Venta</button>
+
     </form>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productosVendidosContainer = document.getElementById('productos-vendidos-container');
@@ -106,5 +118,14 @@
             })
             .catch(error => console.error('Error:', error));
         });
+    </script>
+    <script>
+        var elemento = document.querySelector('.inicio');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+          } else {
+            console.error('No se encontró ningún elemento con la clase "inicio"');
+          }
     </script>
     {% endblock %}

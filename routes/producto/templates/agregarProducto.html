@@ -2,9 +2,9 @@
 
 {% block content %}
     <h1>Agregar Nuevo Producto</h1>
-    <form id="producto-form">
+    <form id="producto-form" enctype="multipart/form-data">
         <label for="codigo_producto">Código del Producto</label>
-        <input type="text" id="codigo_producto" name="codigo_producto" placeholder="Ingresa el código del producto">
+        <input type="text" id="codigo_producto" name="codigo_producto" placeholder="Ingresa el código del producto" maxlength="10">
         <br>
         <label for="sabor">Sabor</label>
         <input type="text" id="sabor" name="sabor" placeholder="Ingresa el sabor">
@@ -29,39 +29,26 @@
             {% endfor %}
         </select>
         <br>
+        <label for="inputFile">Imagen</label>
+        <input type="file" name="inputFile">
+        <br>
         <button type="submit" value="Agregar Producto" id="producto-btn">Agregar Producto</button>
     </form>
     <script>
         const productoForm = document.getElementById('producto-form');
         productoForm.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            const codigo_producto = document.getElementById('codigo_producto').value;
-            const sabor = document.getElementById('sabor').value;
-            const precio = parseFloat(document.getElementById('precio').value);
-            const cantidad = parseInt(document.getElementById('cantidad').value);
-            const categoria_id = parseInt(document.getElementById('categoria_id').value);
-            const sucursal_id = parseInt(document.getElementById('sucursal_id').value);
-
+            const formData = new FormData(productoForm);
             fetch('/agregarProducto', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'codigo_producto': codigo_producto,
-                    'sabor': sabor,
-                    'precio': precio,
-                    'cantidad': cantidad,
-                    'categoria_id': categoria_id,
-                    'sucursal_id': sucursal_id
-                })
+                body: formData,
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 window.location.href = '/indexProducto'; // Redirecciona a la página de productos después de agregar
             })
             .catch(error => console.error('Error:', error));
         });
     </script>
-    {% endblock %}
+{% endblock %}

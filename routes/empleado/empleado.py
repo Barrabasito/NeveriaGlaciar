@@ -1,10 +1,17 @@
 from flask import Blueprint, request, jsonify, render_template, redirect
 from sqlalchemy import exc
-from models import Empleado,Sucursal,Usuario
+from models import Empleado, Sucursal, Usuario, ImagenEmpleado
 from app import db, bcrypt
 from auth import tokenCheck, verificar
+import base64
 
 appempleado = Blueprint("appempleado", __name__, template_folder="templates")
+
+
+def render_image(data):
+    render_img = base64.b64encode(data).decode("ascii")
+    return render_img
+
 
 @appempleado.route("/indexEmpleado")
 def indexEmpleado():
@@ -16,45 +23,56 @@ def agregar_empleado():
     if request.method == "GET":
         sucursales = Sucursal.query.all()
         usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()
-        return render_template("agregarEmpleado.html", sucursales=sucursales, usuarios_disponibles=usuarios_disponibles)
-    else:
-        # Obtener datos del formulario o solicitud JSON
-        clave = request.json.get("clave")
-        rfc = request.json.get("RFC")
-        nombres = request.json.get("nombres")
-        apellidos = request.json.get("apellidos")
-        fecha_nacimiento = request.json.get("fecha_nacimiento")
-        edad = request.json.get("edad")
-        sueldo = request.json.get("sueldo")
-        area_laboral = request.json.get("area_laboral")
-        email = request.json.get("email")
-        usuario_id = request.json.get("usuario_id")
-        sucursal_id = request.json.get("sucursal_id")
-
-        # Verificar si la sucursal existe
-        sucursal = Sucursal.query.get(sucursal_id)
-        if not sucursal:
-            return jsonify({"status": "error", "message": "La sucursal no existe"})
-
-        # Crear una instancia de Empleado y asignar los valores
-        empleado = Empleado(
-            clave=clave,
-            RFC=rfc,
-            nombres=nombres,
-            apellidos=apellidos,
-            fecha_nacimiento=fecha_nacimiento,
-            edad=edad,
-            sueldo=sueldo,
-            area_laboral=area_laboral,
-            email=email,
-            usuario_id=usuario_id,
-            sucursal_id=sucursal_id
+        return render_template(
+            "agregarEmpleado.html",
+            sucursales=sucursales,
+            usuarios_disponibles=usuarios_disponibles,
         )
-
+    else:
         try:
+            # Obtener datos del formulario y cargar en JSON
+            datos_empleado = {
+                "clave": request.form["clave"],
+                "RFC": request.form["RFC"],
+                "nombres": request.form["nombres"],
+                "apellidos": request.form["apellidos"],
+                "fecha_nacimiento": request.form["fecha_nacimiento"],
+                "edad": int(request.form["edad"]),
+                "sueldo": float(request.form["sueldo"]),
+                "area_laboral": request.form["area_laboral"],
+                "email": request.form["email"],
+                "usuario_id": int(request.form["usuario_id"]),
+                "sucursal_id": int(request.form["sucursal_id"]),
+            }
+
+            # Verificar si la sucursal existe
+            sucursal = Sucursal.query.get(datos_empleado["sucursal_id"])
+            if not sucursal:
+                return jsonify({"status": "error", "message": "La sucursal no existe"})
+
+            # Crear una instancia de Empleado y asignar los valores
+            empleado = Empleado(**datos_empleado)
+
             db.session.add(empleado)
             db.session.commit()
-            responseObject = {"status": "success", "message": "Empleado agregado correctamente"}
+
+            # Manejar la carga de imágenes
+            file = request.files["inputFile"]
+            data = file.read()
+            render_file = render_image(data)
+            imagen_empleado = ImagenEmpleado(
+                type="Empleado",
+                rendered_data=render_file,
+                data=data,
+                clave=datos_empleado["clave"],
+            )
+            db.session.add(imagen_empleado)
+            db.session.commit()
+
+            responseObject = {
+                "status": "success",
+                "message": "Empleado y imagen agregados correctamente",
+            }
         except Exception as e:
             db.session.rollback()
             responseObject = {"status": "error", "message": str(e)}
@@ -69,43 +87,48 @@ def consulta_empleados():
     empleados = Empleado.query.all()
     empleados_data = [
         {
-            'clave': empleado.clave,
-            'RFC': empleado.RFC,
-            'nombres': empleado.nombres,
-            'apellidos': empleado.apellidos,
-            'fecha_nacimiento': empleado.fecha_nacimiento.strftime('%Y-%m-%d'),
-            'edad': empleado.edad,
-            'sueldo': empleado.sueldo,
-            'area_laboral': empleado.area_laboral,
-            'email': empleado.email,
-            'usuario_id': empleado.usuario_id,
-            'sucursal_id': empleado.sucursal_id
-        } for empleado in empleados
+            "clave": empleado.clave,
+            "RFC": empleado.RFC,
+            "nombres": empleado.nombres,
+            "apellidos": empleado.apellidos,
+            "fecha_nacimiento": empleado.fecha_nacimiento.strftime("%Y-%m-%d"),
+            "edad": empleado.edad,
+            "sueldo": empleado.sueldo,
+            "area_laboral": empleado.area_laboral,
+            "email": empleado.email,
+            "usuario_id": empleado.usuario_id,
+            "sucursal_id": empleado.sucursal_id,
+        }
+        for empleado in empleados
     ]
-    return jsonify({'empleados': empleados_data})
-
+    return jsonify({"empleados": empleados_data})
 
 
 @appempleado.route("/detalleEmpleado/<string:clave>")
 def ver_empleado(clave):
     empleado = Empleado.query.filter_by(clave=clave).first_or_404()
 
+    # Obtener imágenes asociadas al empleado (ajusta según la lógica de tu aplicación)
+    imagenes = ImagenEmpleado.query.filter_by(clave=empleado.clave).first()
+    images = imagenes.rendered_data if imagenes else None
+
     empleado_data = {
-        'clave': empleado.clave,
-        'RFC': empleado.RFC,
-        'nombres': empleado.nombres,
-        'apellidos': empleado.apellidos,
-        'fecha_nacimiento': empleado.fecha_nacimiento,
-        'edad': empleado.edad,
-        'sueldo': empleado.sueldo,
-        'area_laboral': empleado.area_laboral,
-        'email': empleado.email,
-        'usuario_id': empleado.usuario_id,
-        'sucursal_id': empleado.sucursal_id
+        "clave": empleado.clave,
+        "RFC": empleado.RFC,
+        "nombres": empleado.nombres,
+        "apellidos": empleado.apellidos,
+        "fecha_nacimiento": empleado.fecha_nacimiento,
+        "edad": empleado.edad,
+        "sueldo": empleado.sueldo,
+        "area_laboral": empleado.area_laboral,
+        "email": empleado.email,
+        "usuario_id": empleado.usuario_id,
+        "sucursal_id": empleado.sucursal_id,
     }
 
-    return render_template("detalleEmpleado.html", empleado=empleado_data)
-
+    return render_template(
+        "detalleEmpleado.html", empleado=empleado_data, imagenes=images
+    )
 
 
 @appempleado.route("/editarEmpleado/<string:clave>", methods=["GET", "POST"])
@@ -119,15 +142,21 @@ def editar_empleado(clave):
             usuario_actual = Usuario.query.get(empleado.usuario_id)
 
             usuarios_disponibles.append(usuario_actual)
-            
-            return render_template("editarEmpleado.html", empleado=empleado, sucursales=sucursales, usuarios_disponibles=usuarios_disponibles, usuario_actual=usuario_actual)
+
+            return render_template(
+                "editarEmpleado.html",
+                empleado=empleado,
+                sucursales=sucursales,
+                usuarios_disponibles=usuarios_disponibles,
+                usuario_actual=usuario_actual,
+            )
         else:
             clave = request.json.get("clave")
             rfc = request.json.get("RFC")
             nombres = request.json.get("nombres")
             apellidos = request.json.get("apellidos")
             fecha_nacimiento = request.json.get("fecha_nacimiento")
-            edad = request.json.get("edad")  
+            edad = request.json.get("edad")
             sueldo = request.json.get("sueldo")
             area_laboral = request.json.get("area_laboral")
             email = request.json.get("email")
@@ -139,7 +168,7 @@ def editar_empleado(clave):
             empleado.nombres = nombres
             empleado.apellidos = apellidos
             empleado.fecha_nacimiento = fecha_nacimiento
-            empleado.edad = edad  
+            empleado.edad = edad
             empleado.sueldo = sueldo
             empleado.area_laboral = area_laboral
             empleado.email = email
@@ -148,7 +177,11 @@ def editar_empleado(clave):
 
             db.session.commit()
 
-            responseObject = {"status": "success", "message": "Empleado editado correctamente", "clave": empleado.clave}
+            responseObject = {
+                "status": "success",
+                "message": "Empleado editado correctamente",
+                "clave": empleado.clave,
+            }
             return jsonify(responseObject)
 
     except Exception as e:
@@ -164,12 +197,17 @@ def editar_empleado(clave):
 def eliminar_empleado(clave):
     try:
         empleado = Empleado.query.get_or_404(clave)
-
+        imagen = ImagenEmpleado.query.filter_by(clave=empleado.clave).first()
         # Eliminar el empleado
+        if imagen:
+            db.session.delete(imagen)
         db.session.delete(empleado)
         db.session.commit()
 
-        responseObject = {"status": "success", "message": "Empleado eliminado correctamente"}
+        responseObject = {
+            "status": "success",
+            "message": "Empleado eliminado correctamente",
+        }
     except Exception as e:
         db.session.rollback()
         responseObject = {"status": "error", "message": str(e)}
@@ -177,3 +215,28 @@ def eliminar_empleado(clave):
         db.session.close()
 
     return jsonify(responseObject)
+
+
+@appempleado.route("/modificarImagenEmpleado/<string:clave>", methods=["POST"])
+def modificarImagen(clave):
+    searchImage = ImagenEmpleado.query.filter_by(clave=clave).first()
+    if searchImage:
+        file = request.files["inputFile"]
+        data = file.read()
+        render_file = render_image(data)
+        searchImage.rendered_data = render_file
+        searchImage.data = data
+        db.session.commit()
+        return jsonify({"Message": "Imagen Actualizada"})
+    else:
+        file = request.files["inputFile"]
+        data = file.read()
+        render_file = render_image(data)
+        newFile = ImagenEmpleado()
+        newFile.type = "Producto"
+        newFile.rendered_data = render_file
+        newFile.data = data
+        newFile.clave = clave
+        db.session.add(newFile)
+        db.session.commit()
+        return jsonify({"Message": "Imagen agregada"})

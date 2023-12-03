@@ -1,31 +1,62 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-            text-align: left;
-        }
+<style>
+    .details-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin: 20px;
+    }
 
-        th {
-            font-weight: bold;
-        }
+    .details-table {
+        width: 45%; /* Ajusta el ancho según tus preferencias */
+    }
 
-        td {
-            border-bottom: 1px solid #ddd;
-        }
+    .product-card {
+        width: 45%; /* Ajusta el ancho según tus preferencias */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        .details-table {
-            width: 100%;
-        }
-    </style>
+    .product-card img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .details-table td,
+    .details-table th {
+        padding: 8px;
+        text-align: left;
+    }
+
+    .details-table th {
+        font-weight: bold;
+    }
+
+    .details-table td {
+        border-bottom: 1px solid #ddd;
+    }
+</style>
 
     <h1>Detalles de Materia Prima</h1>
+<div class="details-container">
     <table class="details-table">
         <tbody id="materia-prima-details-body">
             <!-- Los detalles de la materia prima se insertarán aquí dinámicamente con JavaScript -->
         </tbody>
     </table>
+    <div class="product-card">
+        <img src="data:image/png;base64,{{ imagens }}">
+        <div>
+            <h2>{{ materia_prima.nombre_materia }}</h2>
+            <!-- Otros detalles del producto, si es necesario -->
+        </div>
+    </div>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const materiaPrimaDetailsBody = document.getElementById('materia-prima-details-body');
@@ -53,4 +84,4 @@
             });
         });
     </script>
-    {% endblock %}
+{% endblock %}

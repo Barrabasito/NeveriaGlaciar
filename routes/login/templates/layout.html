@@ -128,13 +128,8 @@
        
 
     <!-- Footer -->
-<<<<<<< HEAD
     <footer class="bg-light text-center text-lg-start">
         <div class="container p-2">
-=======
-    <footer class="bg-light text-center text-lg-start mt-5">
-        <div class="container p-4">
->>>>>>> c5257bb1a4c3991b91e0ea44865b31c17a09e9fe
             <div class="row">
                 <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
                     <h5 class="text-uppercase">Nevería Glaciar</h5>
@@ -144,14 +139,9 @@
                     <h5 class="text-uppercase">Redes Sociales</h5>
                     
                 </div>
-<<<<<<< HEAD
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                     <h5 class="text-uppercase">Lo atiende</h5>
                     <div id="nombreUsuario">Usuario no vinculado a empleado</div>
-=======
-                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Contacto</h5>
->>>>>>> c5257bb1a4c3991b91e0ea44865b31c17a09e9fe
                 </div>
             </div>
         </div>
@@ -159,25 +149,25 @@
 </body>
 <script>
     // function checkToken() {
-    //     var token = localStorage.getItem('token');
-    //     if (token) {
-    //         fetch(`/login?token=${token}`)
-    //         .then(response => response.json())
-    //         .then(data =>{
-    //             console.log(data.message);
-    //             if(data.message != 'valid_token'){
-    //                 localStorage.removeItem('token');
-    //                 window.location.href = '/login';
-    //             }
-    //         })
-    //         .catch(error =>{
-    //             window.location.href = '/login';
-    //         })
-    //     }
-    //     else{
-    //         window.location.href = '/login';
-    //     }
-    // }
+         var token = localStorage.getItem('token');
+         if (token) {
+             fetch(`/login?token=${token}`)
+             .then(response => response.json())
+             .then(data =>{
+                 console.log(data.message);
+                 if(data.message != 'valid_token'){
+                     localStorage.removeItem('token');
+                     window.location.href = '/login';
+                 }
+             })
+             .catch(error =>{
+                 window.location.href = '/login';
+             })
+         }
+         else{
+             window.location.href = '/login';
+         }
+     }
 </script>
 <script>
     // Obtén la cadena de consulta de la URL actual

@@ -4,7 +4,7 @@
 body{
     /*min-height: 100%;*/
     background: #222327;
-    background-image: url('../image/fondo2.jpg'); /* Reemplaza 'ruta/de/la/imagen.jpg' con la ruta de tu imagen */
+    background-image: url('../image/fondo6.jpg'); /* Reemplaza 'ruta/de/la/imagen.jpg' con la ruta de tu imagen */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -29,6 +29,10 @@ footer {
     /* Otros estilos del footer */
     flex-shrink: 0; /* Evita que el footer se encoja cuando el contenido principal es grande */
     height: 10%;
+}
+
+.container{
+    
 }
 
 

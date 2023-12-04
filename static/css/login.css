@@ -13,7 +13,7 @@ body {
 #login-container {
     background-color: rgba(252, 124, 184, 0.8); /* Fondo semi-transparente */
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 55px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;

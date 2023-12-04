@@ -1,0 +1,39 @@
+
+    h1 {
+        margin-top: 20px;
+        color: #f6f6f6; /* Color de contraste */
+    }
+
+    .table-container {
+        overflow-x: auto;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid #F99D9D; /* Borde de contraste para la tabla */
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #F99D9D; /* Borde de contraste para las celdas */
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+        th, td {
+            font-size: 14px;
+        }
+    }
+    
+    .btn-primary {
+        background-color: #F99D9D; /* Color de contraste para el botón */
+        color: #ffffff; /* Texto en color blanco para mejor visibilidad */
+    }

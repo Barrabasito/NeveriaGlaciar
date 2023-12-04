@@ -1,34 +1,27 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
-
-    <h1>Consulta de Productos</h1>
-    <a href="/agregarProducto">Agregar Producto</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Código Producto</th>
-                <th>Sabor</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Categoría ID</th>
-                <th>Sucursal ID</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="productos-table-body">
-            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+<link rel="stylesheet" href="../../static/css/tabla.css">
+    <h1 class="text-center">Consulta de Productos</h1>
+    <a href="/agregarProducto" class="btn btn-primary">Agregar Producto</a>
+    <div class="table-container">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-light">
+                <tr class="table-danger">
+                    <th>Código Producto</th>
+                    <th>Sabor</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Categoría ID</th>
+                    <th>Sucursal ID</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="productos-table-body">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
     <script>
         function verProducto(codigo_producto) {
             window.location.href = `/detalleProducto/${codigo_producto}`;
@@ -66,35 +59,49 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    // You may want to update the UI or provide feedback to the user
+                    // Puedes actualizar la interfaz de usuario o proporcionar comentarios al usuario
                 })
                 .catch(error => console.error('Error:', error));
             });
         }
-    
+        
         document.addEventListener('DOMContentLoaded', function () {
-    const productosCardBody = document.getElementById('productos-card-body');   
+            const productosTableBody = document.getElementById('productos-table-body');
 
-    function appendCard(producto) {
-        const newCard = document.createElement('div');
-        newCard.classList.add('card', 'm-2');
-        newCard.innerHTML = `
-            <img src="${producto.imagen}" class="card-img-top" alt="Imagen del producto" style="max-height: 200px;">
-            <div class="card-body">
-                <h5 class="card-title">${producto.categoria_nombre}</h5>
-            </div>
-        `;
-        productosCardBody.appendChild(newCard);
-    }
+            function appendRow(producto) {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td class="table-light">${producto.codigo_producto}</td>
+                    <td class="table-light">${producto.sabor}</td>
+                    <td class="table-light">${producto.precio}</td>
+                    <td class="table-light">${producto.cantidad}</td>
+                    <td class="table-light">${producto.categoria_id}</td>
+                    <td class="table-light">${producto.sucursal_id}</td>
+                    <td class="actions table-light">
+                        <button class="ver-btn btn btn-outline-primary" onclick="verProducto('${producto.codigo_producto}')">Ver</button>
+                        <button class="editar-btn btn btn-outline-info" onclick="editarProducto('${producto.codigo_producto}')">Editar</button>
+                        <button class="eliminar-btn btn-outline-danger" onclick="eliminarProducto('${producto.codigo_producto}')">Eliminar</button>
+                        <button type="button" class="cambiarImagenLabel btn btn-outline-secondary" onclick="document.getElementById('inputFile-${producto.codigo_producto}').click();">Cambiar Imagen</button>
+                        <input type="file" id="inputFile-${producto.codigo_producto}" name="inputFile" style="display: none;">
+                    </td>
+                `;
+                productosTableBody.appendChild(newRow);
 
-    fetch('/listaProductosa')
-        .then(response => response.json())
-        .then(data => {
-            const productosOrdenados = data.productos.sort((a, b) => a.categoria_id.localeCompare(b.categoria_id));
-            productosOrdenados.forEach(appendCard);
-        })
-        .catch(error => console.error('Error:', error));
-});
+                // Asociar eventos después de agregar la fila al DOM
+                newRow.querySelector('.ver-btn').addEventListener('click', () => verProducto(producto.codigo_producto));
+                newRow.querySelector('.editar-btn').addEventListener('click', () => editarProducto(producto.codigo_producto));
+                newRow.querySelector('.eliminar-btn').addEventListener('click', () => eliminarProducto(producto.codigo_producto));
+                newRow.querySelector('.cambiarImagenLabel').addEventListener('click', () => cambiarImagen(producto.codigo_producto));
+            }
+
+            fetch('/listaProductos')
+                .then(response => response.json())
+                .then(data => {
+                    // Ordenar la lista de productos por código de producto
+                    const productosOrdenados = data.productos.sort((a, b) => a.codigo_producto.localeCompare(b.codigo_producto));
+                    productosOrdenados.forEach(appendRow);
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
     <script>

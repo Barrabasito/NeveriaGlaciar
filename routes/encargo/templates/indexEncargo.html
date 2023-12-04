@@ -1,36 +1,29 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
-
-    <h1>Consulta de Encargos</h1>
-    <a href="/agregarEncargo">Agregar Encargo</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID Encargo</th>
-                <th>Código Materia Prima</th>
-                <th>Cantidad de Encargo</th>
-                <th>Cantidad a Pagar</th>
-                <th>Forma de Pago</th>
-                <th>Fecha de Encargo</th>
-                <th>ID Proveedor</th>
-                <th>ID Sucursal</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="encargos-table-body">
-            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+<link rel="stylesheet" href="../../static/css/tabla.css">
+    <h1 class="text-center">Consulta de Encargos</h1>
+    <a href="/agregarEncargo" class="btn btn-primary">Agregar Encargo</a>
+    <div class="table-container">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-light">
+                <tr class="table-danger">
+                    <th>ID Encargo</th>
+                    <th>Código Materia Prima</th>
+                    <th>Cantidad de Encargo</th>
+                    <th>Cantidad a Pagar</th>
+                    <th>Forma de Pago</th>
+                    <th>Fecha de Encargo</th>
+                    <th>ID Proveedor</th>
+                    <th>ID Sucursal</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="encargos-table-body">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
     <script>
 
         function eliminarEncargo(id_encargo) {
@@ -54,16 +47,16 @@
             function appendRow(encargo) {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${encargo.id_encargo}</td>
-                    <td>${encargo.codigo_materia}</td>
-                    <td>${encargo.cantidad_encargo}</td>
-                    <td>${encargo.cantidad_a_pagar}</td>
-                    <td>${encargo.forma_pago}</td>
-                    <td>${encargo.fecha_encargo}</td>
-                    <td>${encargo.proveedor_id}</td>
-                    <td>${encargo.sucursal_id}</td>
-                    <td class="actions">
-                        <button class="eliminar-btn">Eliminar</button>
+                    <td class="table-light">${encargo.id_encargo}</td>
+                    <td class="table-light">${encargo.codigo_materia}</td>
+                    <td class="table-light">${encargo.cantidad_encargo}</td>
+                    <td class="table-light">${encargo.cantidad_a_pagar}</td>
+                    <td class="table-light">${encargo.forma_pago}</td>
+                    <td class="table-light">${encargo.fecha_encargo}</td>
+                    <td class="table-light">${encargo.proveedor_id}</td>
+                    <td class="table-light">${encargo.sucursal_id}</td>
+                    <td class="actions table-light">
+                        <button class="eliminar-btn btn-outline-danger">Eliminar</button>
                     </td>
                 `;
                 encargosTableBody.appendChild(newRow);

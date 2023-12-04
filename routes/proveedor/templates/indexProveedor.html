@@ -1,34 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
-
-    <h1>Consulta de Proveedores</h1>
-    <a href="/agregarProveedor">Agregar Proveedor</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID Proveedor</th>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="proveedores-table-body">
-            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+<link rel="stylesheet" href="../../static/css/tabla.css">
+    <h1 class="text-center">Consulta de Proveedores</h1>
+    <a href="/agregarProveedor" class="btn btn-primary">Agregar Proveedor</a>
+    <div class="table-container">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-light">
+                <tr class="table-danger">
+                    <th>ID Proveedor</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="proveedores-table-body">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
     <script>
         function verProveedor(id_proveedor) {
             window.location.href = `/detalleProveedor/${id_proveedor}`;
@@ -59,15 +51,15 @@
             function appendRow(proveedor) {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${proveedor.id_proveedor}</td>
-                    <td>${proveedor.nombres}</td>
-                    <td>${proveedor.apellidos}</td>
-                    <td>${proveedor.direccion}</td>
-                    <td>${proveedor.telefono}</td>
-                    <td class="actions">
-                        <button class="ver-btn" onclick="verProveedor(${proveedor.id_proveedor})">Ver</button>
-                        <button class="editar-btn" onclick="editarProveedor(${proveedor.id_proveedor})">Editar</button>
-                        <button class="eliminar-btn" onclick="eliminarProveedor(${proveedor.id_proveedor})">Eliminar</button>
+                    <td class="table-light">${proveedor.id_proveedor}</td>
+                    <td class="table-light">${proveedor.nombres}</td>
+                    <td class="table-light">${proveedor.apellidos}</td>
+                    <td class="table-light">${proveedor.direccion}</td>
+                    <td class="table-light">${proveedor.telefono}</td>
+                    <td class="actions table-light">
+                        <button class="ver-btn btn btn-outline-primary" onclick="verProveedor(${proveedor.id_proveedor})">Ver</button>
+                        <button class="editar-btn btn btn-outline-info" onclick="editarProveedor(${proveedor.id_proveedor})">Editar</button>
+                        <button class="eliminar-btn btn btn-outline-danger" onclick="eliminarProveedor(${proveedor.id_proveedor})">Eliminar</button>
                     </td>
                 `;
                 proveedoresTableBody.appendChild(newRow);

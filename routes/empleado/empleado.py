@@ -19,7 +19,11 @@ def indexEmpleado():
 
 
 @appempleado.route("/agregarEmpleado", methods=["GET", "POST"])
-def agregar_empleado():
+@tokenCheck
+def agregar_empleado(usuario):
+    print(usuario)
+    if not usuario["admin"]:
+        return jsonify({"error": "No tienes permisos"})
     if request.method == "GET":
         sucursales = Sucursal.query.all()
         usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()

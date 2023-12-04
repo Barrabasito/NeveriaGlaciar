@@ -1,39 +1,32 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
-
-    <h1>Consulta de Empleados</h1>
-    <a href="/agregarEmpleado">Agregar Empleado</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Clave</th>
-                <th>RFC</th>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Edad</th>
-                <th>Sueldo</th>
-                <th>Área Laboral</th>
-                <th>Email</th>
-                <th>Usuario ID</th>
-                <th>Sucursal ID</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="empleados-table-body">
-            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+<link rel="stylesheet" href="../../static/css/tabla.css">
+    <h1 class="text-center">Consulta de Empleados</h1>
+    <a href="/agregarEmpleado" class="btn btn-primary">Agregar Empleado</a>
+    <div class="table-container">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-light">
+                <tr class="table-danger">
+                    <th>Clave</th>
+                    <th>RFC</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Edad</th>
+                    <th>Sueldo</th>
+                    <th>Área Laboral</th>
+                    <th>Email</th>
+                    <th>Usuario ID</th>
+                    <th>Sucursal ID</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="empleados-table-body">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
     <script>
         function verEmpleado(clave) {
             window.location.href = `/detalleEmpleado/${clave}`;
@@ -84,22 +77,22 @@
             function appendRow(empleado) {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${empleado.clave}</td>
-                    <td>${empleado.RFC}</td>
-                    <td>${empleado.nombres}</td>
-                    <td>${empleado.apellidos}</td>
-                    <td>${empleado.fecha_nacimiento}</td>
-                    <td>${empleado.edad}</td>
-                    <td>${empleado.sueldo}</td>
-                    <td>${empleado.area_laboral}</td>
-                    <td>${empleado.email}</td>
-                    <td>${empleado.usuario_id}</td>
-                    <td>${empleado.sucursal_id}</td>
-                    <td class="actions">
-                        <button class="ver-btn">Ver</button>
-                        <button class="editar-btn">Editar</button>
-                        <button class="eliminar-btn">Eliminar</button>
-                        <label for="inputFile-${empleado.clave}" class="cambiarImagenLabel">Cambiar Imagen</label>
+                    <td class="table-light">${empleado.clave}</td>
+                    <td class="table-light">${empleado.RFC}</td>
+                    <td class="table-light">${empleado.nombres}</td>
+                    <td class="table-light">${empleado.apellidos}</td>
+                    <td class="table-light">${empleado.fecha_nacimiento}</td>
+                    <td class="table-light">${empleado.edad}</td>
+                    <td class="table-light">${empleado.sueldo}</td>
+                    <td class="table-light">${empleado.area_laboral}</td>
+                    <td class="table-light">${empleado.email}</td>
+                    <td class="table-light">${empleado.usuario_id}</td>
+                    <td class="table-light">${empleado.sucursal_id}</td>
+                    <td class="actions table-light">
+                        <button class="ver-btn btn btn-outline-primary ">Ver</button>
+                        <button class="editar-btn btn btn-outline-info">Editar</button>
+                        <button class="eliminar-btn btn-outline-danger">Eliminar</button>
+                        <button type="button" class="cambiarImagenLabel btn btn-outline-secondary" onclick="document.getElementById('inputFile-${empleado.clave}').click();">Cambiar Imagen</button>
                         <input type="file" id="inputFile-${empleado.clave}" name="inputFile" style="display: none;">
                     </td>
                 `;
@@ -128,8 +121,8 @@
         if (elemento) {
             // Agrega la clase 'active' al elemento
             elemento.classList.add('active');
-          } else {
+        } else {
             console.error('No se encontró ningún elemento con la clase "empleados"');
-          }
+        }
     </script>
     {% endblock %}

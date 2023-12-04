@@ -1,32 +1,25 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
-
-    <h1>Consulta de Sucursales</h1>
-    <a href="/agregarSucursal">Agregar Sucursal</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Teléfonos</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="sucursales-table-body">
-            <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
-        </tbody>
-    </table>
+<link rel="stylesheet" href="../../static/css/tabla.css">
+    <h1 class="text-center">Consulta de Sucursales</h1>
+    <a href="/agregarSucursal" class="btn btn-primary">Agregar Sucursal</a>
+    <div class="table-container">
+        <table border="1" class="table table-bordered">
+            <thead class="thead-light">
+                <tr class="table-danger">
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfonos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="sucursales-table-body">
+                <!-- Las filas de la tabla se insertarán aquí dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
     <script>
         function verSucursal(id) {
             window.location.href = `/detalleSucursal/${id}`;
@@ -57,14 +50,14 @@
             function appendRow(sucursal) {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td>${sucursal.id_sucursal}</td>
-                    <td>${sucursal.nombre}</td>
-                    <td>${sucursal.direccion}</td>
-                    <td>${sucursal.telefonos.map(t => t.numero).join(', ')}</td>
-                    <td class="actions">
-                        <button class="ver-btn">Ver</button>
-                        <button class="editar-btn">Editar</button>
-                        <button class="eliminar-btn">Eliminar</button>
+                    <td class="table-light">${sucursal.id_sucursal}</td>
+                    <td class="table-light">${sucursal.nombre}</td>
+                    <td class="table-light">${sucursal.direccion}</td>
+                    <td class="table-light">${sucursal.telefonos.map(t => t.numero).join(', ')}</td>
+                    <td class="actions table-light">
+                        <button class="ver-btn btn btn-outline-primary">Ver</button>
+                        <button class="editar-btn btn btn-outline-info">Editar</button>
+                        <button class="eliminar-btn btn btn-outline-danger">Eliminar</button>
                     </td>
                 `;
                 sucursalesTableBody.appendChild(newRow);

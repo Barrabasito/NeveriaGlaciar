@@ -22,8 +22,6 @@ def indexProducto():
 @appproducto.route("/agregarProducto", methods=["GET", "POST"])
 def agregar_producto():
     if request.method == "GET":
-        # Consulta de todas las sucursales y categorias dentro de la base de datos
-        # se manda a la vista agregarproducto
         sucursales = Sucursal.query.all()
         categorias = Categoria.query.all()
         return render_template(
@@ -51,6 +49,7 @@ def agregar_producto():
 
             db.session.add(producto)
             db.session.commit()
+
             # Manejar la carga de imágenes
             file = request.files["inputFile"]
             data = file.read()

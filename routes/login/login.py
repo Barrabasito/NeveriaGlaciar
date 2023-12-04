@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect
 from sqlalchemy import exc
-from models import Usuario,Sucursal,Empleado
+from models import Usuario, Sucursal, Empleado
 from app import db, bcrypt
 from auth import tokenCheck, verificar
 from config import BaseConfig
@@ -25,48 +25,59 @@ def login_post():
     else:
         nombre_usuario = request.json["email"]
         password = request.json["password"]
-        usuario = Usuario(nombre_usuario=nombre_usuario, password=password,admin=True,sucursal_id=None)
+        usuario = Usuario(
+            nombre_usuario=nombre_usuario,
+            password=password,
+            admin=True,
+            sucursal_id=None,
+        )
         searchUser = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
         if searchUser:
             validation = bcrypt.check_password_hash(searchUser.password, password)
             if validation:
                 auth_token = usuario.encode_auth_token(usuario_id=searchUser.id_usuario)
                 usuario_data = {
-                'id_usuario': searchUser.id_usuario,
-                'nombre_usuario': searchUser.nombre_usuario,
-                'password': searchUser.password,
-                'fecha_registro': searchUser.fecha_registro.strftime('%Y-%m-%d'),  # Formatear la fecha como string
-                'admin': searchUser.admin,
-                'sucursal_id': searchUser.sucursal_id
+                    "id_usuario": searchUser.id_usuario,
+                    "nombre_usuario": searchUser.nombre_usuario,
+                    "password": searchUser.password,
+                    "fecha_registro": searchUser.fecha_registro.strftime(
+                        "%Y-%m-%d"
+                    ),  # Formatear la fecha como string
+                    "admin": searchUser.admin,
+                    "sucursal_id": searchUser.sucursal_id,
                 }
-                
+
                 response = {
                     "status": "success",
                     "message": "Login exitoso",
                     "auth_token": auth_token,
-                    "usuario":usuario_data,
+                    "usuario": usuario_data,
                 }
                 print(response)
                 return jsonify(response)
         return jsonify({"message": "Datos incorrectos"})
-    
+
 
 @applogin.route("/agregarUsuarioExterno", methods=["GET", "POST"])
 def agregar_usuario_externo():
     if request.method == "GET":
         sucursales = Sucursal.query.all()
-        return render_template("agregarUsuarioExterno.html",sucursales=sucursales)
+        return render_template("agregarUsuarioExterno.html", sucursales=sucursales)
     else:
         nombre_usuario = request.json["nombre_usuario"]
         password = request.json["password"]
-        admin = request.json.get("admin", False)  # Puedes establecer un valor predeterminado si no se proporciona
-        sucursal_id = request.json.get("sucursal_id", None)  # Puedes establecer None si no se proporciona
+        admin = request.json.get(
+            "admin", False
+        )  # Puedes establecer un valor predeterminado si no se proporciona
+        sucursal_id = request.json.get(
+            "sucursal_id", None
+        )  # Puedes establecer None si no se proporciona
 
         usuario = Usuario(
             nombre_usuario=nombre_usuario,
             password=password,
             admin=admin,
-            sucursal_id=sucursal_id
+            sucursal_id=sucursal_id,
         )
 
         user_exists = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
@@ -85,3 +96,8 @@ def agregar_usuario_externo():
 
         return jsonify(responseObject)
 
+
+@applogin.route("/<path:undefined_path>")
+def undefined_path(**kwargs):
+    # Puedes redirigir a la página de error directamente aquí si lo prefieres
+    return render_template("404.html"), 404

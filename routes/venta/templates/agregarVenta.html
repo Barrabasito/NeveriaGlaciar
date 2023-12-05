@@ -4,9 +4,10 @@
 <style>
     .containerAgregar {
         display: flex;
-        height: 80%;
-        padding-right: 100px;
-        padding-left: 100px;
+        height: 400px;
+        padding-right: 80px;
+        padding-left: 80px;
+        padding-bottom: 20px;
     }
     
     .half {
@@ -19,12 +20,16 @@
     /* Estilos adicionales para hacerlo más atractivo visualmente */
     .half:nth-child(odd) {
         background-color: #f0f0f0;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
     }
 
     .listaProductos{
-        background-color: #ccc;
+        background-color: white;
         overflow-y: auto; /* Agregado para permitir desplazamiento si hay muchos productos */
         max-height: 100%; /* Ajustado para ocupar toda la altura */
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
     }
 
     h2 {
@@ -38,25 +43,22 @@
     <form id="venta-form" enctype="multipart/form-data">
 
         <div class="row mb-3">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-4">
                 <label for="sucursal_id" class="form-label">Sucursal:</label>
                 <input id="sucursal_id" type="text" class="form-control" name="sucursal_id" required>
             </div>
 
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-4">
                 <label for="clave_empleado" class="form-label">Empleado:</label>
                 <input id="clave_empleado" type="text" class="form-control" name="clave_empleado" required>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-4">
                 <label for="forma_pago" class="form-label">Forma de Pago:</label>
                 <select id="forma_pago" name="forma_pago" class="form-select" required>
                     <option value="efectivo">Efectivo</option>
                     <option value="tarjeta">Tarjeta</option>
                 </select>
             </div>
-            
         </div>
         <div class="row"><h6 style="text-align: center;">Producto</h6></div>
         <hr>
@@ -76,7 +78,7 @@
             </div>
             <div class="col-sm-12 col-md-6">
                 <label for="cantidad_a_pagar" class="form-label">Cantidad calculda:</label>
-                <input type="number" id="cantidad_a_pagar" class="cantidad_a_pagar" name="cantidad_a_pagar" class="form-control" placeholder="Automático" readonly>
+                <input type="number" id="cantidad_a_pagar" class="cantidad_a_pagar form-control" name="cantidad_a_pagar" placeholder="Automático" readonly>
             </div>
             <div class="col-sm-12 col-md-6">
                 <label for="monto" class="form-label">Monto:</label>

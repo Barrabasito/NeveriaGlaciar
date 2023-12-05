@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<title>Vista de Lista de Empleados</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/archivos.css">
+</head>
+<body>
+<h1 class="text-center">SELECCIONE ARCHIVOS</h1>
+<div class="container">
+<div class="row">
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Empleados</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvempleados')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('Empleados')">Vista Previa</button>
+            <button class="btn btn-danger" onclick="descargarCSV('descargarcsvempleados')"><i class="fa-solid fa-file-pdf">PDF</i></button>
+            <button class="btn btn-light" onclick="mostrarVistaPrevia('Empleados')">Vista Previa</button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Productos</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvproductos')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('Productos')">Vista Previa</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Materias Primas</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvmateriasprimas')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('MateriasPrimas')">Vista Previa</button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Ventas</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvventas')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('Ventas')">Vista Previa</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Encargos</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvencargos')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('Encargos')">Vista Previa</button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="myDiv">
+            <p class="text-center">Usuarios</p>
+            <button class="btn btn-primary" onclick="descargarCSV('descargarcsvusuarios')">Descargar CSV</button>
+            <button class="btn btn-secondary" onclick="mostrarVistaPrevia('Usuarios')">Vista Previa</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Modal para la vista previa del CSV -->
+<div id="previewModal">
+<div id="modalContent">
+    <span id="closeModal" onclick="cerrarModal()">&times;</span>
+    <!-- Aquí se mostrará el contenido de la vista previa del CSV en forma de tabla -->
+    <h1 class="text-center">Vista Previa</h1>
+    <table id="tablePreview"></table>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<script>
+
+    function descargarCSV(tipo) {
+        // Aquí llamas a la función del servidor para generar y descargar el archivo CSV
+        window.location.href = (`/${tipo}`);
+    }
+
+    function mostrarVistaPrevia(tipo) {
+        // Aquí llamas a la función del servidor para obtener la vista previa de los empleados
+        fetch(`/lista${tipo}`)
+            .then(response => response.json())
+            .then(data => {
+                // Conviertes los datos JSON a una tabla HTML
+                const tablePreview = generateTable(data[tipo.toLowerCase()]);
+                // Muestras la vista previa en el modal
+                document.getElementById('tablePreview').innerHTML = tablePreview;
+                document.getElementById('previewModal').style.display = 'block';
+            })
+            .catch(error => console.error(`Error al obtener datos de ${tipo}`, error));
+    }
+
+    function cerrarModal() {
+        // Cierra el modal al hacer clic en la "X" o en cualquier área fuera del contenido del modal
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    function generateTable(data) {
+        const headers = Object.keys(data[0]);
+        const table = `
+            <thead>
+                <tr>${headers.map(header => `<th>${header}</th>`).join('')}</tr>
+            </thead>
+            <tbody>
+                ${data.map(row => `<tr>${headers.map(header => `<td>${row[header]}</td>`).join('')}</tr>`).join('')}
+            </tbody>
+        `;
+        return table;
+    }
+</script>
+{% endblock %}

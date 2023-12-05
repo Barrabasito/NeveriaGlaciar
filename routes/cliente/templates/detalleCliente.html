@@ -1,31 +1,17 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-            text-align: left;
-        }
+<link rel="stylesheet" href="../../static/css/detalle.css">
 
-        th {
-            font-weight: bold;
-        }
-
-        td {
-            border-bottom: 1px solid #ddd;
-        }
-
-        .details-table {
-            width: 100%;
-        }
-    </style>
-
+<div class="details-container">
     <h1>Detalles de Cliente</h1>
     <table class="details-table">
         <tbody id="cliente-details-body">
             <!-- Los detalles del cliente se insertarán aquí dinámicamente con JavaScript -->
         </tbody>
     </table>
+    <!-- JavaScript para agregar dinámicamente los detalles del cliente -->
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const clienteDetailsBody = document.getElementById('cliente-details-body');

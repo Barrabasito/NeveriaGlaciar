@@ -34,6 +34,7 @@ def tokenCheck(f):
         # Obtener el token del encabezado de la solicitud
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]
+            print(token)
 
         if not token:
             return jsonify({"token": "Token no válido"})

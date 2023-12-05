@@ -21,18 +21,7 @@
         </table>
     </div>
     <script>
-        // Hacer una solicitud con el token en el encabezado
-fetch('/listaSucursales', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + localStorage.getItem('token'),
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-    
+  
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');
         const apellidos=localStorage.getItem('apellidos');

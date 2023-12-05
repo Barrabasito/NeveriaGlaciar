@@ -46,12 +46,30 @@ def login_post():
                     "admin": searchUser.admin,
                     "sucursal_id": searchUser.sucursal_id,
                 }
+                
+                empleado=Empleado.query.filter_by(usuario_id=searchUser.id_usuario).first()
+                
+                empleado_data={
+                    "clave":empleado.clave,
+                    "nombres":empleado.nombres,
+                    "apellidos":empleado.apellidos,
+                    "sucursal_id":empleado.sucursal_id
+                }
+                
+                sucursal=Sucursal.query.filter_by(id_sucursal=empleado.sucursal_id).first()
+                
+                sucursal_data={
+                    "id_sucursal":sucursal.id_sucursal,
+                    "nombre":sucursal.nombre
+                }
 
                 response = {
                     "status": "success",
                     "message": "Login exitoso",
                     "auth_token": auth_token,
                     "usuario": usuario_data,
+                    "empleado":empleado_data,
+                    "sucursal":sucursal_data
                 }
                 print(response)
                 return jsonify(response)

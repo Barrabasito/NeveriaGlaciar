@@ -7,11 +7,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../static/css/layout.css">
 </head>
+<style>
+    #oculto {
+        display: none;
+    }
+</style>
 <body onload="checkToken()">
     <!-- Barra de navegación -->
     
         <div class="navigation navbar navbar-expand-lg navbar-light bg-light">
             <ul>      
+             
                 <li class="sucursales">
                     <a href="{{'/indexSucursal'}}">
                         <span class="icon">
@@ -109,13 +115,14 @@
                     </a>
                 </li>
                 <li class="cerrar">
-                    <a href="#">
+                    <a onclick="cerrarSesion()">
                         <span class="icon">
-                            <i class="fa-solid fa-gear"></i>                    
+                            <i class="fa-solid fa-door-open"></i>                   
                         </span>
                         <span class="text">Cerrar Sesión</span>
                     </a>
                 </li>
+            
                 <div class="indicator"></div>
             </ul>
         </div>
@@ -136,18 +143,54 @@
                     <p>¡La mejor experiencia en helados y postres!</p>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Redes Sociales</h5>
-                    
+                    <h5 class="text-uppercase" id="idSucursal"></h5>
+                    <div id="nombreSucursal"></div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Lo atiende</h5>
-                    <div id="nombreUsuario">Usuario no vinculado a empleado</div>
+                    <h5 class="text-uppercase" id="idUsuario"></h5>
+                    <div id="nombreUsuario"></div>
                 </div>
             </div>
         </div>
     </footer>  
 </body>
 <script>
+
+    const usuario=localStorage.getItem('usuario');
+    const admin=localStorage.getItem('admin');
+
+     // Mostrar las rutas adicionales solo si admin es 'true'
+     if (admin !== 'true') {
+        const elementosParaQuitar = document.querySelectorAll('.sucursales, .materias, .empleados, .clientes, .proveedores, .ventas, .reportes, .usuarios');
+        elementosParaQuitar.forEach(elemento => {
+            elemento.remove();
+        });
+    }
+
+    if(admin=="true"){
+            const miHS = document.getElementById('idSucursal');  
+            const miDivS = document.getElementById('nombreSucursal');
+            const miHU = document.getElementById('idUsuario');
+            const miDivU = document.getElementById('nombreUsuario');
+            miHS.textContent = "Sucursales";
+            miDivS.textContent = "Todas disponibles";
+            miHU.textContent = "Bienvenido Administrador@";
+            miDivU.textContent = usuario;
+    }else{
+            const miHS = document.getElementById('idSucursal');
+            const miDivS = document.getElementById('nombreSucursal');
+            const miHU = document.getElementById('idUsuario');
+            const miDivU = document.getElementById('nombreUsuario');
+            miHS.textContent = "Sucursal";
+            miDivS.textContent = nombre_sucursal;
+            miHU.textContent = "Lo Atiende";
+            miDivU.textContent = nombres + " " + apellidos;
+            esAdministrador=false;
+    }
+    
+
+    console.log(usuario);
+
      function checkToken() {
          var token = localStorage.getItem('token');
          if (token) {
@@ -168,27 +211,55 @@
              window.location.href = '/login';
          }
      }
+     function cerrarSesion() {
+        // Preguntar al usuario si está seguro de cerrar sesión
+        var confirmacion = window.confirm("¿Estás seguro de cerrar sesión?");
+        
+        // Si el usuario confirma, proceder con el cierre de sesión
+        if (confirmacion) {
+            var token = localStorage.getItem('token');
+            if (token) {
+                fetch(`/login?token=${token}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message);
+                    if(data.message === 'valid_token'){
+                        localStorage.removeItem('token');
+                        window.location.href = '/login';
+                    }
+                })
+                .catch(error => {
+                    window.location.href = '/login';
+                })
+            }
+            else {
+                window.location.href = '/login';
+            }
+        }
+        // Si el usuario cancela, no hacer nada
+    }
+    
 </script>
 <script>
     // Obtén la cadena de consulta de la URL actual
-const queryString = window.location.search;
+//const queryString = window.location.search;
 
 // Parsea la cadena de consulta en un objeto con parámetros clave-valor
-const urlParams = new URLSearchParams(queryString);
+//const urlParams = new URLSearchParams(queryString);
 
 // Obtiene el valor de un parámetro específico
-const encodedData = urlParams.get('data');
+//const encodedData = urlParams.get('data');
 
 // Decodifica la cadena y conviértela de nuevo a un objeto JSON
-const decodedData = JSON.parse(decodeURIComponent(encodedData));
+//const decodedData = JSON.parse(decodeURIComponent(encodedData));
 
-console.log(decodedData); // Mostrará el objeto JSON en la consola
-const nombreUsuario = decodedData.nombre_usuario;
+//console.log(decodedData); // Mostrará el objeto JSON en la consola
+//const nombreUsuario = decodedData.nombre_usuario;
 // Obtén el div en el que quieres mostrar el valor
-const miDiv = document.getElementById('nombreUsuario');
+//const miDiv = document.getElementById('nombreUsuario');
 
 // Accede a la propiedad específica del objeto JSON y agrégala al div
-miDiv.textContent = nombreUsuario;
+//miDiv.textContent = nombreUsuario;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

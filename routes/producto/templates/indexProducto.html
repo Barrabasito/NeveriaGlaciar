@@ -23,6 +23,10 @@
         </table>
     </div>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         function verProducto(codigo_producto) {
             window.location.href = `/detalleProducto/${codigo_producto}`;
         }

@@ -21,6 +21,10 @@
     </div>
 
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         document.addEventListener('DOMContentLoaded', function () {
             const empleadoDetailsBody = document.getElementById('empleado-details-body');
             const empleadoData = {{ empleado | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla

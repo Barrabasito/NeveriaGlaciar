@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from sqlalchemy import exc
 from models import Sucursal,Telefono
 from app import db, bcrypt
@@ -7,9 +7,20 @@ from auth import tokenCheck, verificar
 appsucursal = Blueprint("appsucursal", __name__, template_folder="templates")
 
 @appsucursal.route("/indexSucursal")
-def indexSucursal():
-    return render_template("indexSucursal.html")
+@tokenCheck
+def indexSucursal(usuario):
+    print(usuario)
+    if usuario["admin"]:
+        # Puedes agregar lógica específica para usuarios admin aquí, si es necesario
+        return render_template("indexSucursal.html")
+    else:
+        print("No tienes permisos de administrador")
+        # Redirige al usuario a una página específica para manejar la falta de permisos
+        return redirect(url_for('sin_permisos'))
 
+@appsucursal.route("/sin_permisos")
+def sin_permisos():
+    return render_template("error/sinPermisos.html")
 
 @appsucursal.route("/agregarSucursal", methods=["GET", "POST"])
 def add_sucursal():

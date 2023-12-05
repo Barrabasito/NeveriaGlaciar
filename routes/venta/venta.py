@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect
 from sqlalchemy import exc
-from models import Venta,Producto,Producto_Vendido,Sucursal,Empleado
+from models import Venta,Producto,Categoria,Producto_Vendido,Sucursal,Empleado
 from app import db, bcrypt
 from auth import tokenCheck, verificar
 import datetime
@@ -18,8 +18,9 @@ def agregar_venta():
         # Cargar datos necesarios para el formulario, por ejemplo, empleados y sucursales
         empleados = Empleado.query.all()
         productos = Producto.query.all()
+        categorias = Categoria.query.all()
         sucursales = Sucursal.query.all()
-        return render_template("agregarVenta.html", empleados=empleados, sucursales=sucursales, productos=productos)
+        return render_template("agregarVenta.html", empleados=empleados, sucursales=sucursales, productos=productos,categorias=categorias)
     else:
         fecha_venta = datetime.datetime.now()
         monto = request.json.get("monto")

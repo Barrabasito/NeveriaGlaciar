@@ -30,20 +30,24 @@ def tokenCheck(f):
     @wraps(f)
     def verificar(*args, **kwargs):
         token = None
-        print(request.headers["token"])
-        if "token" in request.headers:
-            print("Que rollo si entre al primero")
-            token = request.headers["token"]
+
+        # Obtener el token del encabezado de la solicitud
+        if "Authorization" in request.headers:
+            token = request.headers["Authorization"].split(" ")[1]
+
         if not token:
-            return jsonify({"token": "Token no valido"})
+            return jsonify({"token": "Token no válido"})
+
         try:
             info = obtenerInfo(token)
-            print(info)
             if info["status"] == "fail":
-                return jsonify({"message": "Token failed"})
+                return jsonify({"message": "Token inválido"})
         except Exception as e:
             print(e)
-            return jsonify({"message": "Token invalid"})
+            return jsonify({"message": "Error al procesar el token"})
+
+        # Puedes hacer algo con la información del token si es necesario
+
         return f(info["data"], *args, **kwargs)
 
     return verificar

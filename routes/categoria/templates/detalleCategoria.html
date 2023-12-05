@@ -10,8 +10,16 @@
             <!-- Los detalles de la categoría se insertarán aquí dinámicamente con JavaScript -->
         </tbody>
     </table>
-    <!-- JavaScript para agregar dinámicamente los detalles de la categoría -->
-</div>
+    <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoriaDetailsBody = document.getElementById('categoria-details-body');
+            const categoriaData = {{ categoria | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+            
+            const order = ['id_categoria', 'nombre_categoria'];
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

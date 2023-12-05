@@ -144,16 +144,6 @@ li.active~.indicator{
     --x:0;
     transform: translateX(var(--x));
 }
-/* Estilos para tablets y dispositivos medianos */
-/* @media (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    .container {
-        width: 90%;
-    }
-}
 
 /* Estilos para dispositivos pequeños (móviles) */
 @media (max-width: 576px) {

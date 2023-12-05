@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect
+from flask import Blueprint, request, jsonify, render_template, redirect, Response
 from sqlalchemy import exc
 from models import Empleado, Sucursal, Usuario, ImagenEmpleado
 from app import db, bcrypt
@@ -19,11 +19,7 @@ def indexEmpleado():
 
 
 @appempleado.route("/agregarEmpleado", methods=["GET", "POST"])
-@tokenCheck
-def agregar_empleado(usuario):
-    print(usuario)
-    if not usuario["admin"]:
-        return jsonify({"error": "No tienes permisos"})
+def agregar_empleado():
     if request.method == "GET":
         sucursales = Sucursal.query.all()
         usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()

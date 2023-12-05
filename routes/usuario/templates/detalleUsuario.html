@@ -1,32 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-    <style>
-        td, th {
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            font-weight: bold;
-        }
-
-        td {
-            border-bottom: 1px solid #ddd;
-        }
-
-        .details-table {
-            width: 100%;
-        }
-    </style>
-
+<link rel="stylesheet" href="../../static/css/detalle.css">
+<div class="details-container">
     <h1>Detalles de Usuario</h1>
     <table class="details-table">
         <tbody id="usuario-details-body">
             <!-- Los detalles del usuario se insertarán aquí dinámicamente con JavaScript -->
         </tbody>
     </table>
+</div>
     <script>
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');

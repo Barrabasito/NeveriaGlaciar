@@ -1,0 +1,52 @@
+
+    body {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    main {
+        flex: 1;
+        max-height: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .details-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%; /* Ajusta según tus necesidades */
+        text-align: center; /* Centra el contenido */
+        margin: auto; /* Centra el contenedor */
+        margin-top: 20px; /* Ajusta según tus necesidades */
+    }
+
+    footer {
+        flex-shrink: 0;
+        height: 10%;
+    }
+
+    .details-table {
+        width: 100%;
+    }
+
+    td, th {
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        font-weight: bold;
+    }
+
+    td {
+        border-bottom: 1px solid #ddd;
+    }

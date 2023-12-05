@@ -1,25 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <style>
-        td, th {
-            padding: 8px;
-            text-align: left;
-        }
+<link rel="stylesheet" href="../../static/css/detalle.css">
 
-        th {
-            font-weight: bold;
-        }
-
-        td {
-            border-bottom: 1px solid #ddd;
-        }
-
-        .details-table {
-            width: 100%;
-        }
-    </style>
-
+<div class="details-container">
     <h1>Detalles de Categoría</h1>
     <table class="details-table">
         <tbody id="categoria-details-body">
@@ -37,17 +21,25 @@
             
             const order = ['id_categoria', 'nombre_categoria'];
 
-            function appendDetailRow(key, value) {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${key}:</td>
-                    <td>${value}</td>
-                `;
-                categoriaDetailsBody.appendChild(newRow);
-            }
-            order.forEach(key => {
-                appendDetailRow(key, categoriaData[key]);
-            });
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categoriaDetailsBody = document.getElementById('categoria-details-body');
+        const categoriaData = {{ categoria | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
+        
+        const order = ['id_categoria', 'nombre_categoria'];
+
+        function appendDetailRow(key, value) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${key}:</td>
+                <td>${value}</td>
+            `;
+            categoriaDetailsBody.appendChild(newRow);
+        }
+
+        order.forEach(key => {
+            appendDetailRow(key, categoriaData[key]);
         });
-    </script>
-    {% endblock %}
+    });
+</script>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from database import db
 from encriptador import bcrypt
@@ -33,6 +33,11 @@ app.register_blueprint(appencargo)
 app.register_blueprint(appproveedor)
 app.register_blueprint(appmateria)
 app.register_blueprint(appventa)
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template("error_500.html"), 500
 
 
 app.register_blueprint(ImagenEmpleadoUser)

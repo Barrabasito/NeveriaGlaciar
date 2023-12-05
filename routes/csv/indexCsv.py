@@ -214,17 +214,17 @@ def generate_csv_ventas(ventas):
 
     # Agregar datos de ventas al CSV
     for venta in ventas:
-        productos_vendidos_data = venta.get("productos_vendidos", [])
+        productos_vendidos_data = venta.productos_vendidos
         for producto_vendido in productos_vendidos_data:
             venta_data = [
-                venta["id_venta"],
-                venta["fecha_venta"],
-                venta["monto"],
-                venta["forma_pago"],
-                venta["sucursal_id"],
-                venta["clave_empleado"],
-                producto_vendido["codigo_producto"],
-                producto_vendido["cantidad"],
+                venta.id_venta,
+                venta.fecha_venta,
+                venta.monto,
+                venta.forma_pago,
+                venta.sucursal_id,
+                venta.clave,
+                producto_vendido.codigo_producto,
+                producto_vendido.cantidad,
             ]
             csv_data.append(venta_data)
 

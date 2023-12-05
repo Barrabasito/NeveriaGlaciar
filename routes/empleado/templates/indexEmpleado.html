@@ -28,6 +28,10 @@
         </table>
     </div>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         function verEmpleado(clave) {
             window.location.href = `/detalleEmpleado/${clave}`;
         }

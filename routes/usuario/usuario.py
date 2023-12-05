@@ -17,7 +17,7 @@ def getUsers(usuario):
         usuarios = Usuario.query.all()
         for usuario in usuarios:
             usuarioData = {}
-            usuarioData["id"] = usuario.id_usuario
+            usuarioData["id_usuario"] = usuario.id_usuario
             usuarioData["nombre_usuario"] = usuario.nombre_usuario
             usuarioData["password"] = usuario.password
             usuarioData["fecha_registro"] = usuario.fecha_registro

@@ -51,6 +51,10 @@
     </div>
 </form>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         const registerForm = document.querySelector('#register-form');
         const passwordInput = document.querySelector('#password');
         const confirmarPasswordInput = document.querySelector('#confirmar_password');

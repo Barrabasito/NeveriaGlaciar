@@ -25,6 +25,10 @@
 </div>
 
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         function verMateriaPrima(codigo_materia) {
             window.location.href = `/detalleMateriaPrima/${codigo_materia}`;
         }

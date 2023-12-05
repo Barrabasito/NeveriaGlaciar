@@ -27,6 +27,10 @@
         </tbody>
     </table>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         document.addEventListener('DOMContentLoaded', function () {
             const clienteDetailsBody = document.getElementById('cliente-details-body');
             const clienteData = {{ cliente | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla

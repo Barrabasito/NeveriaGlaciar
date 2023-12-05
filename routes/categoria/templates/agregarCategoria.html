@@ -18,6 +18,10 @@
     </div>
 </form>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+        
         const categoriaForm = document.getElementById('categoria-form');
         categoriaForm.addEventListener('submit', function (event) {
             event.preventDefault();

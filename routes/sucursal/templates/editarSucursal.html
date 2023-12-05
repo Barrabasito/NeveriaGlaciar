@@ -37,6 +37,10 @@
 </form>
 
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         document.addEventListener('DOMContentLoaded', function () {
             const telefonosContainer = document.getElementById('telefonos-container');
             const addTelefonoButton = document.getElementById('add-telefono-btn');

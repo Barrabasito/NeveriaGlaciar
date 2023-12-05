@@ -60,6 +60,10 @@
     </div>
 
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         document.addEventListener('DOMContentLoaded', function () {
             const productoDetailsBody = document.getElementById('producto-details-body');
             const productoData = {{ producto_data | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla

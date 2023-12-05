@@ -35,53 +35,52 @@
 
     <div class="half">
 
-        <form id="venta-form" enctype="multipart/form-data"></form>
-
-        <div class="row mb-3">
-            <div class="col-sm-12 col-md-6">
-                <label for="monto" class="form-label">Monto:</label>
-                <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" required>
-            </div>
-
-            <div class="col-sm-12 col-md-6">
-                <label for="forma_pago" class="form-label">Forma de Pago:</label>
-                <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Enter forma de pago">
-            </div>
-        </div>
+    <form id="venta-form" enctype="multipart/form-data">
 
         <div class="row mb-3">
             <div class="col-sm-12 col-md-6">
                 <label for="sucursal_id" class="form-label">Sucursal:</label>
-                <select id="sucursal_id" name="sucursal_id" class="form-select">
-                    {% for sucursal in sucursales %}
-                        <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-                    {% endfor %}
-                </select>
+                <input id="sucursal_id" type="text" class="form-control" name="sucursal_id" required>
             </div>
 
             <div class="col-sm-12 col-md-6">
                 <label for="clave_empleado" class="form-label">Empleado:</label>
-                <select id="clave_empleado" name="clave_empleado" class="form-select">
-                    {% for empleado in empleados %}
-                        <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
-                    {% endfor %}
+                <input id="clave_empleado" type="text" class="form-control" name="clave_empleado" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="forma_pago" class="form-label">Forma de Pago:</label>
+                <select id="forma_pago" name="forma_pago" class="form-select" required>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta">Tarjeta</option>
                 </select>
             </div>
+            
         </div>
         <div class="row"><h6 style="text-align: center;">Producto</h6></div>
         <hr>
         <div class="row mb-3">
             <div class="col-sm-12 col-md-6">
                 <label for="producto_seleccionado" class="form-label">Producto</label>
-                    <select class="form-select producto-seleccionado" name="producto_seleccionado" required>
+                    <select id="producto" class="form-select producto-seleccionado" name="producto_seleccionado" required>
                         {% for producto in productos %}
-                            <option value="{{ producto.codigo_producto }}">{{ producto.sabor }}</option>
+                        {% set categoria_nombre = categorias[producto.categoria_id-1].nombre_categoria %}
+                        <option value="{{ producto.codigo_producto }}" data-precio="{{ producto.precio }}">{{ categoria_nombre }} - {{ producto.sabor }} ${{ producto.precio }}</option>
                         {% endfor %}
                     </select>
             </div>
             <div class="col-sm-12 col-md-6">
                     <label for="cantidad" class="form-label">Cantidad</label>
-                    <input type="number" class="form-control cantidad" name="cantidad" placeholder="Enter cantidad"value=1 required>
+                    <input id="cantidad_producto" type="number" class="form-control cantidad" name="cantidad" placeholder="Enter cantidad"value=1 required>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label for="cantidad_a_pagar" class="form-label">Cantidad calculda:</label>
+                <input type="number" id="cantidad_a_pagar" class="cantidad_a_pagar" name="cantidad_a_pagar" class="form-control" placeholder="Automático" readonly>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label for="monto" class="form-label">Monto:</label>
+                <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" readonly required>
             </div>
         </div>
         
@@ -101,28 +100,80 @@
 
     </div>
 </div>
-    <script>        
-            const listaProductosContainer = document.getElementById('listaProductos');
-            const addProductoButton = document.getElementById('add-producto-btn');
-    
-            function createProductoList(producto) {
-                const nuevoProducto = document.createElement('div');
-                nuevoProducto.classList.add('producto-vendido-input');  // Agregada la clase
-                nuevoProducto.innerHTML = `<p>${producto.codigo_producto} - ${producto.cantidad}</p>`;
-                listaProductosContainer.appendChild(nuevoProducto);
-            }
-    
-            addProductoButton.addEventListener('click', function () {
-                const productoSeleccionado = document.querySelector('.producto-seleccionado').value;
-                const cantidad = document.querySelector('.cantidad').value;
-    
-                const nuevoProducto = {
-                    'codigo_producto': productoSeleccionado,
-                    'cantidad': cantidad
-                };
-    
-                createProductoList(nuevoProducto);
-            });
+    <script>
+        //Agregar Producto        
+        const listaProductosContainer = document.getElementById('listaProductos');
+        const addProductoButton = document.getElementById('add-producto-btn');
+        let sumaMonto=0;
+
+        const cantidadProductoInput = document.getElementById('cantidad_producto');
+        const cantidadAPagarInput = document.getElementById('cantidad_a_pagar');
+        const productoSelect = document.getElementById('producto');
+
+            
+    const clave=localStorage.getItem('clave');
+    const nombres=localStorage.getItem('nombres');
+    const apellidos=localStorage.getItem('apellidos');
+    const id_sucursal=localStorage.getItem('id_sucursal');
+    const nombre_sucursal=localStorage.getItem('sucursal');
+
+        const miInputS =document.getElementById('sucursal_id');
+        const miInputE =document.getElementById('clave_empleado');
+        const monto =document.getElementById('monto');
+        miInputS.value = nombre_sucursal;
+        miInputE.value = nombres + " " + apellidos;
+        monto.value = sumaMonto;
+
+        // Agregar evento de cambio a la selección de producto
+        productoSelect.addEventListener('change', function() {
+            calcularCantidadAPagar();
+        });
+
+        // Agregar evento de cambio a la cantidad
+        cantidadProductoInput.addEventListener('change', function() {
+            calcularCantidadAPagar();
+        });
+
+        function calcularCantidadAPagar() {
+            const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+            const precioProducto= parseFloat(selectedOption.getAttribute('data-precio')) || 0;
+            const cantidadProducto = parseInt(cantidadProductoInput.value) || 0;
+
+            // Calcular automáticamente la cantidad a pagar
+            const cantidadAPagar = precioProducto * cantidadProducto;
+            cantidadAPagarInput.value = cantidadAPagar.toFixed(2); // Dos decimales
+        }
+
+        calcularCantidadAPagar();
+
+        // Lista para almacenar los productos
+        const productos = [];
+        
+        function createProductoList(producto, cantidad_calculada) {
+            const nuevoProducto = document.createElement('div');
+            nuevoProducto.classList.add('producto-vendido-input');  // Agregada la clase
+            nuevoProducto.innerHTML = `<p>${producto.codigo_producto}- ${producto.cantidad} - $${cantidad_calculada} </p>`;
+            listaProductosContainer.appendChild(nuevoProducto);
+        }
+        
+        addProductoButton.addEventListener('click', function () {
+            const productoSeleccionado = document.querySelector('.producto-seleccionado').value;
+            const cantidad = document.querySelector('.cantidad').value;
+            const cantidad_calculada = parseFloat(document.querySelector('.cantidad_a_pagar').value);
+        
+            const nuevoProducto = {
+                'codigo_producto': productoSeleccionado,
+                'cantidad': cantidad
+            };
+        
+            // Agregar el nuevo producto a la lista
+            productos.push(nuevoProducto);
+            sumaMonto=sumaMonto+cantidad_calculada;
+            monto.value = sumaMonto;
+        
+            // Crear la lista visual de productos
+            createProductoList(nuevoProducto, cantidad_calculada);
+        });
 
         
             const ventaForm = document.getElementById('venta-form');
@@ -131,16 +182,8 @@
 
             const monto = parseFloat(document.getElementById('monto').value);
             const formaPago = document.getElementById('forma_pago').value;
-            const sucursalId = parseInt(document.getElementById('sucursal_id').value);
-            const claveEmpleado = document.getElementById('clave_empleado').value;
+            const sucursalId = parseInt(id_sucursal);
 
-            const productosVendidosInputs = document.querySelectorAll('.producto-vendido-input');
-            const productosVendidos = Array.from(productosVendidosInputs).map(input => {
-                return {
-                    'codigo_producto': input.querySelector('.producto-seleccionado').value,
-                    'cantidad': parseInt(input.querySelector('.cantidad').value)
-                };
-            });
 
             fetch('/agregarVenta', {
                 method: 'POST',
@@ -151,8 +194,8 @@
                     'monto': monto,
                     'forma_pago': formaPago,
                     'sucursal_id': sucursalId,
-                    'clave_empleado': claveEmpleado,
-                    'productos_vendidos': productosVendidos
+                    'clave_empleado': clave,
+                    'productos_vendidos': productos
                 })
             })
             .then(response => response.json())

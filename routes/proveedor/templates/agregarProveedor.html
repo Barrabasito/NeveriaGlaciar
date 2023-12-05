@@ -40,6 +40,10 @@
     </div>
 </form>
     <script>
+        const nombre_sucursal=localStorage.getItem('sucursal');
+        const nombres=localStorage.getItem('nombres');
+        const apellidos=localStorage.getItem('apellidos');
+
         const proveedorForm = document.getElementById('proveedor-form');
         proveedorForm.addEventListener('submit', function (event) {
             event.preventDefault();

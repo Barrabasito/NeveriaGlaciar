@@ -1,6 +1,6 @@
 class BaseConfig:
     USER_DB = "postgres"
-    PASS_DB = "19100209"
+    PASS_DB = "Barrabasito20"
     URL_DB = "localhost"
     NAME_DB = "NeveriaGlaciar"
     FULL_URL_DB = f"postgresql://{USER_DB}:{PASS_DB}@{URL_DB}/{NAME_DB}"

@@ -47,21 +47,33 @@ def login_post():
                     #"sucursal_id": searchUser.sucursal_id,
                 }
                 
+                
                 empleado=Empleado.query.filter_by(usuario_id=searchUser.id_usuario).first()
                 
-                empleado_data={
-                    "clave":empleado.clave,
-                    "nombres":empleado.nombres,
-                    "apellidos":empleado.apellidos,
-                    "sucursal_id":empleado.sucursal_id
-                }
                 
-                sucursal=Sucursal.query.filter_by(id_sucursal=empleado.sucursal_id).first()
-                
-                sucursal_data={
+                if empleado is not None:
+                    empleado_data = {
+                    "clave": empleado.clave,
+                    "nombres": empleado.nombres,
+                    "apellidos": empleado.apellidos,
+                    "sucursal_id": empleado.sucursal_id
+                    }
+                    sucursal=Sucursal.query.filter_by(id_sucursal=empleado.sucursal_id).first()
+                    sucursal_data = {
                     "id_sucursal":sucursal.id_sucursal,
                     "nombre":sucursal.nombre
-                }
+                    }
+                else:
+                    empleado_data = {
+                    "clave": None,  
+                    "nombres": None,
+                    "apellidos": None,
+                    "sucursal_id": None
+                    }
+                    sucursal_data = {
+                    "id_sucursal":None,
+                    "nombre":None
+                    }
 
                 response = {
                     "status": "success",

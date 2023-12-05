@@ -39,24 +39,27 @@
                 })
             }).then(response => response.json())
             .then(data=>{
-                localStorage.setItem('token',data.auth_token);
-                localStorage.setItem('usuario',data.usuario.nombre_usuario);
-                localStorage.setItem('admin',data.usuario.admin);
-                localStorage.setItem('clave',data.empleado.clave);
-                localStorage.setItem('nombres',data.empleado.nombres);
-                localStorage.setItem('apellidos',data.empleado.apellidos);
-                localStorage.setItem('id_sucursal',data.sucursal.id_sucursal);
-                localStorage.setItem('sucursal',data.sucursal.nombre);
-                //const jsonToSend = JSON.stringify(data.usuario);
-
-                // Codifica la cadena JSON para incluirla en la URL
-                //const encodedData = encodeURIComponent(jsonToSend);
-
-                // Construye la URL con el parámetro
-                //const url = `/agregarVenta?data=${encodedData}`;
-                //console.log(data);
-                window.location.href = '/agregarVenta';
-                
+                if(data.message=="Datos incorrectos"){
+                    alert("Los datos ingresados son incorrectos. Por favor, inténtalo de nuevo.");
+                }else{
+                    localStorage.setItem('token',data.auth_token);
+                    localStorage.setItem('usuario',data.usuario.nombre_usuario);
+                    localStorage.setItem('admin',data.usuario.admin);
+                    localStorage.setItem('clave',data.empleado.clave);
+                    localStorage.setItem('nombres',data.empleado.nombres);
+                    localStorage.setItem('apellidos',data.empleado.apellidos);
+                    localStorage.setItem('id_sucursal',data.sucursal.id_sucursal);
+                    localStorage.setItem('sucursal',data.sucursal.nombre);
+                    //const jsonToSend = JSON.stringify(data.usuario);
+    
+                    // Codifica la cadena JSON para incluirla en la URL
+                    //const encodedData = encodeURIComponent(jsonToSend);
+    
+                    // Construye la URL con el parámetro
+                    //const url = `/agregarVenta?data=${encodedData}`;
+   
+                    window.location.href = '/agregarVenta';
+                }   
             })
         })
     </script>

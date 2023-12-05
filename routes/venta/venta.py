@@ -9,8 +9,22 @@ appventa = Blueprint("appventa", __name__, template_folder="templates")
 
 @appventa.route("/indexVenta")
 def indexVenta():
-    return render_template("indexVenta.html")
+    if request.method == "GET":
+        token = request.args.get("token")
+        if token:
+            info = verificar(token)
+            print(info["data"]["admin"] )
+            if info["data"]["admin"] == True:
+                responseObject = {
+                    "message": "esAdmin"
+                }
+                return jsonify(responseObject)
+        return render_template("sinPermisos.html")
+    return jsonify({"message": "Datos incorrectos"})
 
+@appventa.route("/sinPermisos")
+def sinPermisos():
+    return render_template("sinPermisos.html")
 
 @appventa.route("/agregarVenta", methods=["GET", "POST"])
 def agregar_venta():

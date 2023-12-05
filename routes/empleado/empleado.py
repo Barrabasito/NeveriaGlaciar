@@ -95,6 +95,9 @@ def agregar_empleado():
 @appempleado.route("/listaEmpleados")
 def consulta_empleados():
     empleados = Empleado.query.all()
+    usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()
+    cantidad_usuarios_disponibles = len(usuarios_disponibles)
+    print(cantidad_usuarios_disponibles)
     empleados_data = [
         {
             "clave": empleado.clave,
@@ -111,7 +114,10 @@ def consulta_empleados():
         }
         for empleado in empleados
     ]
-    return jsonify({"empleados": empleados_data})
+    return jsonify({
+        "empleados": empleados_data,
+        "usuarios_disponibles":cantidad_usuarios_disponibles
+        })
 
 
 @appempleado.route("/detalleEmpleado/<string:clave>")

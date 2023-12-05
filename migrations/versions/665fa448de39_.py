@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4369067082a6
+Revision ID: 665fa448de39
 Revises: 
-Create Date: 2023-12-04 09:33:27.009937
+Create Date: 2023-12-05 13:29:28.496358
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4369067082a6'
+revision = '665fa448de39'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -37,6 +37,14 @@ def upgrade():
     sa.Column('direccion', sa.String(length=60), nullable=False),
     sa.PrimaryKeyConstraint('id_sucursal')
     )
+    op.create_table('usuario',
+    sa.Column('id_usuario', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('nombre_usuario', sa.String(length=30), nullable=False),
+    sa.Column('password', sa.String(length=255), nullable=False),
+    sa.Column('fecha_registro', sa.DateTime(), nullable=False),
+    sa.Column('admin', sa.Boolean(), nullable=False),
+    sa.PrimaryKeyConstraint('id_usuario')
+    )
     op.create_table('cliente',
     sa.Column('nombre_empresa', sa.String(length=50), nullable=False),
     sa.Column('direccion', sa.String(length=50), nullable=False),
@@ -48,6 +56,24 @@ def upgrade():
     sa.Column('sucursal_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
     sa.PrimaryKeyConstraint('nombre_empresa')
+    )
+    op.create_table('empleado',
+    sa.Column('clave', sa.String(length=10), nullable=False),
+    sa.Column('RFC', sa.String(length=10), nullable=False),
+    sa.Column('nombres', sa.String(length=50), nullable=False),
+    sa.Column('apellidos', sa.String(length=50), nullable=False),
+    sa.Column('fecha_nacimiento', sa.Date(), nullable=False),
+    sa.Column('edad', sa.Integer(), nullable=False),
+    sa.Column('sueldo', sa.Float(), nullable=False),
+    sa.Column('area_laboral', sa.String(length=50), nullable=False),
+    sa.Column('email', sa.String(length=500), nullable=False),
+    sa.Column('usuario_id', sa.Integer(), nullable=True),
+    sa.Column('sucursal_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
+    sa.ForeignKeyConstraint(['usuario_id'], ['usuario.id_usuario'], ),
+    sa.PrimaryKeyConstraint('clave'),
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('usuario_id')
     )
     op.create_table('materia_prima',
     sa.Column('codigo_materia', sa.String(length=10), nullable=False),
@@ -76,34 +102,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
     sa.PrimaryKeyConstraint('id_telefono')
     )
-    op.create_table('usuario',
-    sa.Column('id_usuario', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('nombre_usuario', sa.String(length=30), nullable=False),
-    sa.Column('password', sa.String(length=255), nullable=False),
-    sa.Column('fecha_registro', sa.DateTime(), nullable=False),
-    sa.Column('admin', sa.Boolean(), nullable=False),
-    sa.Column('sucursal_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
-    sa.PrimaryKeyConstraint('id_usuario')
-    )
-    op.create_table('empleado',
-    sa.Column('clave', sa.String(length=10), nullable=False),
-    sa.Column('RFC', sa.String(length=10), nullable=False),
-    sa.Column('nombres', sa.String(length=50), nullable=False),
-    sa.Column('apellidos', sa.String(length=50), nullable=False),
-    sa.Column('fecha_nacimiento', sa.Date(), nullable=False),
-    sa.Column('edad', sa.Integer(), nullable=False),
-    sa.Column('sueldo', sa.Float(), nullable=False),
-    sa.Column('area_laboral', sa.String(length=50), nullable=False),
-    sa.Column('email', sa.String(length=500), nullable=False),
-    sa.Column('usuario_id', sa.Integer(), nullable=True),
-    sa.Column('sucursal_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
-    sa.ForeignKeyConstraint(['usuario_id'], ['usuario.id_usuario'], ),
-    sa.PrimaryKeyConstraint('clave'),
-    sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('usuario_id')
-    )
     op.create_table('encargo',
     sa.Column('id_encargo', sa.Integer(), nullable=False),
     sa.Column('codigo_materia', sa.String(length=10), nullable=False),
@@ -117,6 +115,15 @@ def upgrade():
     sa.ForeignKeyConstraint(['proveedor_id'], ['proveedor.id_proveedor'], ),
     sa.ForeignKeyConstraint(['sucursal_id'], ['sucursal.id_sucursal'], ),
     sa.PrimaryKeyConstraint('id_encargo')
+    )
+    op.create_table('imagen_empleado',
+    sa.Column('id_imagenEmpleado', sa.Integer(), nullable=False),
+    sa.Column('type', sa.String(length=128), nullable=False),
+    sa.Column('data', sa.LargeBinary(), nullable=False),
+    sa.Column('rendered_data', sa.Text(), nullable=False),
+    sa.Column('clave', sa.String(length=10), nullable=False),
+    sa.ForeignKeyConstraint(['clave'], ['empleado.clave'], ),
+    sa.PrimaryKeyConstraint('id_imagenEmpleado')
     )
     op.create_table('imagen_materia_prima',
     sa.Column('id_images', sa.Integer(), nullable=False),
@@ -135,15 +142,6 @@ def upgrade():
     sa.Column('codigo_producto', sa.String(length=10), nullable=False),
     sa.ForeignKeyConstraint(['codigo_producto'], ['producto.codigo_producto'], ),
     sa.PrimaryKeyConstraint('id_images')
-    )
-    op.create_table('imagen_empleado',
-    sa.Column('id_imagenEmpleado', sa.Integer(), nullable=False),
-    sa.Column('type', sa.String(length=128), nullable=False),
-    sa.Column('data', sa.LargeBinary(), nullable=False),
-    sa.Column('rendered_data', sa.Text(), nullable=False),
-    sa.Column('clave', sa.String(length=10), nullable=False),
-    sa.ForeignKeyConstraint(['clave'], ['empleado.clave'], ),
-    sa.PrimaryKeyConstraint('id_imagenEmpleado')
     )
     op.create_table('venta',
     sa.Column('id_venta', sa.Integer(), nullable=False),
@@ -171,16 +169,16 @@ def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('producto_vendido')
     op.drop_table('venta')
-    op.drop_table('imagen_empleado')
     op.drop_table('imagen_producto')
     op.drop_table('imagen_materia_prima')
+    op.drop_table('imagen_empleado')
     op.drop_table('encargo')
-    op.drop_table('empleado')
-    op.drop_table('usuario')
     op.drop_table('telefono')
     op.drop_table('producto')
     op.drop_table('materia_prima')
+    op.drop_table('empleado')
     op.drop_table('cliente')
+    op.drop_table('usuario')
     op.drop_table('sucursal')
     op.drop_table('proveedor')
     op.drop_table('categoria')

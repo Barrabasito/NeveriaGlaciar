@@ -154,6 +154,7 @@
         </div>
     </footer>  
 </body>
+
 <script>
 
     const usuario=localStorage.getItem('usuario');
@@ -189,8 +190,6 @@
     }
     
 
-    console.log(usuario);
-
      function checkToken() {
          var token = localStorage.getItem('token');
          if (token) {
@@ -210,7 +209,29 @@
          else{
              window.location.href = '/login';
          }
+
+
+         if (token) {
+            fetch(`/indexVenta?token=${token}`)
+            .then(response => response.json())
+            .then(data =>{
+                console.log(data.message);
+                if(data.message != 'esAdmin'){
+                    localStorage.removeItem('token');
+                    window.location.href = '/sinPermisos';
+                }
+            })
+            .catch(error =>{
+                window.location.href = '/sinPermisos';
+            })
+        }
+        else{
+            window.location.href = '/sinPermisos';
+        }
+
      }
+
+
      function cerrarSesion() {
         // Preguntar al usuario si está seguro de cerrar sesión
         var confirmacion = window.confirm("¿Estás seguro de cerrar sesión?");

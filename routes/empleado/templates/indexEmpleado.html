@@ -3,7 +3,7 @@
 {% block content %}
 <link rel="stylesheet" href="../../static/css/tabla.css">
     <h1 class="text-center">Consulta de Empleados</h1>
-    <a href="/agregarEmpleado" class="btn btn-primary">Agregar Empleado</a>
+    <a class="btn btn-primary" id="agregarEmpleado">Agregar Empleado</a>
     <div class="table-container">
         <table border="1" class="table table-bordered">
             <thead class="thead-light">
@@ -31,6 +31,20 @@
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');
         const apellidos=localStorage.getItem('apellidos');
+
+        var usuarios_disponibles;
+
+        function verificarUsuarios() {
+         
+            if (usuarios_disponibles > 0) {
+                // Redirigir a la ruta '/agregarEmpleado'
+                window.location.href = '/agregarEmpleado';
+            } else {
+                // Mostrar una alerta si no hay usuarios disponibles
+                alert('No hay usuarios disponibles. No puedes agregar un empleado en este momento.');
+            }
+        }
+        document.getElementById('agregarEmpleado').addEventListener('click', verificarUsuarios);
 
         function verEmpleado(clave) {
             window.location.href = `/detalleEmpleado/${clave}`;
@@ -116,6 +130,7 @@
                     // Ordenar la lista de empleados por clave
                     const empleadosOrdenados = data.empleados.sort((a, b) => a.clave.localeCompare(b.clave));
                     empleadosOrdenados.forEach(appendRow);
+                    usuarios_disponibles=data.usuarios_disponibles;
                 })
                 .catch(error => console.error('Error:', error));
         });

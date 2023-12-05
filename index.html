@@ -3,100 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dividir Pantalla</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        .half {
-            flex: 1;
-            padding: 20px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-        }
-
-        /* Estilos adicionales para hacerlo más atractivo visualmente */
-        .half:nth-child(odd) {
-            background-color: #f0f0f0;
-        }
-
-        h2 {
-            color: #333;
-        }
-    </style>
+    <title>Cliente Protegido</title>
 </head>
 <body>
 
-<div class="container m-5">
-    
-    <div class="half">
-        <form id="venta-form" enctype="multipart/form-data">
-        <div class="row mb-3">
-            <div class="col-sm-12 col-md-6">
-                <label for="monto" class="form-label">Monto:</label>
-                <input type="number" id="monto" name="monto" class="form-control" placeholder="Enter monto" step="0.01" required>
-            </div>
+    <h1>Página de Administración</h1>
 
-            <div class="col-sm-12 col-md-6">
-                <label for="forma_pago" class="form-label">Forma de Pago:</label>
-                <input type="text" id="forma_pago" name="forma_pago" class="form-control" placeholder="Enter forma de pago">
-            </div>
-        </div>
+    <script>
+        // Supongamos que tienes información sobre el usuario en el lado del cliente
+        var usuario = {
+            nombre: "Usuario Normal",
+            esAdministrador: false
+        };
 
-        <div class="row mb-3">
-            <div class="col-sm-12 col-md-6">
-                <label for="sucursal_id" class="form-label">Sucursal:</label>
-                <select id="sucursal_id" name="sucursal_id" class="form-select">
-                    {% for sucursal in sucursales %}
-                        <option value="{{ sucursal.id_sucursal }}">{{ sucursal.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        // Función para verificar si el usuario es administrador y ocultar la página si no lo es
+        function verificarAccesoAdministrador() {
+            if (usuario && !usuario.esAdministrador) {
+                // Si no es administrador, oculta el cuerpo de la página
+                document.body.style.display = 'none';
+                // Puedes redirigir a otra página también: window.location.href = '/';
+            }
+        }
 
-            <div class="col-sm-12 col-md-6">
-                <label for="clave_empleado" class="form-label">Empleado:</label>
-                <select id="clave_empleado" name="clave_empleado" class="form-select">
-                    {% for empleado in empleados %}
-                        <option value="{{ empleado.clave }}">{{ empleado.nombres }} {{ empleado.apellidos }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col">
-                <h2>Productos Vendidos</h2>
-                <div id="productos-vendidos-container">
-                    <!-- Contenido dinámico será insertado aquí -->
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col">
-                <button type="button" id="add-producto-btn" class="btn btn-primary">Añadir</button>
-            </div>
-        </div>
-    </form>
-    </div>
-    <div class="half">
-        <h1 class="text-center mb-4">Venta</h1>
-        <div class="row">
-            <div class="col">
-                <button type="submit" class="btn btn-success w-100" id="venta-btn">Pagar</button>
-            </div>
-        </div>
-    </div>
-</div>
+        // Llama a la función al cargar la página
+        window.onload = verificarAccesoAdministrador;
+    </script>
 
 </body>
 </html>

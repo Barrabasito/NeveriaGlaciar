@@ -33,7 +33,7 @@
             <input type="checkbox" id="admin" name="admin">
         </div>
     </div>
-
+<!--
     <div class="row mb-3">
         <div class="col-sm-12">
             <label for="sucursal_id" class="form-label">Sucursal:</label>
@@ -44,7 +44,7 @@
             </select>
         </div>
     </div>
-
+-->
     <div class="row mb-3">
         <div class="col-12">
             <button type="submit" class="btn btn-success w-100" id="register-btn">Guardar Cambios</button>
@@ -65,7 +65,7 @@
          // Obtener los elementos del formulario
          const nombreUsuarioInput = document.getElementById('nombre_usuario');
          const adminCheckbox = document.getElementById('admin');
-         const sucursalSelect = document.getElementById('sucursal_id');
+         //const sucursalSelect = document.getElementById('sucursal_id');
 
          // Llenar los campos con los valores del usuario y opciones de sucursales
          nombreUsuarioInput.value = "{{ usuario.nombre_usuario }}";
@@ -73,7 +73,7 @@
          adminCheckbox.checked = {{isAdmin}};
        
          // Seleccionar la sucursal actual del usuario
-         sucursalSelect.value = "{{ usuario.sucursal_id }}";
+         //sucursalSelect.value = "{{ usuario.sucursal_id }}";
 
         // Función para verificar si las contraseñas coinciden
         function verificarCoincidenciaContrasena() {
@@ -101,7 +101,7 @@
             const password = document.querySelector('#password').value;
             const confirmar_password = document.querySelector('#confirmar_password').value;
             const admin = document.querySelector('#admin').checked;
-            const sucursal_id = document.querySelector('#sucursal_id').value;
+            //const sucursal_id = document.querySelector('#sucursal_id').value;
 
             if (passwordInput.value !== confirmarPasswordInput.value) {
                 alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
@@ -117,7 +117,7 @@
                     'nombre_usuario': nombre_usuario,
                     'password': password,
                     'admin': admin,
-                    'sucursal_id': sucursal_id
+                    //'sucursal_id': sucursal_id
                 })
             })
             .then(response => response.json())

@@ -19,7 +19,7 @@
             const usuarioDetailsBody = document.getElementById('usuario-details-body');
             const usuarioData = {{ usuario | tojson | safe }}; // Este valor debe ser pasado desde el servidor al renderizar la plantilla
             
-            const order = ['id_usuario', 'nombre_usuario', 'password', 'fecha_registro', 'admin', 'sucursal_id'];
+            const order = ['id_usuario', 'nombre_usuario', 'password', 'fecha_registro', 'admin'];
 
             function appendDetailRow(key, value) {
                 const newRow = document.createElement('tr');

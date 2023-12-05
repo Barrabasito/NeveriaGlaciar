@@ -17,7 +17,7 @@ def obtenerInfo(tokens):
                     "email": user.nombre_usuario,
                     "admin": user.admin,
                     "registered_on": user.fecha_registro,
-                    "sucursal_id":user.sucursal_id,
+                    #"sucursal_id":user.sucursal_id,
                 },
             }
             return usuario

@@ -21,6 +21,7 @@
         <label for="admin">Admin</label>
         <input type="checkbox" id="admin" name="admin">
         <br>
+        <!--
         <label for="sucursal_id">Sucursal</label>
         <select id="sucursal_id" name="sucursal_id">
             {% for sucursal in sucursales %}
@@ -28,6 +29,7 @@
             {% endfor %}
         </select>
         <br>
+    -->
         <button type="submit" value="Registrar" id="register-btn">Enviar</button>
     </form>
     <script>
@@ -62,7 +64,7 @@
             const password = document.querySelector('#password').value;
             const confirmar_password = document.querySelector('#confirmar_password').value;
             const admin = document.querySelector('#admin').checked;
-            const sucursal_id = document.querySelector('#sucursal_id').value;
+           // const sucursal_id = document.querySelector('#sucursal_id').value;
 
             if (passwordInput.value !== confirmarPasswordInput.value) {
                 alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');

@@ -29,7 +29,7 @@ def login_post():
             nombre_usuario=nombre_usuario,
             password=password,
             admin=True,
-            sucursal_id=None,
+            #sucursal_id=None,
         )
         searchUser = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
         if searchUser:
@@ -44,7 +44,7 @@ def login_post():
                         "%Y-%m-%d"
                     ),  # Formatear la fecha como string
                     "admin": searchUser.admin,
-                    "sucursal_id": searchUser.sucursal_id,
+                    #"sucursal_id": searchUser.sucursal_id,
                 }
                 
                 empleado=Empleado.query.filter_by(usuario_id=searchUser.id_usuario).first()
@@ -87,15 +87,15 @@ def agregar_usuario_externo():
         admin = request.json.get(
             "admin", False
         )  # Puedes establecer un valor predeterminado si no se proporciona
-        sucursal_id = request.json.get(
-            "sucursal_id", None
-        )  # Puedes establecer None si no se proporciona
+        #sucursal_id = request.json.get(
+         #   "sucursal_id", None
+        #)  # Puedes establecer None si no se proporciona
 
         usuario = Usuario(
             nombre_usuario=nombre_usuario,
             password=password,
             admin=admin,
-            sucursal_id=sucursal_id,
+            #sucursal_id=sucursal_id,
         )
 
         user_exists = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()

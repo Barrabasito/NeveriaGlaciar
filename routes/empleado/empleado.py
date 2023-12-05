@@ -22,11 +22,21 @@ def indexEmpleado():
 def agregar_empleado():
     if request.method == "GET":
         sucursales = Sucursal.query.all()
+
         usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()
+        
+        total_empleados = Empleado.query.filter(Empleado.clave.isnot(None)).count()
+
+        siguiente_numero = total_empleados + 1
+        # Formatea el número para que tenga 4 dígitos (rellenando con ceros a la izquierda)
+        numero_formateado = f'{siguiente_numero:04}'
+        nueva_clave = 'EMPNVG' + numero_formateado
+        
         return render_template(
             "agregarEmpleado.html",
             sucursales=sucursales,
             usuarios_disponibles=usuarios_disponibles,
+            nueva_clave=nueva_clave
         )
     else:
         try:

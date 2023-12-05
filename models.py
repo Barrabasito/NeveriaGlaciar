@@ -8,7 +8,7 @@ class Sucursal(db.Model):
     nombre = db.Column(db.String(50), nullable=False)
     direccion = db.Column(db.String(60), nullable=False)
     telefonos = db.relationship('Telefono', backref='sucursal', lazy=True)
-    usuarios = db.relationship('Usuario', backref='sucursal', lazy=True, cascade='save-update, merge, refresh-expire')
+    #usuarios = db.relationship('Usuario', backref='sucursal', lazy=True, cascade='save-update, merge, refresh-expire')
     productos = db.relationship('Producto', backref='sucursal', lazy=True)
     empleados = db.relationship('Empleado', backref='sucursal', lazy=True)
     clientes = db.relationship('Cliente', backref='sucursal', lazy=True)
@@ -28,10 +28,10 @@ class Usuario(db.Model):
     password = db.Column(db.String(255), nullable=False)
     fecha_registro = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
-    sucursal_id = db.Column(db.Integer, db.ForeignKey('sucursal.id_sucursal'), nullable=True)
+    #sucursal_id = db.Column(db.Integer, db.ForeignKey('sucursal.id_sucursal'), nullable=True)
     empleado = db.relationship('Empleado', backref='usuario', uselist=False, cascade='save-update, merge, refresh-expire')
 
-    def __init__(self, nombre_usuario, password, admin, sucursal_id) -> None:
+    def __init__(self, nombre_usuario, password, admin) -> None:
         self.nombre_usuario = nombre_usuario
         self.password = bcrypt.generate_password_hash(
             password, BaseConfig.BCRYPT_LOG_ROUNDS
@@ -39,7 +39,7 @@ class Usuario(db.Model):
 
         self.fecha_registro = datetime.datetime.now()
         self.admin = admin
-        self.sucursal_id=sucursal_id
+        #self.sucursal_id=sucursal_id
 
     def encode_auth_token(self, usuario_id):  # Encriptador de usuarios
         try:

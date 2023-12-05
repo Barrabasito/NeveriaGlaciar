@@ -36,40 +36,6 @@ def Inicio():
 def indexUsuario():
     return render_template("indexUsuario.html")
 
-    if request.method == "GET":
-        token = request.args.get("token")
-        if token:
-            info = verificar(token)
-            if info["status"] != "fail":
-                responseObject = {
-                    "status": "success",
-                    "message": "valid_token",
-                    "info": info,
-                }
-                return jsonify(responseObject)
-        return render_template("/login.html")
-    else:
-        nombre_usuario = request.json["email"]
-        password = request.json["password"]
-        usuario = Usuario(
-            nombre_usuario=nombre_usuario,
-            password=password,
-            admin=True,
-            sucursal_id=None,
-        )
-        searchUser = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
-        if searchUser:
-            validation = bcrypt.check_password_hash(searchUser.password, password)
-            if validation:
-                auth_token = usuario.encode_auth_token(usuario_id=searchUser.id_usuario)
-                response = {
-                    "status": "success",
-                    "message": "Login exitoso",
-                    "auth_token": auth_token,
-                }
-                return jsonify(response)
-        return jsonify({"message": "Datos incorrectos"})
-
 
 @appusuario.route("/agregarUsuario", methods=["GET", "POST"])
 def agregar_usuario():
@@ -82,15 +48,15 @@ def agregar_usuario():
         admin = request.json.get(
             "admin", False
         )  # Puedes establecer un valor predeterminado si no se proporciona
-        sucursal_id = request.json.get(
-            "sucursal_id", None
-        )  # Puedes establecer None si no se proporciona
+        #sucursal_id = request.json.get(
+         #   "sucursal_id", None
+        #)  # Puedes establecer None si no se proporciona
 
         usuario = Usuario(
             nombre_usuario=nombre_usuario,
             password=password,
             admin=admin,
-            sucursal_id=sucursal_id,
+            #sucursal_id=sucursal_id,
         )
 
         user_exists = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
@@ -120,7 +86,7 @@ def consulta_usuarios():
             "password": usuario.password,
             "fecha_registro": usuario.fecha_registro.isoformat(),
             "admin": usuario.admin,
-            "sucursal_id": usuario.sucursal_id,
+            #"sucursal_id": usuario.sucursal_id,
         }
         for usuario in usuarios
     ]
@@ -139,7 +105,7 @@ def ver_usuario(id_usuario):
             "%Y-%m-%d"
         ),  # Formatear la fecha como string
         "admin": usuario.admin,
-        "sucursal_id": usuario.sucursal_id,
+        #"sucursal_id": usuario.sucursal_id,
     }
 
     return render_template("detalleUsuario.html", usuario=usuario_data)
@@ -170,7 +136,7 @@ def editar_usuario(id_usuario):
             nombre_usuario = request.json.get("nombre_usuario")
             password = request.json.get("password")
             admin = request.json.get("admin")
-            sucursal_id = request.json.get("sucursal_id")
+            #sucursal_id = request.json.get("sucursal_id")
 
             # Verificar si el nuevo nombre de usuario ya existe
             existing_user = Usuario.query.filter(
@@ -189,7 +155,7 @@ def editar_usuario(id_usuario):
                 password, BaseConfig.BCRYPT_LOG_ROUNDS
             ).decode()
             usuario.admin = admin
-            usuario.sucursal_id = sucursal_id
+            #usuario.sucursal_id = sucursal_id
 
             db.session.commit()
             responseObject = {

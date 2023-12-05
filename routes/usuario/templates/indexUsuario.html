@@ -14,7 +14,7 @@
                     <th>Password</th>
                     <th>Fecha de Registro</th>
                     <th>Admin</th>
-                    <th>Sucursal ID</th>
+                    <!--<th>Sucursal ID</th>-->
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -63,7 +63,6 @@
                     <td class="table-light">${usuario.password}</td>
                     <td class="table-light">${new Date(usuario.fecha_registro).toLocaleDateString()}</td>
                     <td class="table-light">${usuario.admin ? 'Sí' : 'No'}</td>
-                    <td class="table-light">${usuario.sucursal_id}</td>
                     <td class="actions table-light">
                         <button class="ver-btn btn btn-outline-primary">Ver</button>
                         <button class="editar-btn btn btn-outline-info">Editar</button>

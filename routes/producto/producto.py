@@ -24,8 +24,16 @@ def agregar_producto():
     if request.method == "GET":
         sucursales = Sucursal.query.all()
         categorias = Categoria.query.all()
+        
+        total_productos = Producto.query.filter(Producto.codigo_producto.isnot(None)).count()
+
+        siguiente_numero = total_productos + 1
+        # Formatea el número para que tenga 4 dígitos (rellenando con ceros a la izquierda)
+        numero_formateado = f'{siguiente_numero:04}'
+        nuevo_codigo = 'PRODNG' + numero_formateado
+        
         return render_template(
-            "agregarProducto.html", sucursales=sucursales, categorias=categorias
+            "agregarProducto.html", sucursales=sucursales, categorias=categorias,nuevo_codigo=nuevo_codigo
         )
     else:
         try:

@@ -1,0 +1,47 @@
+.details-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+}
+
+.details-table {
+    width: 45%;
+    background-color: white; /* Fondo blanco para la tabla */
+    padding: 20px; /* Ajusta el espacio alrededor de la tabla según tus preferencias */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.product-card {
+    width: 45%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.product-card img {
+    width: 100%;
+    max-width: 80%; /* Establece un ancho máximo para la imagen */
+    height: auto;
+    display: block;
+}
+
+.details-table table {
+    width: 100%; /* Hacer que la tabla ocupe el 100% del ancho */
+    border-collapse: collapse; /* Colapsar los bordes de la tabla */
+}
+
+.details-table td,
+.details-table th {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.details-table th {
+    font-weight: bold;
+}

@@ -22,47 +22,58 @@
         </form>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script>
         const loginForm = document.querySelector('#login-container form');
         const loginButton = document.querySelector('#login-btn');
-        loginButton.addEventListener('click',(e)=>{
+    
+        loginButton.addEventListener('click', (e) => {
             e.preventDefault();
-            const email = document.querySelector('#email').value
+            const email = document.querySelector('#email').value;
             const password = document.querySelector('#password').value;
+    
             fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    'email':email,
-                    'password':password
+                    'email': email,
+                    'password': password
                 })
             }).then(response => response.json())
-            .then(data=>{
-                if(data.message=="Datos incorrectos"){
-                    alert("Los datos ingresados son incorrectos. Por favor, inténtalo de nuevo.");
-                }else{
-                    localStorage.setItem('token',data.auth_token);
-                    localStorage.setItem('usuario',data.usuario.nombre_usuario);
-                    localStorage.setItem('admin',data.usuario.admin);
-                    localStorage.setItem('clave',data.empleado.clave);
-                    localStorage.setItem('nombres',data.empleado.nombres);
-                    localStorage.setItem('apellidos',data.empleado.apellidos);
-                    localStorage.setItem('id_sucursal',data.sucursal.id_sucursal);
-                    localStorage.setItem('sucursal',data.sucursal.nombre);
-                    //const jsonToSend = JSON.stringify(data.usuario);
+                .then(data => {
+                    if (data.message === "Datos incorrectos") {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Los datos ingresados son incorrectos. Por favor, inténtalo de nuevo.',
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                        });
+                    } else {
+                        localStorage.setItem('token', data.auth_token);
+                        localStorage.setItem('usuario', data.usuario.nombre_usuario);
+                        localStorage.setItem('admin', data.usuario.admin);
+                        localStorage.setItem('clave', data.empleado.clave);
+                        localStorage.setItem('nombres', data.empleado.nombres);
+                        localStorage.setItem('apellidos', data.empleado.apellidos);
+                        localStorage.setItem('id_sucursal', data.sucursal.id_sucursal);
+                        localStorage.setItem('sucursal', data.sucursal.nombre);
     
-                    // Codifica la cadena JSON para incluirla en la URL
-                    //const encodedData = encodeURIComponent(jsonToSend);
-    
-                    // Construye la URL con el parámetro
-                    //const url = `/agregarVenta?data=${encodedData}`;
-   
-                    window.location.href = '/agregarVenta';
-                }   
-            })
-        })
+                        window.location.href = '/agregarVenta';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                    });
+                });
+        });
     </script>
 </body>
 </html>

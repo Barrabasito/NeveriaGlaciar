@@ -6,9 +6,9 @@ from flask import jsonify, request
 def obtenerInfo(tokens):
     if tokens:
         resp = Usuario.decode_auth_token(tokens)
-        print(resp)
+        #print(resp)
         user = Usuario.query.filter_by(id_usuario=resp["sub"]).first()
-        print(user)
+        #print(user)
         if user:
             usuario = {
                 "status": "success",
@@ -34,7 +34,7 @@ def tokenCheck(f):
         # Obtener el token del encabezado de la solicitud
         if "Authorization" in request.headers:
             token = request.headers["Authorization"].split(" ")[1]
-            print(token)
+            #print(token)
 
         if not token:
             return jsonify({"token": "Token no válido"})
@@ -44,7 +44,7 @@ def tokenCheck(f):
             if info["status"] == "fail":
                 return jsonify({"message": "Token inválido"})
         except Exception as e:
-            print(e)
+            #print(e)
             return jsonify({"message": "Error al procesar el token"})
 
         # Puedes hacer algo con la información del token si es necesario
@@ -56,7 +56,7 @@ def tokenCheck(f):
 
 #Se verifica a la hora de iniciar Sesion
 def verificar(token):
-    print(token)
+    #print(token)
     if not token:
         return jsonify({"token": "Token no valido"})
     try:
@@ -64,6 +64,6 @@ def verificar(token):
         if info["status"] == "fail":
             return jsonify({"message": "Token failed"})
     except Exception as e:
-        print(e)
+        #print(e)
         return jsonify({"message": "Token invalid"})
     return info

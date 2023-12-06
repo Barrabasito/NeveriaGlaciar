@@ -9,22 +9,9 @@ appventa = Blueprint("appventa", __name__, template_folder="templates")
 
 @appventa.route("/indexVenta")
 def indexVenta():
-    if request.method == "GET":
-        token = request.args.get("token")
-        if token:
-            info = verificar(token)
-            print(info["data"]["admin"] )
-            if info["data"]["admin"] == True:
-                responseObject = {
-                    "message": "esAdmin"
-                }
-                return jsonify(responseObject)
-        return render_template("sinPermisos.html")
-    return jsonify({"message": "Datos incorrectos"})
+    url="indexVenta"
+    return render_template("indexVenta.html",url=url)
 
-@appventa.route("/sinPermisos")
-def sinPermisos():
-    return render_template("sinPermisos.html")
 
 @appventa.route("/agregarVenta", methods=["GET", "POST"])
 def agregar_venta():
@@ -34,7 +21,8 @@ def agregar_venta():
         productos = Producto.query.all()
         categorias = Categoria.query.all()
         sucursales = Sucursal.query.all()
-        return render_template("agregarVenta.html", empleados=empleados, sucursales=sucursales, productos=productos,categorias=categorias)
+        url="agregarVenta"
+        return render_template("agregarVenta.html", empleados=empleados, sucursales=sucursales, productos=productos,categorias=categorias,url=url)
     else:
         fecha_venta = datetime.datetime.now()
         monto = request.json.get("monto")
@@ -75,7 +63,6 @@ def agregar_venta():
         return jsonify(responseObject)
 
 
-    
 @appventa.route("/listaVentas")
 def consulta_ventas():
     ventas = Venta.query.all()
@@ -99,6 +86,7 @@ def consulta_ventas():
 
     return jsonify({'ventas': ventas_data})
 
+
 @appventa.route("/detalleVenta/<int:venta_id>")
 def ver_venta(venta_id):
     venta = Venta.query.get_or_404(venta_id)
@@ -114,8 +102,8 @@ def ver_venta(venta_id):
         'clave_empleado': venta.clave,
         'productos_vendidos': productos_vendidos_data
     }
-
-    return render_template("detalleVenta.html", venta=venta_data)
+    url="detalleVenta"
+    return render_template("detalleVenta.html", venta=venta_data,url=url)
 
 
 

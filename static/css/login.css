@@ -48,6 +48,16 @@ button {
     cursor: pointer;
 }
 
+a.inicio{
+    background-color: #950347; /* Use color5 */
+    color: #f8f8f8; /* White */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 button:hover {
     background-color: #7a093c; 
 }

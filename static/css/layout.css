@@ -19,6 +19,13 @@ body{
 }
 
 
+
+.cerrar:hover a {
+    background: tomato; /* Cambia a rojo cuando el mouse está encima */
+    color: #fff; /* Cambia a blanco el texto cuando el mouse está encima */
+    border-radius: 50%; /* Borde redondeado solo durante el hover */
+}
+
 main {
     /* Otros estilos del contenido principal */
     flex: 1; /* Hace que el contenido principal ocupe el espacio restante */
@@ -30,11 +37,6 @@ footer {
     flex-shrink: 0; /* Evita que el footer se encoja cuando el contenido principal es grande */
     height: 10%;
 }
-
-.container{
-    
-}
-
 
 .icon, .text{
     color: #222327;

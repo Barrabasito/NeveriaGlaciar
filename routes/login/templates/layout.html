@@ -143,13 +143,16 @@
                     <h5 class="text-uppercase">Nevería Glaciar</h5>
                     <p>¡La mejor experiencia en helados y postres!</p>
                 </div>
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                     <h5 class="text-uppercase" id="idSucursal"></h5>
                     <div id="nombreSucursal"></div>
                 </div>
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
                     <h5 class="text-uppercase" id="idUsuario"></h5>
                     <div id="nombreUsuario"></div>
+                </div>
+                <div class="col-lg-2 col-md-2 mb-4 mb-md-0">
+                    <img src="{{ url_for('static', filename='image/NeveriaGlaciar.png') }}" alt="Logo" width="70"  height="70" class="d-inline-block align-text-top"/>
                 </div>
             </div>
         </div>
@@ -168,6 +171,7 @@
             elemento.remove();
         });
     }
+
 
     if(admin=="true"){
             const miHS = document.getElementById('idSucursal');  

@@ -36,10 +36,11 @@
         color: #333;
     }
 </style>
+<div class="d-flex align-items-center justify-content-center">
+    <h2>Venta</h2>
+</div>
 <div class="containerAgregar mt-5">
-
     <div class="half">
-
     <form id="venta-form" enctype="multipart/form-data">
 
         <div class="row mb-3">
@@ -111,13 +112,14 @@
         const cantidadProductoInput = document.getElementById('cantidad_producto');
         const cantidadAPagarInput = document.getElementById('cantidad_a_pagar');
         const productoSelect = document.getElementById('producto');
+   
 
-            
     const clave=localStorage.getItem('clave');
     const nombres=localStorage.getItem('nombres');
     const apellidos=localStorage.getItem('apellidos');
     const id_sucursal=localStorage.getItem('id_sucursal');
     const nombre_sucursal=localStorage.getItem('sucursal');
+
 
         const miInputS =document.getElementById('sucursal_id');
         const miInputE =document.getElementById('clave_empleado');

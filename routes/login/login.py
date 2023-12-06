@@ -8,6 +8,12 @@ from config import BaseConfig
 applogin = Blueprint("applogin", __name__, template_folder="templates")
 
 
+@applogin.route("/")
+@applogin.route("/main", methods=["GET"])
+def main():
+    return render_template("/main.html")
+
+
 @applogin.route("/login", methods=["GET", "POST"])
 def login_post():
     if request.method == "GET":
@@ -29,7 +35,7 @@ def login_post():
             nombre_usuario=nombre_usuario,
             password=password,
             admin=True,
-            #sucursal_id=None,
+            # sucursal_id=None,
         )
         searchUser = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()
         if searchUser:
@@ -44,46 +50,45 @@ def login_post():
                         "%Y-%m-%d"
                     ),  # Formatear la fecha como string
                     "admin": searchUser.admin,
-                    #"sucursal_id": searchUser.sucursal_id,
+                    # "sucursal_id": searchUser.sucursal_id,
                 }
-                
-                
-                empleado=Empleado.query.filter_by(usuario_id=searchUser.id_usuario).first()
-                
-                
+
+                empleado = Empleado.query.filter_by(
+                    usuario_id=searchUser.id_usuario
+                ).first()
+
                 if empleado is not None:
                     empleado_data = {
-                    "clave": empleado.clave,
-                    "nombres": empleado.nombres,
-                    "apellidos": empleado.apellidos,
-                    "sucursal_id": empleado.sucursal_id
+                        "clave": empleado.clave,
+                        "nombres": empleado.nombres,
+                        "apellidos": empleado.apellidos,
+                        "sucursal_id": empleado.sucursal_id,
                     }
-                    sucursal=Sucursal.query.filter_by(id_sucursal=empleado.sucursal_id).first()
+                    sucursal = Sucursal.query.filter_by(
+                        id_sucursal=empleado.sucursal_id
+                    ).first()
                     sucursal_data = {
-                    "id_sucursal":sucursal.id_sucursal,
-                    "nombre":sucursal.nombre
+                        "id_sucursal": sucursal.id_sucursal,
+                        "nombre": sucursal.nombre,
                     }
                 else:
                     empleado_data = {
-                    "clave": None,  
-                    "nombres": None,
-                    "apellidos": None,
-                    "sucursal_id": None
+                        "clave": None,
+                        "nombres": None,
+                        "apellidos": None,
+                        "sucursal_id": None,
                     }
-                    sucursal_data = {
-                    "id_sucursal":None,
-                    "nombre":None
-                    }
+                    sucursal_data = {"id_sucursal": None, "nombre": None}
 
                 response = {
                     "status": "success",
                     "message": "Login exitoso",
                     "auth_token": auth_token,
                     "usuario": usuario_data,
-                    "empleado":empleado_data,
-                    "sucursal":sucursal_data
+                    "empleado": empleado_data,
+                    "sucursal": sucursal_data,
                 }
-                #print(response)
+                # print(response)
                 return jsonify(response)
         return jsonify({"message": "Datos incorrectos"})
 
@@ -95,16 +100,12 @@ def verificarRol():
         print(token)
         if token:
             info = verificar(token)
-            print(info["data"]["admin"] )
+            print(info["data"]["admin"])
             if info["data"]["admin"] == True:
-                responseObject = {
-                    "message": "esAdmin"
-                }
+                responseObject = {"message": "esAdmin"}
                 return jsonify(responseObject)
             else:
-                responseObject = {
-                    "message": "noEsAdmin"
-                }
+                responseObject = {"message": "noEsAdmin"}
                 return jsonify(responseObject)
         return render_template("sinPermisos.html")
     return jsonify({"message": "Datos incorrectos"})
@@ -113,6 +114,7 @@ def verificarRol():
 @applogin.route("/sinPermisos")
 def sinPermisos():
     return render_template("sinPermisos.html")
+
 
 @applogin.route("/agregarUsuarioExterno", methods=["GET", "POST"])
 def agregar_usuario_externo():
@@ -125,15 +127,15 @@ def agregar_usuario_externo():
         admin = request.json.get(
             "admin", False
         )  # Puedes establecer un valor predeterminado si no se proporciona
-        #sucursal_id = request.json.get(
-         #   "sucursal_id", None
-        #)  # Puedes establecer None si no se proporciona
+        # sucursal_id = request.json.get(
+        #   "sucursal_id", None
+        # )  # Puedes establecer None si no se proporciona
 
         usuario = Usuario(
             nombre_usuario=nombre_usuario,
             password=password,
             admin=admin,
-            #sucursal_id=sucursal_id,
+            # sucursal_id=sucursal_id,
         )
 
         user_exists = Usuario.query.filter_by(nombre_usuario=nombre_usuario).first()

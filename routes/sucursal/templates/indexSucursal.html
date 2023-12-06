@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="../../static/css/tabla.css">
     <h1 class="text-center">Consulta de Sucursales</h1>
     <a href="/agregarSucursal" class="btn btn-primary">Agregar Sucursal</a>
@@ -35,7 +36,16 @@
         }
     
         function eliminarSucursal(id) {
-            if (confirm("¿Estás seguro de que deseas eliminar esta sucursal?")) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
                 fetch(`/eliminarSucursal/${id}`, {
                     method: 'DELETE',
                 })
@@ -43,11 +53,27 @@
                 .then(data => {
                     // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
                     console.log(data);
-                    window.location.href = '/indexSucursal'; 
+                    Swal.fire({
+                        title: 'Eliminada',
+                        text: 'La categoría ha sido eliminada correctamente',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    }).then(() => {
+                        window.location.href = '/indexSucursal';
+                    });
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Hubo un error al intentar eliminar la categoría',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                    });
+                });
             }
-        }
+        });
+    }
     
         document.addEventListener('DOMContentLoaded', function () {
             const sucursalesTableBody = document.getElementById('sucursales-table-body');

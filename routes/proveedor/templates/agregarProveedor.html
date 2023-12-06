@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <h1 class="text-center mb-4">Agregar Nuevo Proveedor</h1>
 
 <form id="proveedor-form" class="container">
@@ -39,37 +39,60 @@
         </div>
     </div>
 </form>
-    <script>
-        const nombre_sucursal=localStorage.getItem('sucursal');
-        const nombres=localStorage.getItem('nombres');
-        const apellidos=localStorage.getItem('apellidos');
+<script>
+    const nombre_sucursal = localStorage.getItem('sucursal');
+    const nombres = localStorage.getItem('nombres');
+    const apellidos = localStorage.getItem('apellidos');
 
-        const proveedorForm = document.getElementById('proveedor-form');
-        proveedorForm.addEventListener('submit', function (event) {
-            event.preventDefault();
+    const proveedorForm = document.getElementById('proveedor-form');
+    proveedorForm.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-            const nombres = document.getElementById('nombres').value;
-            const apellidos = document.getElementById('apellidos').value;
-            const direccion = document.getElementById('direccion').value;
-            const telefono = document.getElementById('telefono').value;
+        const nombres = document.getElementById('nombres').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const direccion = document.getElementById('direccion').value;
+        const telefono = document.getElementById('telefono').value;
 
-            fetch('/agregarProveedor', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'nombres': nombres,
-                    'apellidos': apellidos,
-                    'direccion': direccion,
-                    'telefono': telefono
-                })
+        fetch('/agregarProveedor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'nombres': nombres,
+                'apellidos': apellidos,
+                'direccion': direccion,
+                'telefono': telefono
             })
-            .then(response => response.json())
-            .then(data => {
-                window.location.href = '/indexProveedor'; // Redirecciona a la página de proveedores después de agregar
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Mostrar mensaje de éxito con temporizador
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Proveedor agregado correctamente. Redirigiendo en 5 segundos...',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                timer: 5000, // 5 segundos
+                timerProgressBar: true,
+                showConfirmButton: false,
             })
-            .catch(error => console.error('Error:', error));
+            // Redirecciona a la página de proveedores después de agregar
+            window.location.href = '/indexProveedor';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Mostrar mensaje de error con temporizador
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un error al agregar el proveedor',
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                timer: 5000, // 5 segundos
+                timerProgressBar: true,
+                showConfirmButton: false,
+            });
         });
-    </script>
+    });
+</script>
     {% endblock %}

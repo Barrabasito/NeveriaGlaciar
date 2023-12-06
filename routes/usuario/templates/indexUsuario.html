@@ -2,6 +2,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="../../static/css/tabla.css">
     <h1 class="text-center">Consulta de Usuarios</h1>
     <a href="/agregarUsuario" class="btn btn-primary">Agregar Usuario</a>
@@ -38,19 +39,43 @@
         }
     
         function eliminarUsuario(id_usuario) {
-            if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-                fetch(`/eliminarUsuario/${id_usuario}`, {
-                    method: 'DELETE',
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Manejar la respuesta del servidor, por ejemplo, redireccionar o mostrar un mensaje
-                    console.log(data);
-                    window.location.href = '/indexUsuario'; 
-                })
-                .catch(error => console.error('Error:', error));
-            }
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/eliminarUsuario/${id_usuario}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                Swal.fire({
+                    title: 'Eliminado',
+                    text: 'El usuario ha sido eliminado correctamente',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                }).then(() => {
+                    window.location.href = '/indexUsuario';
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un error al intentar eliminar el usuario',
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                });
+            });
         }
+    });
+}
     
         document.addEventListener('DOMContentLoaded', function () {
             const usuariosTableBody = document.getElementById('usuarios-table-body');
@@ -92,8 +117,8 @@
         if (elemento) {
             // Agrega la clase 'active' al elemento
             elemento.classList.add('active');
-          } else {
+        } else {
             console.error('No se encontró ningún elemento con la clase "usuarios"');
-          }
+        }
     </script>
     {% endblock %}

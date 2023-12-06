@@ -8,7 +8,8 @@ appcategoria = Blueprint("appcategoria", __name__, template_folder="templates")
 
 @appcategoria.route("/indexCategoria")
 def indexCategoria():
-    return render_template("indexCategoria.html")
+    url="indexCategoria"
+    return render_template("indexCategoria.html",url=url)
 
 
 @appcategoria.route("/agregarCategoria", methods=["GET", "POST"])
@@ -40,6 +41,7 @@ def add_categoria():
 
         return jsonify(responseObject)
     
+    
 @appcategoria.route("/listaCategorias")
 def consulta_categorias():
     categorias = Categoria.query.all()
@@ -52,17 +54,16 @@ def consulta_categorias():
     return jsonify({'categorias': categorias_data})
 
 
-
 @appcategoria.route("/detalleCategoria/<int:id_categoria>")
 def ver_categoria(id_categoria):
     categoria = Categoria.query.get_or_404(id_categoria)
-
+    url="detalleCategoria"
     categoria_data = {
         'id_categoria': categoria.id_categoria,
         'nombre_categoria': categoria.nombre_categoria
     }
 
-    return render_template("detalleCategoria.html", categoria=categoria_data)
+    return render_template("detalleCategoria.html", categoria=categoria_data,url=url)
 
 
 @appcategoria.route("/editarCategoria/<int:id_categoria>", methods=["GET", "POST"])

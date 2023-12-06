@@ -83,10 +83,36 @@ def login_post():
                     "empleado":empleado_data,
                     "sucursal":sucursal_data
                 }
-                print(response)
+                #print(response)
                 return jsonify(response)
         return jsonify({"message": "Datos incorrectos"})
 
+
+@applogin.route("/verificarRol")
+def verificarRol():
+    if request.method == "GET":
+        token = request.args.get("token")
+        print(token)
+        if token:
+            info = verificar(token)
+            print(info["data"]["admin"] )
+            if info["data"]["admin"] == True:
+                responseObject = {
+                    "message": "esAdmin"
+                }
+                return jsonify(responseObject)
+            else:
+                responseObject = {
+                    "message": "noEsAdmin"
+                }
+                return jsonify(responseObject)
+        return render_template("sinPermisos.html")
+    return jsonify({"message": "Datos incorrectos"})
+
+
+@applogin.route("/sinPermisos")
+def sinPermisos():
+    return render_template("sinPermisos.html")
 
 @applogin.route("/agregarUsuarioExterno", methods=["GET", "POST"])
 def agregar_usuario_externo():

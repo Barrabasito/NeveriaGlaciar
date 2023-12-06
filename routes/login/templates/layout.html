@@ -210,15 +210,20 @@
              window.location.href = '/login';
          }
 
-
+         var token = localStorage.getItem('token');
          if (token) {
-            fetch(`/indexVenta?token=${token}`)
+            fetch(`/verificarRol?token=${token}`)
             .then(response => response.json())
             .then(data =>{
                 console.log(data.message);
-                if(data.message != 'esAdmin'){
-                    localStorage.removeItem('token');
-                    window.location.href = '/sinPermisos';
+                if(data.message === 'noEsAdmin'){
+                    //localStorage.removeItem('token');
+                    var arregloCadenas = ["indexCategoria","detalleCategoria","indexEncargo","agregarEncargo","indexVenta", "agregarVenta","detalleVenta", "indexProducto", "detalleProducto"];
+
+                    var url="{{ url }}";
+                    if(!arregloCadenas.includes(url)){
+                        window.location.href = '/sinPermisos';
+                    }
                 }
             })
             .catch(error =>{
@@ -226,7 +231,7 @@
             })
         }
         else{
-            window.location.href = '/sinPermisos';
+           window.location.href = '/sinPermisos';
         }
 
      }

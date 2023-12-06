@@ -8,7 +8,8 @@ appencargo = Blueprint("appencargo", __name__, template_folder="templates")
 
 @appencargo.route("/indexEncargo")
 def indexEncargo():
-    return render_template("indexEncargo.html")
+    url="indexEncargo"
+    return render_template("indexEncargo.html",url=url)
 
 
 @appencargo.route("/agregarEncargo", methods=["GET", "POST"])
@@ -17,7 +18,8 @@ def add_encargo():
         sucursales = Sucursal.query.all()
         proveedores = Proveedor.query.all()
         materias_primas = Materia_Prima.query.all()
-        return render_template("agregarEncargo.html", sucursales=sucursales, proveedores=proveedores, materias_primas=materias_primas)
+        url="agregarEncargo"
+        return render_template("agregarEncargo.html", sucursales=sucursales, proveedores=proveedores, materias_primas=materias_primas,url=url)
     else:
         # Obtener datos del formulario o solicitud JSON
         codigo_materia = request.json.get("codigo_materia")

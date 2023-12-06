@@ -16,7 +16,8 @@ def render_image(data):
 
 @appproducto.route("/indexProducto")
 def indexProducto():
-    return render_template("indexProducto.html")
+    url="indexProducto"
+    return render_template("indexProducto.html",url=url)
 
 
 @appproducto.route("/agregarProducto", methods=["GET", "POST"])
@@ -31,9 +32,9 @@ def agregar_producto():
         # Formatea el número para que tenga 4 dígitos (rellenando con ceros a la izquierda)
         numero_formateado = f'{siguiente_numero:04}'
         nuevo_codigo = 'PRODNG' + numero_formateado
-        
+        url="agregarProducto"
         return render_template(
-            "agregarProducto.html", sucursales=sucursales, categorias=categorias,nuevo_codigo=nuevo_codigo
+            "agregarProducto.html", sucursales=sucursales, categorias=categorias,nuevo_codigo=nuevo_codigo,url=url
         )
     else:
         try:
@@ -116,8 +117,9 @@ def ver_producto(codigo_producto):
         "categoria_id": producto.categoria_id,
         "sucursal_id": producto.sucursal_id,
     }
+    url="detalleProducto"
     return render_template(
-        "detalleProducto.html", producto_data=producto_data, imagens=images
+        "detalleProducto.html", producto_data=producto_data, imagens=images,url=url
     )
 
 
@@ -132,6 +134,7 @@ def editar_producto(codigo_producto):
             sucursales = Sucursal.query.all()
             categoria = Categoria.query.get(producto.categoria_id)
             sucursal = Sucursal.query.get(producto.sucursal_id)
+            url="editarProducto"
             return render_template(
                 "editarProducto.html",
                 producto=producto,
@@ -139,6 +142,7 @@ def editar_producto(codigo_producto):
                 sucursalActual=sucursal,
                 categorias=categorias,
                 sucursales=sucursales,
+                url=url
             )
         elif request.method == "POST":
             # Obtener datos del formulario y cargar en JSON

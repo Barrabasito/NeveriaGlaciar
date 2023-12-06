@@ -88,6 +88,13 @@ def agregar_producto():
 @appproducto.route("/listaProductos")
 def consulta_productos():
     productos = Producto.query.all()
+    
+    categorias_disponibles = Categoria.query.all()
+    cantidad_categorias_disponibles = len(categorias_disponibles)
+    
+    sucursales_disponibles = Sucursal.query.all()
+    cantidad_sucursales_disponibles = len(sucursales_disponibles)
+    
     productos_data = [
         {
             "codigo_producto": producto.codigo_producto,
@@ -99,7 +106,11 @@ def consulta_productos():
         }
         for producto in productos
     ]
-    return jsonify({"productos": productos_data})
+    return jsonify({
+        "productos": productos_data,
+        "categorias_disponibles":cantidad_categorias_disponibles,
+        "sucursales_disponibles":cantidad_sucursales_disponibles
+        })
 
 
 @appproducto.route("/detalleProducto/<string:codigo_producto>")

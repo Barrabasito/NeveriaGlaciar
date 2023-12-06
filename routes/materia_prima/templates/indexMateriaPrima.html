@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="../../static/css/tabla.css">
 <h1 class="text-center">Consulta de Materias Primas</h1>
-<a href="/agregarMateriaPrima" class="btn btn-primary">Agregar Materia Prima</a>
+<a class="btn btn-primary" id="agregarMateriaPrima">Agregar Materia Prima</a>
 
 <div class="table-container">
     <table class="table table-bordered">
@@ -28,6 +28,27 @@
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');
         const apellidos=localStorage.getItem('apellidos');
+
+
+        var sucursales_disponibles;
+
+function verificarMaterias() {
+
+    if(sucursales_disponibles > 0){
+        // Redirigir a la ruta '/agregarEmpleado'
+        window.location.href = '/agregarMateriaPrima';
+        }else{
+            // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No hay sucursales disponibles. No puedes agregar una materia prima en este momento.',
+        });
+
+}
+        }
+document.getElementById('agregarMateriaPrima').addEventListener('click', verificarMaterias);
+
 
         function verMateriaPrima(codigo_materia) {
             window.location.href = `/detalleMateriaPrima/${codigo_materia}`;
@@ -181,6 +202,8 @@
                     // Ordenar la lista de materias primas por código_materia
                     const materiasPrimasOrdenadas = data.materias_primas.sort((a, b) => a.codigo_materia.localeCompare(b.codigo_materia));
                     materiasPrimasOrdenadas.forEach(appendRow);
+
+                    sucursales_disponibles=data.sucursales_disponibles;
                 })
                 .catch(error => console.error('Error:', error));
         });

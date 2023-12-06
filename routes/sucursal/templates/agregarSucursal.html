@@ -1,20 +1,20 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1 class="text-center mb-4">Add New Sucursal</h1>
+<h1 class="text-center mb-4">Agregar Sucursal</h1>
 
 <form id="sucursal-form" class="container">
     <div class="row mb-3">
         <div class="col-sm-12">
-            <label for="nombre" class="form-label">Sucursal Name:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Enter sucursal name">
+            <label for="nombre" class="form-label">Nombre de la Sucursal:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ingresa el nombre de la Sucursal">
         </div>
     </div>
 
     <div class="row mb-3">
         <div class="col-sm-12">
-            <label for="direccion" class="form-label">Address:</label>
-            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Enter address">
+            <label for="direccion" class="form-label">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingresa dirección">
         </div>
     </div>
 
@@ -23,17 +23,17 @@
             <label for="telefonos" class="form-label">Telefonos:</label>
             <div id="telefonos-container">
                 <div class="telefono-input">
-                    <input type="text" class="form-control telefono" name="telefonos" placeholder="Enter telefono">
-                    <button type="button" class="btn btn-danger remove-telefono-btn">Remove</button>
+                    <input type="text" class="form-control telefono" name="telefonos" placeholder="Ingresa telefono">
+                    <button type="button" class="btn btn-danger remove-telefono-btn">Eliminar</button>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="add-telefono-btn">Add Telefonos</button>
+            <button type="button" class="btn btn-primary" id="add-telefono-btn">Agregar Telefono</button>
         </div>
     </div>
 
     <div class="row mb-3">
         <div class="col-12">
-            <button type="submit" class="btn btn-success w-100" id="sucursal-btn">Add Sucursal</button>
+            <button type="submit" class="btn btn-success w-100" id="sucursal-btn">Agregar Sucursal</button>
         </div>
     </div>
 </form>
@@ -50,8 +50,8 @@
                 const newTelefonoInput = document.createElement('div');
                 newTelefonoInput.classList.add('telefono-input');
                 newTelefonoInput.innerHTML = `
-                    <input type="text" class="telefono" name="telefonos" placeholder="Enter telefono">
-                    <button type="button" class="remove-telefono-btn">Remove</button>
+                <input type="text" class="form-control telefono" name="telefonos" placeholder="Ingresa telefono">
+                <button type="button" class="btn btn-danger remove-telefono-btn">Eliminar</button>
                 `;
                 telefonosContainer.appendChild(newTelefonoInput);
 
@@ -89,5 +89,14 @@
             })
             .catch(error => console.error('Error:', error));
         });
+    </script>
+    <script>
+        var elemento = document.querySelector('.sucursales');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+          } else {
+            console.error('No se encontró ningún elemento con la clase "sucursales"');
+          }
     </script>
     {% endblock %}

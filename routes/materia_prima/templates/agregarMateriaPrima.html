@@ -90,6 +90,14 @@
             .catch(error => console.error('Error:', error));
         });
     </script>
-
+    <script>
+        var elemento = document.querySelector('.materias');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+        } else {
+            console.error('No se encontró ningún elemento con la clase "materias"');
+        }
+    </script>
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/materiaprima.css') }}"> -->
 {% endblock %}

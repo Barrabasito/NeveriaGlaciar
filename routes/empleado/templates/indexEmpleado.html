@@ -34,11 +34,21 @@
         const apellidos=localStorage.getItem('apellidos');
 
         var usuarios_disponibles;
+        var sucursales_disponibles;
 
         function verificarUsuarios() {
     if (usuarios_disponibles > 0) {
+        if(sucursales_disponibles > 0){
         // Redirigir a la ruta '/agregarEmpleado'
         window.location.href = '/agregarEmpleado';
+        }else{
+            // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No hay sucursales disponibles. No puedes agregar un empleado en este momento.',
+        });
+        }
     } else {
         // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
         Swal.fire({
@@ -69,7 +79,7 @@
             confirmButtonText: 'Sí, eliminar'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/eliminarCategoria/${clave}`, {
+                fetch(`/eliminarEmpleado/${clave}`, {
                     method: 'DELETE',
                 })
                 .then(response => response.json())
@@ -217,6 +227,7 @@
                     const empleadosOrdenados = data.empleados.sort((a, b) => a.clave.localeCompare(b.clave));
                     empleadosOrdenados.forEach(appendRow);
                     usuarios_disponibles=data.usuarios_disponibles;
+                    sucursales_disponibles=data.sucursales_disponibles;
                 })
                 .catch(error => console.error('Error:', error));
         });

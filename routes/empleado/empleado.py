@@ -97,6 +97,10 @@ def consulta_empleados():
     empleados = Empleado.query.all()
     usuarios_disponibles = Usuario.query.filter(Usuario.empleado == None).all()
     cantidad_usuarios_disponibles = len(usuarios_disponibles)
+    
+    sucursales_disponibles = Sucursal.query.all()
+    cantidad_sucursales_disponibles = len(sucursales_disponibles)
+    
     print(cantidad_usuarios_disponibles)
     empleados_data = [
         {
@@ -116,7 +120,8 @@ def consulta_empleados():
     ]
     return jsonify({
         "empleados": empleados_data,
-        "usuarios_disponibles":cantidad_usuarios_disponibles
+        "usuarios_disponibles":cantidad_usuarios_disponibles,
+        "sucursales_disponibles":cantidad_sucursales_disponibles
         })
 
 

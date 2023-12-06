@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../../static/css/sinPermisos.css">
     <title>Sin Permisos</title>
 </head>
 <body>
     <div class="container">
+        <i class="fas fa-times error-icon"></i>
         <h1>Acceso Restringido</h1>
-        <p>No tienes permisos de administrador para acceder a esta página.</p>
-        
+        <p>Tu tiempo se ha agotado o no tienes permisos de administrador para acceder a esta página.</p>
+        <a href="{{'/login'}}" class="btn">Ir a la página de login</a>
     </div>
 </body>
 </html>

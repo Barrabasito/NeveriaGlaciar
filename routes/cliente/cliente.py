@@ -61,6 +61,10 @@ def add_cliente():
 @appcliente.route("/listaClientes")
 def lista_clientes():
     clientes = Cliente.query.all()
+    
+    sucursales_disponibles = Sucursal.query.all()
+    cantidad_sucursales_disponibles = len(sucursales_disponibles)
+    
     clientes_data = [
         {
             'nombre_empresa': cliente.nombre_empresa,
@@ -72,7 +76,10 @@ def lista_clientes():
             'sucursal_id': cliente.sucursal_id
         } for cliente in clientes
     ]
-    return jsonify({'clientes': clientes_data})
+    return jsonify({
+        'clientes': clientes_data,
+         "sucursales_disponibles":cantidad_sucursales_disponibles
+        })
 
 @appcliente.route("/detalleCliente/<string:nombre_empresa>")
 def ver_cliente(nombre_empresa):

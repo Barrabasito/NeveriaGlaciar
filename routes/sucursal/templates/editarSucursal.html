@@ -50,9 +50,9 @@
                 const newTelefonoInput = document.createElement('div');
                 newTelefonoInput.classList.add('telefono-input');
                 newTelefonoInput.innerHTML = `
-                    <input type="text" class="telefono" name="telefonos" placeholder="Ingrese el teléfono" value="${value}">
-                    <button type="button" class="remove-telefono-btn">Eliminar</button>
-                `;
+                    <input type="text" class="form-control telefono" name="telefonos" placeholder="Ingrese el teléfono" value="${value}">
+                    <button type="button" class="btn btn-danger remove-telefono-btn">Eliminar</button>
+                    `;
                 telefonosContainer.appendChild(newTelefonoInput);
     
                 const removeTelefonoButton = newTelefonoInput.querySelector('.remove-telefono-btn');
@@ -107,5 +107,14 @@
             })
             .catch(error => console.error('Error:', error));
         });
+    </script>
+    <script>
+        var elemento = document.querySelector('.sucursales');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+          } else {
+            console.error('No se encontró ningún elemento con la clase "sucursales"');
+          }
     </script>
     {% endblock %}

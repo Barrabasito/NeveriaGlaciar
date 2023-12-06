@@ -65,6 +65,13 @@ def add_encargo():
 @appencargo.route("/listaEncargos")
 def consulta_encargos():
     encargos = Encargo.query.all()
+    
+    sucursales_disponibles = Sucursal.query.all()
+    cantidad_sucursales_disponibles = len(sucursales_disponibles)
+    
+    proveedores_disponibles = Proveedor.query.all()
+    cantidad_proveedores_disponibles = len(proveedores_disponibles)
+    
     encargos_data = [
         {
             'id_encargo': encargo.id_encargo,
@@ -77,7 +84,11 @@ def consulta_encargos():
             'sucursal_id': encargo.sucursal_id
         } for encargo in encargos
     ]
-    return jsonify({'encargos': encargos_data})
+    return jsonify({
+        'encargos': encargos_data,
+        "sucursales_disponibles":cantidad_sucursales_disponibles,
+        "proveedores_disponibles":cantidad_proveedores_disponibles
+        })
 
 
 @appencargo.route("/eliminarEncargo/<int:id_encargo>", methods=["DELETE"])

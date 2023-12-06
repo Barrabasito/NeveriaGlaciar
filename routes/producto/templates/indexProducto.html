@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="../../static/css/tabla.css">
     <h1 class="text-center">Consulta de Productos</h1>
-    <a href="/agregarProducto" class="btn btn-primary">Agregar Producto</a>
+    <a class="btn btn-primary" id="agregarProducto">Agregar Producto</a>
     <div class="table-container">
         <table border="1" class="table table-bordered">
             <thead class="thead-light">
@@ -27,6 +27,35 @@
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');
         const apellidos=localStorage.getItem('apellidos');
+
+
+        var categorias_disponibles;
+        var sucursales_disponibles;
+
+        function verificarProductos() {
+    if (categorias_disponibles > 0) {
+        if(sucursales_disponibles > 0){
+        // Redirigir a la ruta '/agregarEmpleado'
+        window.location.href = '/agregarProducto';
+        }else{
+            // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No hay sucursales disponibles. No puedes agregar un producto en este momento.',
+        });
+        }
+    } else {
+        // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No hay categorias disponibles. No puedes agregar un producto en este momento.',
+        });
+    }
+}
+document.getElementById('agregarProducto').addEventListener('click', verificarProductos);
+
 
         function verProducto(codigo_producto) {
             window.location.href = `/detalleProducto/${codigo_producto}`;
@@ -188,6 +217,9 @@
                     // Ordenar la lista de productos por código de producto
                     const productosOrdenados = data.productos.sort((a, b) => a.codigo_producto.localeCompare(b.codigo_producto));
                     productosOrdenados.forEach(appendRow);
+
+                    categorias_disponibles=data.categorias_disponibles;
+                    sucursales_disponibles=data.sucursales_disponibles;
                 })
                 .catch(error => console.error('Error:', error));
         });

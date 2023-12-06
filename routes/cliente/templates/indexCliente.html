@@ -4,7 +4,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../../static/css/tabla.css">
     <h1 class="text-center">Consulta de Clientes</h1>
-    <a href="/agregarCliente" class="btn btn-primary">Agregar Cliente</a>
+    <a class="btn btn-primary" id="agregarCliente">Agregar Cliente</a>
     <div class="table-container"></div>
         <table border="1" class="table table-bordered">
             <thead class="thead-light">
@@ -28,6 +28,25 @@
         const nombre_sucursal=localStorage.getItem('sucursal');
         const nombres=localStorage.getItem('nombres');
         const apellidos=localStorage.getItem('apellidos');
+
+        var sucursales_disponibles;
+
+function verificarClientes() {
+
+    if(sucursales_disponibles > 0){
+        // Redirigir a la ruta '/agregarEmpleado'
+        window.location.href = '/agregarCliente';
+        }else{
+            // Mostrar una alerta de SweetAlert si no hay usuarios disponibles
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: 'No hay sucursales disponibles. No puedes agregar un cliente en este momento.',
+        });
+
+}
+        }
+document.getElementById('agregarCliente').addEventListener('click', verificarClientes);
 
         function verCliente(nombre_empresa) {
             window.location.href = `/detalleCliente/${nombre_empresa}`;
@@ -109,6 +128,8 @@
                     // Ordenar la lista de clientes por nombre_empresa
                     const clientesOrdenados = data.clientes.sort((a, b) => a.nombre_empresa.localeCompare(b.nombre_empresa));
                     clientesOrdenados.forEach(appendRow);
+
+                    sucursales_disponibles=data.sucursales_disponibles;
                 })
                 .catch(error => console.error('Error:', error));
         });

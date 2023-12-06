@@ -86,6 +86,10 @@ def agregar_materia_prima():
 @appmateria.route("/listaMateriasPrimas")
 def consulta_materias_primas():
     materias_primas = Materia_Prima.query.all()
+    
+    sucursales_disponibles = Sucursal.query.all()
+    cantidad_sucursales_disponibles = len(sucursales_disponibles)
+    
     materias_primas_data = [
         {
             "codigo_materia": materia_prima.codigo_materia,
@@ -96,7 +100,10 @@ def consulta_materias_primas():
         }
         for materia_prima in materias_primas
     ]
-    return jsonify({"materias_primas": materias_primas_data})
+    return jsonify({
+        "materias_primas": materias_primas_data,
+        "sucursales_disponibles":cantidad_sucursales_disponibles
+        })
 
 
 @appmateria.route("/detalleMateriaPrima/<string:codigo_materia>")

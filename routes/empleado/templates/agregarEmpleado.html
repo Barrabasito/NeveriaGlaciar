@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
                         <label for="inputFile" class="form-label">Imagen</label>
-                        <input type="file" name="inputFile">
+                        <input type="file" name="inputFile" required>
                     </div>
                 </div>
                 <div class="row">
@@ -123,5 +123,14 @@
             })
             .catch(error => console.error('Error:', error));
         });
+    </script>
+    <script>
+        var elemento = document.querySelector('.empleados');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+        } else {
+            console.error('No se encontró ningún elemento con la clase "empleados"');
+        }
     </script>
     {% endblock %}

@@ -15,7 +15,7 @@ body {
     padding: 20px;
     border-radius: 55px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 330px;
     text-align: center;
 }
 
@@ -53,6 +53,6 @@ button:hover {
 }
 
 #logo {
-    max-width: 200px; 
+    max-width: 240px; 
     margin-bottom: 20px;
 }

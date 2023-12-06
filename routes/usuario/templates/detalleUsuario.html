@@ -34,4 +34,13 @@
             });
         });
     </script>
+    <script>
+        var elemento = document.querySelector('.usuarios');
+        if (elemento) {
+            // Agrega la clase 'active' al elemento
+            elemento.classList.add('active');
+        } else {
+            console.error('No se encontró ningún elemento con la clase "usuarios"');
+        }
+    </script>
     {% endblock %}
